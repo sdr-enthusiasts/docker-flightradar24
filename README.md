@@ -27,7 +27,7 @@ First-time users should obtain a Flightradar24 sharing key.
 
 In order to obtain a Flightradar24 sharing key, initially run the container with the following command:
 
-`docker run --rm -it --entrypoint fr24feed mikenye/fr24feed:1.0.24-5-amd64 --signup`
+`docker run --rm -it --entrypoint fr24feed mikenye/fr24feed --signup`
 
 This will take you through the signup process. At the end of the signup process, you'll be presented with:
 ```
