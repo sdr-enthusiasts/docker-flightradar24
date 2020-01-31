@@ -1,4 +1,4 @@
-# docker-piaware
+# docker-flightradar24
 Docker container running flightradar24 fr24feed. Designed to work in tandem with mikenye/piaware. Builds and runs on x86_64, arm32v7 (see below).
 
 fr24feed pulls ModeS/BEAST information from the mikenye/piaware (or another host providing ModeS/BEAST data), and sends data to flightradar24.
