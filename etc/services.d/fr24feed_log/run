@@ -1,0 +1,3 @@
+#!/usr/bin/with-contenv sh
+
+tail -F /var/log/fr24feed.log

@@ -1,0 +1,35 @@
+#!/usr/bin/with-contenv sh
+
+# Check to make sure the correct command line arguments have been set
+EXITCODE=0
+if [ -z "${BEASTHOST}" ]; then
+  echo "ERROR: BEASTHOST environment variable not set"
+  EXITCODE=1
+fi
+if [ -z "${FR24KEY}" ]; then
+  echo "ERROR: FR24KEY environment variable not set"
+  EXITCODE=1
+fi
+if [ $EXITCODE -ne 0 ]; then
+  exit 1
+fi
+
+# Set up timezone
+if [ -z "${TZ}" ]; then
+  echo "WARNING: TZ environment variable not set"
+else
+  ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+fi
+
+# Set up fr24feed
+touch /etc/fr24feed.ini
+echo receiver="beast-tcp" > /etc/fr24feed.ini
+echo fr24key="${FR24KEY}" >> /etc/fr24feed.ini
+echo host="${BEASTHOST}:${BEASTPORT}" >> /etc/fr24feed.ini
+echo bs="yes" >> /etc/fr24feed.ini
+echo raw="yes" >> /etc/fr24feed.ini
+echo logmode="1" >> /etc/fr24feed.ini
+echo logpath="/var/log" >> /etc/fr24feed.ini
+echo mlat="${MLAT}" >> /etc/fr24feed.ini
+echo mlat-without-gps="${MLAT}" >> /etc/fr24feed.ini
+

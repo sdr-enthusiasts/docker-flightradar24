@@ -1,0 +1,3 @@
+#!/usr/bin/with-contenv sh
+
+/usr/bin/fr24feed 2>&1 > /dev/null
