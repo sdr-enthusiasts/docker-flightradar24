@@ -7,8 +7,8 @@ For more information on what fr24feed is, see here: https://www.flightradar24.co
 
 ## Supported tags and respective Dockerfiles
 * `latest`, `1.0.24`
-  * `latest-amd64`, `1.0.24-5-amd64` (`1.0.24` branch, `Dockerfile.amd64`)
-  * `latest-arm32v7`, `1.0.24-5-arm32v7` (`1.0.24` branch, `Dockerfile.arm32v7`)
+  * `latest-amd64`, `1.0.24-amd64` (`1.0.24` branch, `Dockerfile.amd64`)
+  * `latest-arm32v7`, `1.0.24-arm32v7` (`1.0.24` branch, `Dockerfile.arm32v7`)
 * `development` (`master` branch, `Dockerfile.amd64`, `amd64` architecture only, not recommended for production)
 
 ## Changelog
