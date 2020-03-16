@@ -1,6 +1,6 @@
 #!/bin/sh
 
-VERSION=1.0.24
+VERSION=1.0.18
 ARCH=`uname -m`
 IMAGE=mikenye/fr24feed
 
