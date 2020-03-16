@@ -107,7 +107,7 @@ services:
     ports:
       - 8754:8754
     environment:
-      - BEASTHOST=dockerhost
+      - BEASTHOST=piaware
       - FR24KEY=xxxxxxxxxxx
 ```
 
