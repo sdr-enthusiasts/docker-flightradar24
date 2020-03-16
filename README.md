@@ -1,20 +1,14 @@
-# docker-flightradar24
-Docker container running flightradar24 fr24feed. Designed to work in tandem with mikenye/piaware. Builds and runs on x86_64, arm32v7 (see below).
+# mikenye/flightradar24
+Docker container running flightradar24 fr24feed. Designed to work in tandem with [mikenye/readsb](https://hub.docker.com/repository/docker/mikenye/readsb) or [mikenye/piaware](https://hub.docker.com/repository/docker/mikenye/piaware). Builds and runs on x86_64, arm32v7 (see below).
 
 fr24feed pulls ModeS/BEAST information from the mikenye/piaware (or another host providing ModeS/BEAST data), and sends data to flightradar24.
 
 For more information on what fr24feed is, see here: https://www.flightradar24.com/share-your-data
 
 ## Supported tags and respective Dockerfiles
-* `latest`, `1.0.24`
-  * `latest-amd64`, `1.0.24-amd64` (`1.0.24` branch, `Dockerfile.amd64`)
-  * `latest-arm32v7`, `1.0.24-arm32v7` (`1.0.24` branch, `Dockerfile.arm32v7`)
-* `development` (`master` branch, `Dockerfile.amd64`, `amd64` architecture only, not recommended for production)
-
-## Changelog
-
-### v1.0.24
- * Original image
+* `latest` (`master` branch, `Dockerfile`)
+* Version and architecture specific tags available
+* `development` (`master` branch, `Dockerfile`, `amd64` architecture only, not recommended for production)
 
 ## Multi Architecture Support
 Currently, this image should pull and run on the following architectures:
@@ -45,20 +39,21 @@ The IP address or hostname of the docker host running the `mikenye/piaware` cont
 
 ## Up-and-Running with `docker run`
 
-```
+```bash
 docker run \
  -d \
  --rm \
  --name fr24feed \
  -e TZ="YOUR_TIMEZONE" \
- -e BEASTHOST=beasthost
+ -e BEASTHOST=beasthost \
+ -e MLAT=yes \
  -p 8754:8754 \
  mikenye/fr24feed
 ```
 
 ## Up-and-Running with Docker Compose
 
-```
+```docker-compose
 version: '2.0'
 
 services:
@@ -72,11 +67,12 @@ services:
     environment:
       - TZ="Australia/Perth"
       - BEASTHOST=beasthost
+      - MLAT=yes
 ```
 
 ## Up-and-Running with Docker Compose, including `mikenye/piaware`
 
-```
+```docker-compose
 version: '2.0'
 
 services:
@@ -109,6 +105,7 @@ services:
     environment:
       - BEASTHOST=piaware
       - FR24KEY=xxxxxxxxxxx
+      - MLAT=yes
 ```
 
 For an explanation of the `mikenye/piaware` image's configuration, see that image's readme.
@@ -124,17 +121,17 @@ There are a series of available environment variables:
 | `BEASTPORT`          | Optional. TCP port number of Mode-S/BEAST provider (dump1090) | 30005 |
 | `FR24KEY`            | Required. Flightradar24 Sharing Key | |
 | `TZ`                 | Your local timezone (optional)  | GMT     |
+| `MLAT`               | Enable multilateration (optional) | no |
 
 
 ## Ports
 
 The following ports are used by this container:
 
-* `8754` - fr24feed web interface - optional but recommended 
+* `8754` - fr24feed web interface - optional but recommended
 * `30003` - fr24feed TCP BaseStation output listen port - optional, recommended to leave unmapped unless explicitly needed
 * `30334` - fr24feed TCP Raw output listen port - optional, recommended to leave unmapped unless explicitly needed
 
 ## Logging
 * The `fr24feed` process is logged to the container's stdout, and can be viewed with `docker logs [-f] container`.
 * `fr24feed` log file exists at `/var/log/fr24feed.log`, with automatic log rotation.
-
