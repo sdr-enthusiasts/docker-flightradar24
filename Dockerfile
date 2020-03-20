@@ -3,7 +3,6 @@ FROM debian:stable-slim
 ENV S6_BEHAVIOUR_IF_STAGE2_FAILS=2 \
     BEASTPORT=30005 \
     MLAT=no
-# MLAT needs to be set to 'no' due to a segfault issue with fr24feed
 
 COPY deploy_fr24feed.sh /tmp/deploy_fr24feed.sh
 
@@ -12,12 +11,13 @@ RUN set -x && \
     apt-get update -y && \
     apt-get install --no-install-recommends -y \
         binutils \
-        procps \
         ca-certificates \
         curl \
-        gnupg \
         file \
-        xmlstarlet && \
+        gnupg \
+        procps \
+        xmlstarlet \
+        && \
     echo "========== Deploying s6-overlay ==========" && \
     curl -s https://raw.githubusercontent.com/mikenye/deploy-s6-overlay/master/deploy-s6-overlay.sh | sh && \
     echo "========== Deploying fr24feed ==========" && \
@@ -25,9 +25,10 @@ RUN set -x && \
     echo "========== Clean-up ==========" && \
     apt-get remove -y \
         curl \
-        gnupg \
         file \
-        xmlstarlet && \
+        gnupg \
+        xmlstarlet \
+        && \
     apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/*
 

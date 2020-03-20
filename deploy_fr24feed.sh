@@ -23,7 +23,7 @@ FR24DEBS=$(curl http://repo.feed.flightradar24.com | \
   cut -d ">" -f 2 | \
   cut -d "<" -f 1 | \
   grep -i ".deb" | \
-  grep ${FR24REPOPATH} | \
+  grep "${FR24REPOPATH}" | \
   sort --reverse)
 
 for FR24DEBFILE in $FR24DEBS
@@ -32,11 +32,11 @@ do
     # Attempt .deb file download
     if [ -z ${FR24FILEOVERRIDE+x} ]; then
         echo "Attempting to download ${FR24DEBFILE}"
-        curl --silent --output /tmp/fr24feed.deb https://repo-feed.flightradar24.com/${FR24DEBFILE}
+        curl --silent --output /tmp/fr24feed.deb "https://repo-feed.flightradar24.com/${FR24DEBFILE}"
         CURLEXITCODE="$?"
     else
         echo "Attempting to download ${FR24FILEOVERRIDE}"
-        curl --silent --output /tmp/fr24feed.deb https://repo-feed.flightradar24.com/${FR24FILEOVERRIDE}
+        curl --silent --output /tmp/fr24feed.deb "https://repo-feed.flightradar24.com/${FR24FILEOVERRIDE}"
         CURLEXITCODE="$?"
     fi
 
@@ -58,7 +58,11 @@ do
     fi
 
     # Get version from .deb file
-    FR24FEEDVERSION=$(dpkg --info /tmp/fr24feed.deb | grep -i Version\: | tr -s " " | cut -d ":" -f 2 | tr -d " ")
+    FR24FEEDVERSION=$(dpkg --info /tmp/fr24feed.deb | \
+                      grep -i Version\: | \
+                      tr -s " " | \
+                      cut -d ":" -f 2 | \
+                      tr -d " ")
 
     # Break out of loop
     echo "Downloaded ${FR24FEEDVERSION} for ${ARCH} OK"
@@ -69,7 +73,7 @@ done
 echo "${FR24FEEDVERSION}_${FR24FEEDARCH}" >> /VERSION
 
 # Deploy fr24feed.deb
-cd /tmp
+cd /tmp || exit 1
 ar x /tmp/fr24feed.deb
 tar xzvf data.tar.gz
 find /tmp -name .DS_Store -exec rm {} \;

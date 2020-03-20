@@ -1,4 +1,5 @@
 #!/usr/bin/with-contenv sh
+#shellcheck shell=sh
 
 # Check to make sure the correct command line arguments have been set
 EXITCODE=0
@@ -18,7 +19,7 @@ fi
 if [ -z "${TZ}" ]; then
   echo "WARNING: TZ environment variable not set"
 else
-  ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+  ln -snf "/usr/share/zoneinfo/${TZ}" /etc/localtime && echo "${TZ}" > /etc/timezone
 fi
 
 # Set up fr24feed
@@ -32,4 +33,3 @@ echo logmode="1" >> /etc/fr24feed.ini
 echo logpath="/var/log" >> /etc/fr24feed.ini
 echo mlat="${MLAT}" >> /etc/fr24feed.ini
 echo mlat-without-gps="${MLAT}" >> /etc/fr24feed.ini
-

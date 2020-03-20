@@ -1,3 +1,5 @@
 #!/usr/bin/with-contenv sh
+#shellcheck shell=sh
 
-tail -F /var/log/fr24feed.log
+exec \
+  tail -F /var/log/fr24feed.log

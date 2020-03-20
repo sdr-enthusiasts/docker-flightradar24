@@ -1,19 +1,23 @@
 # mikenye/flightradar24
-Docker container running flightradar24 fr24feed. Designed to work in tandem with [mikenye/readsb](https://hub.docker.com/repository/docker/mikenye/readsb) or [mikenye/piaware](https://hub.docker.com/repository/docker/mikenye/piaware). Builds and runs on x86_64, arm32v7 (see below).
 
-fr24feed pulls ModeS/BEAST information from the mikenye/piaware (or another host providing ModeS/BEAST data), and sends data to flightradar24.
+Docker container running FlightRadar24's `fr24feed`. Designed to work in tandem with [mikenye/readsb](https://hub.docker.com/repository/docker/mikenye/readsb) or [mikenye/piaware](https://hub.docker.com/repository/docker/mikenye/piaware). Builds and runs on `x86_64`, `arm32v7` (see below).
 
-For more information on what fr24feed is, see here: https://www.flightradar24.com/share-your-data
+`fr24feed` pulls ModeS/BEAST information from the [mikenye/piaware](https://hub.docker.com/repository/docker/mikenye/piaware) (or another host providing ModeS/BEAST data), and sends data to FlightRadar24.
+
+For more information on what fr24feed is, see here: [share-your-data](https://www.flightradar24.com/share-your-data).
 
 ## Supported tags and respective Dockerfiles
+
 * `latest` (`master` branch, `Dockerfile`)
 * Version and architecture specific tags available
 * `development` (`master` branch, `Dockerfile`, `amd64` architecture only, not recommended for production)
 
 ## Multi Architecture Support
+
 Currently, this image should pull and run on the following architectures:
- * ```amd64```: Linux x86-64
- * ```arm32v7```, ```armv7l```: ARMv7 32-bit (Odroid HC1/HC2/XU4, RPi 2/3)
+
+* ```amd64```: Linux x86-64
+* ```arm32v7```, ```armv7l```: ARMv7 32-bit (Odroid HC1/HC2/XU4, RPi 2/3)
 
 ## Obtaining a Flightradar24 Sharing Key
 
@@ -21,9 +25,12 @@ First-time users should obtain a Flightradar24 sharing key.
 
 In order to obtain a Flightradar24 sharing key, initially run the container with the following command:
 
-`docker run --rm -it --entrypoint fr24feed mikenye/fr24feed --signup`
+```shell
+docker run --rm -it --entrypoint fr24feed mikenye/fr24feed --signup
+```
 
 This will take you through the signup process. At the end of the signup process, you'll be presented with:
+
 ```
 Congratulations! You are now registered and ready to share ADS-B data with Flightradar24.
 + Your sharing key (xxxxxxxxxxxx) has been configured and emailed to you for backup purposes.
@@ -33,13 +40,14 @@ Congratulations! You are now registered and ready to share ADS-B data with Fligh
 Take a note of the sharing key, as you'll need it when launching the container.
 
 ## Configuring `mikenye/piaware` Container
+
 If you're using this container with the `mikenye/piaware` container to provide ModeS/BEAST data, you'll need to ensure you've opened port 30005 into the `mikenye/piaware` container, so this container can connect to it.
 
 The IP address or hostname of the docker host running the `mikenye/piaware` container should be passed to the `mikenye/fr24feed` container via the `BEASTHOST` environment variable shown below. The port can be changed from the default of 30005 with the optional `BEASTPORT` environment variable.
 
 ## Up-and-Running with `docker run`
 
-```bash
+```shell
 docker run \
  -d \
  --rm \
@@ -53,7 +61,7 @@ docker run \
 
 ## Up-and-Running with Docker Compose
 
-```docker-compose
+```shell
 version: '2.0'
 
 services:
@@ -72,7 +80,7 @@ services:
 
 ## Up-and-Running with Docker Compose, including `mikenye/piaware`
 
-```docker-compose
+```shell
 version: '2.0'
 
 services:
@@ -110,7 +118,6 @@ services:
 
 For an explanation of the `mikenye/piaware` image's configuration, see that image's readme.
 
-
 ## Runtime Environment Variables
 
 There are a series of available environment variables:
@@ -123,7 +130,6 @@ There are a series of available environment variables:
 | `TZ`                 | Your local timezone (optional)  | GMT     |
 | `MLAT`               | Enable multilateration (optional) | no |
 
-
 ## Ports
 
 The following ports are used by this container:
@@ -133,5 +139,6 @@ The following ports are used by this container:
 * `30334` - fr24feed TCP Raw output listen port - optional, recommended to leave unmapped unless explicitly needed
 
 ## Logging
+
 * The `fr24feed` process is logged to the container's stdout, and can be viewed with `docker logs [-f] container`.
 * `fr24feed` log file exists at `/var/log/fr24feed.log`, with automatic log rotation.

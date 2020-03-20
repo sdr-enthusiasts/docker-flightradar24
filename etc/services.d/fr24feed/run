@@ -1,3 +1,5 @@
 #!/usr/bin/with-contenv sh
+#shellcheck shell=sh
 
-/usr/bin/fr24feed 2>&1 > /dev/null
+exec \
+  /usr/bin/fr24feed > /dev/null 2>&1
