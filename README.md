@@ -55,6 +55,7 @@ docker run \
  -e TZ="YOUR_TIMEZONE" \
  -e BEASTHOST=beasthost \
  -e MLAT=yes \
+ -e FR24KEY=xxxxxxxxxxx \
  -p 8754:8754 \
  mikenye/fr24feed
 ```
@@ -76,6 +77,7 @@ services:
       - TZ="Australia/Perth"
       - BEASTHOST=beasthost
       - MLAT=yes
+      - FR24KEY=xxxxxxxxxxx
 ```
 
 ## Up-and-Running with Docker Compose, including `mikenye/piaware`
