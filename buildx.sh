@@ -29,8 +29,8 @@ FR24IMAGEVERSION=$(docker run --rm --entrypoint cat "${REPO}/${IMAGE}:arm64_buil
 echo "Tagging ${REPO}/${IMAGE}:${FR24IMAGEVERSION}"
 docker tag "${REPO}/${IMAGE}:arm64_build" "${REPO}/${IMAGE}:${FR24IMAGEVERSION}_arm64"
 docker tag "${REPO}/${IMAGE}:arm64_build" "${REPO}/${IMAGE}:latest_arm64"
-echo "Pushing ${REPO}/${IMAGE}:${FR24IMAGEVERSION}"
-docker push "${REPO}/${IMAGE}:${FR24IMAGEVERSION}"
+echo "Pushing ${REPO}/${IMAGE}:${FR24IMAGEVERSION}_arm64"
+docker push "${REPO}/${IMAGE}:${FR24IMAGEVERSION}_arm64"
 echo "Pushing ${REPO}/${IMAGE}:latest_arm64"
 docker push "${REPO}/${IMAGE}:latest_arm64"
 
