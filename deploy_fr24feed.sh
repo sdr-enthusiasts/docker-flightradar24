@@ -11,6 +11,10 @@ if [ "$ARCH" = "x86_64" ]; then
 elif [ "$ARCH" = "armv7l" ]; then
     FR24REPOPATH="rpi_binaries"
     FR24FEEDARCH="armhf"
+elif [ "$ARCH" = "aarch64" ]; then
+    dpkg --add-architecture armhf
+    FR24REPOPATH="rpi_binaries"
+    FR24FEEDARCH="armhf"
 else
     echo "${ARCH} architecture is not supported by flightradar24 :-("
     exit 1

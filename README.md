@@ -1,6 +1,6 @@
 # mikenye/flightradar24
 
-Docker container running FlightRadar24's `fr24feed`. Designed to work in tandem with [mikenye/readsb](https://hub.docker.com/repository/docker/mikenye/readsb) or [mikenye/piaware](https://hub.docker.com/repository/docker/mikenye/piaware). Builds and runs on `x86_64`, `arm32v7` (see below).
+Docker container running FlightRadar24's `fr24feed`. Designed to work in tandem with [mikenye/readsb](https://hub.docker.com/repository/docker/mikenye/readsb) or [mikenye/piaware](https://hub.docker.com/repository/docker/mikenye/piaware). Builds and runs on `x86_64`, `arm32v7` & `arm64` (see below).
 
 `fr24feed` pulls ModeS/BEAST information from the [mikenye/piaware](https://hub.docker.com/repository/docker/mikenye/piaware) (or another host providing ModeS/BEAST data), and sends data to FlightRadar24.
 
@@ -16,8 +16,11 @@ For more information on what fr24feed is, see here: [share-your-data](https://ww
 
 Currently, this image should pull and run on the following architectures:
 
-* ```amd64```: Linux x86-64
-* ```arm32v7```, ```armv7l```: ARMv7 32-bit (Odroid HC1/HC2/XU4, RPi 2/3)
+* `linux/amd64`: Linux x86-64
+* `linux/arm/v7`: ARMv7 32-bit (Odroid HC1/HC2/XU4, RPi 2/3)
+* `linux/arm64/v8`: ARMv8 64-bit
+
+A note on `arm64`: FlightRadar24 only make binaries available for `amd64` and `armhf`. The `arm64` version of this container uses the `armhf` binaries which are compiled for `arm32`. `arm32` support is optional on `arm64`. In practice, there is only one `arm64` CPU that omits legacy `arm32` instruction set support - Cavium ThunderX. Thus, this image should work on any `arm64` system that doesn't have the Cavium ThunderX CPU. [Reference](https://askubuntu.com/questions/928249/how-to-run-armhf-executables-on-an-arm64-system).
 
 ## Obtaining a Flightradar24 Sharing Key
 
