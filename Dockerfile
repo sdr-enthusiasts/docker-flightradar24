@@ -34,6 +34,7 @@ RUN set -x && \
     rm -rf /var/lib/apt/lists/*
 
 COPY etc/ /etc/
+COPY healthcheck.sh /healthcheck.sh
 
 EXPOSE 30334/tcp 8754/tcp 30003/tcp
 
