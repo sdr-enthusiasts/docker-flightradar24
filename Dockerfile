@@ -40,3 +40,6 @@ COPY healthcheck.sh /healthcheck.sh
 EXPOSE 30334/tcp 8754/tcp 30003/tcp
 
 ENTRYPOINT [ "/init" ]
+
+# Add healthcheck
+HEALTHCHECK --start-period=30s CMD /healthcheck.sh

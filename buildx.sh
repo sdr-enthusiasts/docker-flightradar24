@@ -2,53 +2,38 @@
 
 REPO=mikenye
 IMAGE=fr24feed
-PLATFORMS="linux/amd64,linux/arm/v7,linux/arm64"
+PLATFORMS="linux/386,linux/amd64,linux/arm/v7,linux/arm64"
 
 docker context use x86_64
 export DOCKER_CLI_EXPERIMENTAL="enabled"
 docker buildx use homecluster
 
-# arm32v7 - build temp image to get versions
-echo "========== Building arm32v7 =========="
-docker context use arm32v7
-docker build -t "${REPO}/${IMAGE}:arm32v7_build" .
-FR24IMAGEVERSION=$(docker run --rm --entrypoint cat "${REPO}/${IMAGE}:arm32v7_build" /VERSION)
-echo "Tagging ${REPO}/${IMAGE}:${FR24IMAGEVERSION}"
-docker tag "${REPO}/${IMAGE}:arm32v7_build" "${REPO}/${IMAGE}:${FR24IMAGEVERSION}"
-docker tag "${REPO}/${IMAGE}:arm32v7_build" "${REPO}/${IMAGE}:latest_armhf"
-echo "Pushing ${REPO}/${IMAGE}:${FR24IMAGEVERSION}"
-docker push "${REPO}/${IMAGE}:${FR24IMAGEVERSION}"
-echo "Pushing ${REPO}/${IMAGE}:latest_armhf"
-docker push "${REPO}/${IMAGE}:latest_armhf"
+echo "========== Building linux/arm/v7 =========="
+docker buildx build -t "${REPO}/${IMAGE}:latest_armhf" --no-cache --compress --push --platform "linux/arm/v7" .
+docker --context=arm32v7 pull "${REPO}/${IMAGE}:latest_armhf"
+FR24IMAGEVERSION=$(docker --context=arm32v7 run --rm --entrypoint cat "${REPO}/${IMAGE}:latest_armhf" /VERSION)
+docker buildx build -t "${REPO}/${IMAGE}:${FR24IMAGEVERSION}" --no-cache --compress --push --platform "linux/arm/v7" .
 
-# arm64 - build temp image to get versions
-echo "========== Building arm64 =========="
-docker context use arm64
-docker build -t "${REPO}/${IMAGE}:arm64_build" .
-FR24IMAGEVERSION=$(docker run --rm --entrypoint cat "${REPO}/${IMAGE}:arm64_build" /VERSION)
-echo "Tagging ${REPO}/${IMAGE}:${FR24IMAGEVERSION}"
-docker tag "${REPO}/${IMAGE}:arm64_build" "${REPO}/${IMAGE}:${FR24IMAGEVERSION}_arm64"
-docker tag "${REPO}/${IMAGE}:arm64_build" "${REPO}/${IMAGE}:latest_arm64"
-echo "Pushing ${REPO}/${IMAGE}:${FR24IMAGEVERSION}_arm64"
-docker push "${REPO}/${IMAGE}:${FR24IMAGEVERSION}_arm64"
-echo "Pushing ${REPO}/${IMAGE}:latest_arm64"
-docker push "${REPO}/${IMAGE}:latest_arm64"
+echo "========== Building linux/arm64 =========="
+docker buildx build -t "${REPO}/${IMAGE}:latest_arm64" --no-cache --compress --push --platform "linux/arm64" .
+docker --context=arm64 pull "${REPO}/${IMAGE}:latest_arm64"
+FR24IMAGEVERSION=$(docker --context=arm64 run --rm --entrypoint cat "${REPO}/${IMAGE}:latest_arm64" /VERSION)
+docker buildx build -t "${REPO}/${IMAGE}:${FR24IMAGEVERSION}_arm64" --no-cache --compress --push --platform "linux/arm64" .
 
-# x86_64 - build temp image to get versions
-echo "========== Building x86_64 =========="
-docker context use x86_64
-docker build -t "${REPO}/${IMAGE}:x86_64_build" .
-FR24IMAGEVERSION=$(docker run --rm --entrypoint cat "${REPO}/${IMAGE}:x86_64_build" /VERSION)
-echo "Tagging ${REPO}/${IMAGE}:${FR24IMAGEVERSION}"
-docker tag "${REPO}/${IMAGE}:x86_64_build" "${REPO}/${IMAGE}:${FR24IMAGEVERSION}"
-docker tag "${REPO}/${IMAGE}:x86_64_build" "${REPO}/${IMAGE}:latest_amd64"
-echo "Pushing ${REPO}/${IMAGE}:${FR24IMAGEVERSION}"
-docker push "${REPO}/${IMAGE}:${FR24IMAGEVERSION}"
-echo "Pushing ${REPO}/${IMAGE}:latest_amd64"
-docker push "${REPO}/${IMAGE}:latest_amd64"
+echo "========== Building linux/amd64 =========="
+docker buildx build -t "${REPO}/${IMAGE}:latest_amd64" --no-cache --compress --push --platform "linux/amd64" .
+docker --context=x86_64 pull "${REPO}/${IMAGE}:latest_amd64"
+FR24IMAGEVERSION=$(docker --context=x86_64 run --rm --entrypoint cat "${REPO}/${IMAGE}:latest_amd64" /VERSION)
+docker buildx build -t "${REPO}/${IMAGE}:${FR24IMAGEVERSION}"--no-cache --compress --push --platform "linux/amd64" .
+
+echo "========== Building linux/386 =========="
+docker buildx build -t "${REPO}/${IMAGE}:latest_i386" --no-cache --compress --push --platform "linux/386" .
+docker --context=x86_64 pull "${REPO}/${IMAGE}:latest_i386"
+FR24IMAGEVERSION=$(docker --context=x86_64 run --rm --entrypoint cat "${REPO}/${IMAGE}:latest_i386" /VERSION)
+docker buildx build -t "${REPO}/${IMAGE}:${FR24IMAGEVERSION}" --no-cache --compress --push --platform "linux/386" .
 
 # multiarch buildx
 echo "========== Buildx multiarch =========="
 docker context use x86_64
 docker buildx use homecluster
-docker buildx build -t "${REPO}/${IMAGE}:latest" --compress --push --platform "${PLATFORMS}" .
+docker buildx build -t "${REPO}/${IMAGE}:latest" --no-cache --compress --push --platform "${PLATFORMS}" .
