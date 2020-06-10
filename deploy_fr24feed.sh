@@ -1,6 +1,6 @@
-#!/bin/bash -x
+#!/bin/bash
 
-set -xe
+set -x
 
 # Get arch
 # Make sure `file` (libmagic) is available
