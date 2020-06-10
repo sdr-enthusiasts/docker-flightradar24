@@ -10,6 +10,7 @@ RUN set -x && \
     echo "========== Prerequisites ==========" && \
     apt-get update -y && \
     apt-get install --no-install-recommends -y \
+        bc \
         binutils \
         ca-certificates \
         curl \
