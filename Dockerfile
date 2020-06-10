@@ -16,6 +16,7 @@ RUN set -x && \
         curl \
         file \
         gnupg \
+        net-tools \
         procps \
         xmlstarlet \
         && \
