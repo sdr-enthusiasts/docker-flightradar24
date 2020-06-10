@@ -1,23 +1,67 @@
-#!/bin/bash -x
+#!/bin/bash
+
+set -x
 
 # Get arch
-ARCH=$(uname -m)
+# Make sure `file` (libmagic) is available
+FILEBINARY=$(which file)
+if [ $? -ne 0 ]; then
+  echo "ERROR: 'file' (libmagic) not available, cannot detect architecture!"
+  exit 1
+fi
+FILEOUTPUT=$("${FILEBINARY}" -L "${FILEBINARY}")
 
-# Check to make sure arch is supported by fr24feed
-if [ "$ARCH" = "x86_64" ]; then
-    FR24REPOPATH="linux_x86_64_binaries"
-    FR24FEEDARCH="amd64"
-    #FR24FILEOVERRIDE="linux_x86_64_binaries/fr24feed_1.0.25-1_amd64.deb"
-elif [ "$ARCH" = "armv7l" ]; then
+# 32-bit x86
+# Example output:
+# /usr/bin/file: ELF 32-bit LSB shared object, Intel 80386, version 1 (SYSV), dynamically linked, interpreter /lib/ld-musl-i386.so.1, stripped
+# /usr/bin/file: ELF 32-bit LSB shared object, Intel 80386, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux.so.2, for GNU/Linux 3.2.0, BuildID[sha1]=d48e1d621e9b833b5d33ede3b4673535df181fe0, stripped  
+echo ${FILEOUTPUT} | grep "Intel 80386" > /dev/null
+if [ $? -eq 0 ]; then
+  FR24REPOPATH="linux_x86_binaries"
+  FR24FEEDARCH="i386"
+fi
+
+# x86-64
+# Example output:
+# /usr/bin/file: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib/ld-musl-x86_64.so.1, stripped
+# /usr/bin/file: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 3.2.0, BuildID[sha1]=6b0b86f64e36f977d088b3e7046f70a586dd60e7, stripped
+echo ${FILEOUTPUT} | grep "x86-64" > /dev/null
+if [ $? -eq 0 ]; then
+  FR24REPOPATH="linux_x86_64_binaries"
+  FR24FEEDARCH="amd64"
+fi
+
+# armel
+# /usr/bin/file: ELF 32-bit LSB shared object, ARM, EABI5 version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux.so.3, for GNU/Linux 3.2.0, BuildID[sha1]=f57b617d0d6cd9d483dcf847b03614809e5cd8a9, stripped
+echo ${FILEOUTPUT} | grep "ARM" > /dev/null
+if [ $? -eq 0 ]; then
+
+  # armhf
+  # Example outputs:
+  # /usr/bin/file: ELF 32-bit LSB shared object, ARM, EABI5 version 1 (SYSV), dynamically linked, interpreter /lib/ld-musl-armhf.so.1, stripped  # /usr/bin/file: ELF 32-bit LSB shared object, ARM, EABI5 version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-armhf.so.3, for GNU/Linux 3.2.0, BuildID[sha1]=921490a07eade98430e10735d69858e714113c56, stripped
+  # /usr/bin/file: ELF 32-bit LSB shared object, ARM, EABI5 version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-armhf.so.3, for GNU/Linux 3.2.0, BuildID[sha1]=921490a07eade98430e10735d69858e714113c56, stripped
+  echo ${FILEOUTPUT} | grep "armhf" > /dev/null
+  if [ $? -eq 0 ]; then
     FR24REPOPATH="rpi_binaries"
     FR24FEEDARCH="armhf"
-elif [ "$ARCH" = "aarch64" ]; then
-    dpkg --add-architecture armhf
+  fi
+
+  # arm64
+  # Example output:
+  # /usr/bin/file: ELF 64-bit LSB shared object, ARM aarch64, version 1 (SYSV), dynamically linked, interpreter /lib/ld-musl-aarch64.so.1, stripped
+  # /usr/bin/file: ELF 64-bit LSB shared object, ARM aarch64, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, for GNU/Linux 3.7.0, BuildID[sha1]=a8d6092fd49d8ec9e367ac9d451b3f55c7ae7a78, stripped
+  echo ${FILEOUTPUT} | grep "aarch64" > /dev/null
+  if [ $? -eq 0 ]; then
     FR24REPOPATH="rpi_binaries"
     FR24FEEDARCH="armhf"
-else
-    echo "${ARCH} architecture is not supported by flightradar24 :-("
-    exit 1
+  fi
+
+fi
+
+# If we don't have an architecture at this point, there's been a problem and we can't continue
+if [ -z "${FR24FEEDARCH}" ]; then
+  echo "ERROR: Unable to determine architecture or unsupported architecture!"
+  exit 1
 fi
 
 # Download repo index and get all .deb files available
