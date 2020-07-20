@@ -153,4 +153,3 @@ The following ports are used by this container:
 Having troubles with the container or have questions?  Please [create a new issue](https://github.com/mikenye/docker-flightradar24/issues).
 
 I also have a [Discord channel](https://discord.gg/sTf9uYF), feel free to [join](https://discord.gg/sTf9uYF) and converse.
-
