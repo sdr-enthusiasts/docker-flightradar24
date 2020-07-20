@@ -28,8 +28,7 @@ else
 fi
 
 # make sure we're listening on port 30334 
-netstat -an | grep LISTEN | grep 30334 > /dev/null
-if [ $? -eq 0 ]; then
+if netstat -an | grep LISTEN | grep 30334 > /dev/null; then
     echo "listening for connections on port 30334. HEALTHY"
 else
     echo "not listening for connections on port 30334. UNHEALTHY"
@@ -37,8 +36,7 @@ else
 fi
 
 # make sure we're listening on port 8754 
-netstat -an | grep LISTEN | grep 8754 > /dev/null
-if [ $? -eq 0 ]; then
+if netstat -an | grep LISTEN | grep 8754 > /dev/null; then
     echo "listening for connections on port 8754. HEALTHY"
 else
     echo "not listening for connections on port 8754. UNHEALTHY"
@@ -46,8 +44,7 @@ else
 fi
 
 # make sure we're listening on port 30003 
-netstat -an | grep LISTEN | grep 30003 > /dev/null
-if [ $? -eq 0 ]; then
+if netstat -an | grep LISTEN | grep 30003 > /dev/null; then
     echo "listening for connections on port 30003. HEALTHY"
 else
     echo "not listening for connections on port 30003. UNHEALTHY"
