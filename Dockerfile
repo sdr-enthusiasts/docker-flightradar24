@@ -6,6 +6,8 @@ ENV S6_BEHAVIOUR_IF_STAGE2_FAILS=2 \
 
 COPY deploy_fr24feed.sh /tmp/deploy_fr24feed.sh
 
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
 RUN set -x && \
     echo "========== Prerequisites ==========" && \
     apt-get update -y && \
