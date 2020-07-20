@@ -95,10 +95,8 @@ do
     fi
 
     # Check downloaded file
-    file /tmp/fr24feed.deb | grep -i XML > /dev/null
-    if [ "$?" -eq "0" ]; then
-        grep -i "<code>nosuchkey</code>" /tmp/fr24feed.deb > /dev/null
-        if [ "$?" -eq "0" ]; then
+    if file /tmp/fr24feed.deb | grep -i XML > /dev/null; then
+        if grep -i "<code>nosuchkey</code>" /tmp/fr24feed.deb > /dev/null; then
             echo "Version ${FR24FEEDVERSION} for ${ARCH} doesn't appear to exist."
             rm /tmp/fr24feed.deb
             continue
