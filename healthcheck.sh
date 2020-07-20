@@ -17,7 +17,7 @@ fi
 
 # Check /var/log/fr24feed.log for sent data in last 5 minutes
 LOG_LAST_ENTRY=$(grep '\[feed\]\[i\]sent' /var/log/fr24feed.log | tail -1)
-LOG_LAST_ENTRY_TIMESTAMP=$(date --date="$(echo $LOG_LAST_ENTRY | cut -d ' ' -f 1,2)" +%s.%N)
+LOG_LAST_ENTRY_TIMESTAMP=$(date --date="$(echo "$LOG_LAST_ENTRY" | cut -d ' ' -f 1,2)" +%s.%N)
 TIMESTAMP_NOW=$(date +%s.%N)
 RECENT_LINE_IN_LOG=$(echo "($TIMESTAMP_NOW - $LOG_LAST_ENTRY_TIMESTAMP) < 300" | bc)
 if [ "$RECENT_LINE_IN_LOG" -eq 1 ]; then
