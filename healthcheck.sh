@@ -5,10 +5,10 @@ EXITCODE=0
 
 # Check /var/log/fr24feed.log for errors
 LOG_ERROR_LAST_ENTRY=$(grep '\[e\]' /var/log/fr24feed.log | tail -1)
-LOG_ERROR_LAST_ENTRY_TIMESTAMP=$(date --date="$(echo $LOG_ERROR_LAST_ENTRY | cut -d ' ' -f 1,2)" +%s.%N)
+LOG_ERROR_LAST_ENTRY_TIMESTAMP=$(date --date="$(echo "$LOG_ERROR_LAST_ENTRY" | cut -d ' ' -f 1,2)" +%s.%N)
 TIMESTAMP_NOW=$(date +%s.%N)
-RECENT_ERRORS_IN_LOG=$(echo "($TIMESTAMP_NOW - $LOG_ERROR_LAST_ENTRY_TIMESTAMP) < 100" | bc)
-if [ $RECENT_ERRORS_IN_LOG -eq 0 ]; then
+RECENT_ERRORS_IN_LOG=$(echo "($TIMESTAMP_NOW" - "$LOG_ERROR_LAST_ENTRY_TIMESTAMP) < 100" | bc)
+if [ "$RECENT_ERRORS_IN_LOG" -eq 0 ]; then
     echo "No recent errors in /var/log/fr24feed.log. HEALTHY"
 else
     echo "Recent errors in /var/log/fr24feed.log: '${LOG_ERROR_LAST_ENTRY}'. UNHEALTHY"
