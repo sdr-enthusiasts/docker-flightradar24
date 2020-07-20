@@ -107,7 +107,7 @@ do
 
     # Get version from .deb file
     FR24FEEDVERSION=$(dpkg --info /tmp/fr24feed.deb | \
-                      grep -i Version\: | \
+                      grep -i 'Version:' | \
                       tr -s " " | \
                       cut -d ":" -f 2 | \
                       tr -d " ")
