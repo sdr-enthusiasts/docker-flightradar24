@@ -2,7 +2,8 @@ FROM debian:stable-slim
 
 ENV S6_BEHAVIOUR_IF_STAGE2_FAILS=2 \
     BEASTPORT=30005 \
-    MLAT=no
+    MLAT=no \
+    VERBOSE_LOGGING=false
 
 COPY deploy_fr24feed.sh /tmp/deploy_fr24feed.sh
 

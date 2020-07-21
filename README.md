@@ -134,6 +134,7 @@ There are a series of available environment variables:
 | `FR24KEY`            | Required. Flightradar24 Sharing Key | |
 | `TZ`                 | Your local timezone (optional)  | GMT     |
 | `MLAT`               | Enable multilateration (optional) | no |
+| `VERBOSE_LOGGING`    | Set to `true` to enable verbose logging (optional) | `false` |
 
 ## Ports
 
