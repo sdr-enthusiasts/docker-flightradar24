@@ -8,5 +8,5 @@ if [ "$VERBOSE_LOGGING" = "true" ]; then
   tail -F /var/log/fr24feed.log
 else
   # filter out noisy info, notice & warning messages
-  tail -F /var/log/fr24feed.log | grep -vP "\[\w+\]\[(i|n|w)\]"  | grep -v '| \[i\]'
+  tail -F /var/log/fr24feed.log | grep -vP "\[\w+\]\[(i|n|w)\]"  | grep -v ' \[i\]'
 fi
