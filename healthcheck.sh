@@ -27,6 +27,9 @@ else
     EXITCODE=1
 fi
 
+# now log checks are finished, truncate log
+truncate -s 0 /var/log/fr24feed.log > /dev/null 2>&1
+
 # make sure we're listening on port 30334 
 if netstat -an | grep LISTEN | grep 30334 > /dev/null; then
     echo "listening for connections on port 30334. HEALTHY"
