@@ -5,8 +5,8 @@ set -o pipefail
 
 if [ "$VERBOSE_LOGGING" = "true" ]; then
   # show everything
-  tail -F /var/log/fr24feed.log
+  tail -F /var/log/fr24feed.log 2> /dev/null
 else
   # filter out noisy info, notice & warning messages
-  tail -F /var/log/fr24feed.log | awk -W Interactive '! /\[[a-zA-Z]+\]\[(i|n|w)\]/'
+  tail -F /var/log/fr24feed.log 2> /dev/null | awk -W Interactive '! /\[[a-zA-Z]+\]\[(i|n|w)\]/'
 fi
