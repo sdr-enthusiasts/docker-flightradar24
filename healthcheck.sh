@@ -4,7 +4,7 @@ set -e
 EXITCODE=0
 
 # Check /var/log/fr24feed.log for errors in last 5 minutes
-LOG_ERROR_LAST_ENTRY=$(grep '\[e\]' /var/log/fr24feed.log | tail -1)
+LOG_ERROR_LAST_ENTRY=$(grep -a '\[e\]' /var/log/fr24feed.log | tail -1)
 LOG_ERROR_LAST_ENTRY_TIMESTAMP=$(date --date="$(echo "$LOG_ERROR_LAST_ENTRY" | cut -d ' ' -f 1,2)" +%s.%N)
 TIMESTAMP_NOW=$(date +%s.%N)
 RECENT_ERRORS_IN_LOG=$(echo "($TIMESTAMP_NOW" - "$LOG_ERROR_LAST_ENTRY_TIMESTAMP) < 300" | bc)
@@ -16,7 +16,7 @@ else
 fi
 
 # Check /var/log/fr24feed.log for sent data in last 5 minutes
-LOG_LAST_ENTRY=$(grep '\[feed\]\[i\]sent' /var/log/fr24feed.log | tail -1)
+LOG_LAST_ENTRY=$(grep -a '\[feed\]\[i\]sent' /var/log/fr24feed.log | tail -1)
 LOG_LAST_ENTRY_TIMESTAMP=$(date --date="$(echo "$LOG_LAST_ENTRY" | cut -d ' ' -f 1,2)" +%s.%N)
 TIMESTAMP_NOW=$(date +%s.%N)
 RECENT_LINE_IN_LOG=$(echo "($TIMESTAMP_NOW - $LOG_LAST_ENTRY_TIMESTAMP) < 300" | bc)
