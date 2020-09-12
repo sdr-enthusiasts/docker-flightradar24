@@ -23,13 +23,14 @@ else
 fi
 
 # Set up fr24feed
-touch /etc/fr24feed.ini
-echo receiver="beast-tcp" > /etc/fr24feed.ini
-echo fr24key="${FR24KEY}" >> /etc/fr24feed.ini
-echo host="${BEASTHOST}:${BEASTPORT}" >> /etc/fr24feed.ini
-echo bs="yes" >> /etc/fr24feed.ini
-echo raw="yes" >> /etc/fr24feed.ini
-echo logmode="1" >> /etc/fr24feed.ini
-echo logpath="/var/log" >> /etc/fr24feed.ini
-echo mlat="${MLAT}" >> /etc/fr24feed.ini
-echo mlat-without-gps="${MLAT}" >> /etc/fr24feed.ini
+{
+  echo receiver="beast-tcp"
+  echo fr24key="${FR24KEY}"
+  echo host="${BEASTHOST}:${BEASTPORT}"
+  echo bs="yes"
+  echo raw="yes"
+  echo logmode="1"
+  echo logpath="/var/log"
+  echo mlat="${MLAT}"
+  echo mlat-without-gps="${MLAT}"
+} > /etc/fr24feed.ini

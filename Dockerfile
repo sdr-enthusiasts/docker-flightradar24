@@ -2,9 +2,12 @@ FROM debian:stable-slim
 
 ENV S6_BEHAVIOUR_IF_STAGE2_FAILS=2 \
     BEASTPORT=30005 \
-    MLAT=no
+    MLAT=no \
+    VERBOSE_LOGGING=false
 
 COPY deploy_fr24feed.sh /tmp/deploy_fr24feed.sh
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN set -x && \
     echo "========== Prerequisites ==========" && \
@@ -16,6 +19,7 @@ RUN set -x && \
         curl \
         file \
         gnupg \
+        net-tools \
         procps \
         xmlstarlet \
         && \
@@ -34,7 +38,11 @@ RUN set -x && \
     rm -rf /var/lib/apt/lists/*
 
 COPY etc/ /etc/
+COPY healthcheck.sh /healthcheck.sh
 
 EXPOSE 30334/tcp 8754/tcp 30003/tcp
 
 ENTRYPOINT [ "/init" ]
+
+# Add healthcheck
+HEALTHCHECK --start-period=300s --interval=300s CMD /healthcheck.sh

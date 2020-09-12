@@ -134,6 +134,7 @@ There are a series of available environment variables:
 | `FR24KEY`            | Required. Flightradar24 Sharing Key | |
 | `TZ`                 | Your local timezone (optional)  | GMT     |
 | `MLAT`               | Enable multilateration (optional) | no |
+| `VERBOSE_LOGGING`    | Set to `true` to enable verbose logging (optional) | `false` |
 
 ## Ports
 
@@ -147,3 +148,9 @@ The following ports are used by this container:
 
 * The `fr24feed` process is logged to the container's stdout, and can be viewed with `docker logs [-f] container`.
 * `fr24feed` log file exists at `/var/log/fr24feed.log`, with automatic log rotation.
+
+## Getting Help
+
+Having troubles with the container or have questions?  Please [create a new issue](https://github.com/mikenye/docker-flightradar24/issues).
+
+I also have a [Discord channel](https://discord.gg/sTf9uYF), feel free to [join](https://discord.gg/sTf9uYF) and converse.
