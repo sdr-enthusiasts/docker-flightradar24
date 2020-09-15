@@ -8,7 +8,7 @@ For more information on what fr24feed is, see here: [share-your-data](https://ww
 
 ## NOTICE!
 
-RPi users are reporting issues with the latest version (`1.0.26-4`) of the `fr24feed` binary from FR24. RPi users are encouraged to remain on version `1.0.25-3` until these issues are resolved. To do this, use the image `mikenye/fr24feed:1.0.25-3_armhf`. Thanks.
+RPi users are reporting issues with the latest versions (`1.0.26-4` and above) of the `fr24feed` binary from FR24. RPi users are encouraged to remain on version `1.0.25-3` until these issues are resolved. I've temporarily reverted the `latest` images to `1.0.25-3` until this is resolved. See <https://github.com/mikenye/docker-flightradar24/issues/14> for further details.
 
 ## Supported tags and respective Dockerfiles
 
