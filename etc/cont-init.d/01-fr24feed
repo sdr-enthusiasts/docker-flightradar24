@@ -33,4 +33,5 @@ fi
   echo logpath="/var/log"
   echo mlat="${MLAT}"
   echo mlat-without-gps="${MLAT}"
+  echo bind-interface="0.0.0.0"
 } > /etc/fr24feed.ini
