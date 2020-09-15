@@ -40,6 +40,10 @@ if echo "${FILEOUTPUT}" | grep "ARM" > /dev/null; then
   if echo "${FILEOUTPUT}" | grep "armhf" > /dev/null; then
     FR24REPOPATH="rpi_binaries"
     FR24FEEDARCH="armhf"
+
+    # Temporary override for broken versions beyond this
+    FR24FILEOVERRIDE="rpi_binaries/fr24feed_1.0.25-3_armhf.deb"
+
   fi
 
   # arm64
@@ -49,6 +53,10 @@ if echo "${FILEOUTPUT}" | grep "ARM" > /dev/null; then
   if echo "${FILEOUTPUT}" | grep "aarch64" > /dev/null; then
     FR24REPOPATH="rpi_binaries"
     FR24FEEDARCH="armhf"
+
+    # Temporary override for broken versions beyond this
+    FR24FILEOVERRIDE="rpi_binaries/fr24feed_1.0.25-3_armhf.deb"
+    
   fi
 
 fi
