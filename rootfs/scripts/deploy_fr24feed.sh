@@ -18,6 +18,9 @@ FILEOUTPUT=$("${FILEBINARY}" -L "${FILEBINARY}")
 if echo "${FILEOUTPUT}" | grep "Intel 80386" > /dev/null; then
   FR24REPOPATH="linux_x86_binaries"
   FR24FEEDARCH="i386"
+
+  # Temporary override for broken versions beyond this
+  FR24FILEOVERRIDE="linux_x86_binaries/fr24feed_1.0.25-3_i386.deb"
 fi
 
 # x86-64
@@ -27,6 +30,9 @@ fi
 if echo "${FILEOUTPUT}" | grep "x86-64" > /dev/null; then
   FR24REPOPATH="linux_x86_64_binaries"
   FR24FEEDARCH="amd64"
+
+  # Temporary override for broken versions beyond this
+  FR24FILEOVERRIDE="linux_x86_64_binaries/fr24feed_1.0.25-3_amd64.deb"
 fi
 
 # armel
