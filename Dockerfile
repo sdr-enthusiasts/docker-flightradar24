@@ -5,7 +5,7 @@ ENV S6_BEHAVIOUR_IF_STAGE2_FAILS=2 \
     MLAT=no \
     VERBOSE_LOGGING=false
 
-COPY deploy_fr24feed.sh /tmp/deploy_fr24feed.sh
+COPY rootfs/ /
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
@@ -26,7 +26,7 @@ RUN set -x && \
     echo "========== Deploying s6-overlay ==========" && \
     curl -s https://raw.githubusercontent.com/mikenye/deploy-s6-overlay/master/deploy-s6-overlay.sh | sh && \
     echo "========== Deploying fr24feed ==========" && \
-    /tmp/deploy_fr24feed.sh && \
+    /scripts/deploy_fr24feed.sh && \
     echo "========== Clean-up ==========" && \
     apt-get remove -y \
         curl \
@@ -37,12 +37,9 @@ RUN set -x && \
     apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/*
 
-COPY etc/ /etc/
-COPY healthcheck.sh /healthcheck.sh
-
 EXPOSE 30334/tcp 8754/tcp 30003/tcp
 
 ENTRYPOINT [ "/init" ]
 
 # Add healthcheck
-HEALTHCHECK --start-period=3600s --interval=600s CMD /healthcheck.sh
+HEALTHCHECK --start-period=3600s --interval=600s CMD /scripts/healthcheck.sh
