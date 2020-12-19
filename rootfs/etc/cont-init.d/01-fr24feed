@@ -1,5 +1,5 @@
-#!/usr/bin/with-contenv sh
-#shellcheck shell=sh
+#!/usr/bin/with-contenv bash
+#shellcheck shell=bash
 
 # Check to make sure the correct command line arguments have been set
 EXITCODE=0
