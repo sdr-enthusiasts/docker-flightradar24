@@ -1,8 +1,13 @@
 # mikenye/flightradar24
 
-Docker container running FlightRadar24's `fr24feed`. Designed to work in tandem with [mikenye/readsb](https://hub.docker.com/repository/docker/mikenye/readsb) or [mikenye/piaware](https://hub.docker.com/repository/docker/mikenye/piaware). Builds and runs on `x86_64`, `arm32v7` & `arm64` (see below).
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/mikenye/docker-flightradar24/Deploy%20to%20Docker%20Hub)](https://github.com/mikenye/docker-flightradar24/actions?query=workflow%3A%22Deploy+to+Docker+Hub%22)
+[![Docker Pulls](https://img.shields.io/docker/pulls/mikenye/fr24feed.svg)](https://hub.docker.com/r/mikenye/fr24feed)
+[![Docker Image Size (tag)](https://img.shields.io/docker/image-size/mikenye/fr24feed/latest)](https://hub.docker.com/r/mikenye/fr24feed)
+[![Discord](https://img.shields.io/discord/734090820684349521)](https://discord.gg/sTf9uYF)
 
-`fr24feed` pulls ModeS/BEAST information from the [mikenye/piaware](https://hub.docker.com/repository/docker/mikenye/piaware) (or another host providing ModeS/BEAST data), and sends data to FlightRadar24.
+Docker container running FlightRadar24's `fr24feed`. Designed to work in tandem with [mikenye/readsb-protobuf](https://hub.docker.com/repository/docker/mikenye/readsb-protobuf). Builds and runs on `x86_64`, `arm32v7`, `arm64` and `386`.
+
+`fr24feed` pulls ModeS/BEAST information from the [mikenye/readsb-protobuf](https://hub.docker.com/repository/docker/mikenye/readsb-protobuf) (or another host providing ModeS/BEAST data), and sends data to FlightRadar24.
 
 For more information on what fr24feed is, see here: [share-your-data](https://www.flightradar24.com/share-your-data).
 
@@ -18,13 +23,7 @@ RPi users are reporting issues with the latest versions (`1.0.26-4` and above) o
 
 ## Multi Architecture Support
 
-Currently, this image should pull and run on the following architectures:
-
-* `linux/amd64`: Linux x86-64
-* `linux/arm/v7`: ARMv7 32-bit (Odroid HC1/HC2/XU4, RPi 2/3)
-* `linux/arm64/v8`: ARMv8 64-bit
-
-A note on `arm64`: FlightRadar24 only make binaries available for `amd64` and `armhf`. The `arm64` version of this container uses the `armhf` binaries which are compiled for `arm32`. `arm32` support is optional on `arm64`. In practice, there is only one `arm64` CPU that omits legacy `arm32` instruction set support - Cavium ThunderX. Thus, this image should work on any `arm64` system that doesn't have the Cavium ThunderX CPU. [Reference](https://askubuntu.com/questions/928249/how-to-run-armhf-executables-on-an-arm64-system).
+A note on `arm64`: FlightRadar24 only make binaries available for `amd64`, `386` and `armhf`. The `arm64` version of this container uses the `armhf` binaries which are compiled for `arm32`. `arm32` support is optional on `arm64`. In practice, there is only one `arm64` CPU that omits legacy `arm32` instruction set support - Cavium ThunderX. Thus, this image should work on any `arm64` system that doesn't have the Cavium ThunderX CPU. [Reference](https://askubuntu.com/questions/928249/how-to-run-armhf-executables-on-an-arm64-system).
 
 ## Obtaining a Flightradar24 Sharing Key
 
