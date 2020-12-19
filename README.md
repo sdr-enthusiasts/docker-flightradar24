@@ -6,7 +6,7 @@ Docker container running FlightRadar24's `fr24feed`. Designed to work in tandem 
 
 For more information on what fr24feed is, see here: [share-your-data](https://www.flightradar24.com/share-your-data).
 
-## NOTICE!
+## NOTICE
 
 RPi users are reporting issues with the latest versions (`1.0.26-4` and above) of the `fr24feed` binary from FR24. RPi users are encouraged to remain on version `1.0.25-3` until these issues are resolved. I've temporarily reverted the `latest` images to `1.0.25-3` until this is resolved. See <https://github.com/mikenye/docker-flightradar24/issues/14> for further details.
 
