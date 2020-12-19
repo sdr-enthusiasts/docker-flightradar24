@@ -35,7 +35,8 @@ RUN set -x && \
         xmlstarlet \
         && \
     apt-get autoremove -y && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* && \
+    fr24feed --version > /CONTAINER_VERSION
 
 EXPOSE 30334/tcp 8754/tcp 30003/tcp
 
