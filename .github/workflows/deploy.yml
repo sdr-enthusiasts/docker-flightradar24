@@ -10,7 +10,7 @@ on:
 
   # Build and deploy the image nightly (to ensure we pick up any security updates)
   schedule:
-    - cron: "0 0 * * *"
+    - cron: "0 3 * * *"
 
 jobs:
   deploy_dockerhub_multiarch:
