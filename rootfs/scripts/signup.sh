@@ -24,15 +24,12 @@ function write_fr24_expectscript() {
         echo 'expect "Step 1.2 - If you used to feed FR24 with ADS-B data before, enter your sharing key.\n$:"'
         echo "send \"\r\""
         echo 'expect "Step 1.3 - Would you like to participate in MLAT calculations? (yes/no)$:"'
-        echo "send \"no\r\""
-        echo "expect \"Step 3.A - Enter antenna's latitude (DD.DDDD)\""
-        echo 'expect "$:"'
+        echo "send \"yes\r\""
+        echo "expect \"Step 3.A - Enter antenna's latitude (DD.DDDD)\r\$:\""
         echo "send \"${FEEDER_LAT}\r\""
-        echo "expect \"Step 3.B - Enter antenna's longitude (DDD.DDDD)\""
-        echo 'expect "$:"'
+        echo "expect \"Step 3.B - Enter antenna's longitude (DDD.DDDD)\r\$:\""
         echo "send \"${FEEDER_LONG}\r\""
-        echo "expect \"Step 3.C - Enter antenna's altitude above the sea level (in feet)\""
-        echo 'expect "$:"'
+        echo "expect \"Step 3.C - Enter antenna's altitude above the sea level (in feet)\r\$:\""
         echo "send \"${FEEDER_ALT_FT}\r\""
         # TODO - Add better error handlin
         # eg: Handle 'Validating email/location information...ERROR'
