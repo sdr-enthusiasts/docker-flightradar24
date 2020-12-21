@@ -15,7 +15,7 @@ TMPFILE_FR24SIGNUP_LOG="$TMPDIR_FR24SIGNUP/TMPFILE_FR24SIGNUP_LOG"
 
 function write_fr24_expectscript() {
     {
-        echo '#!/usr/bin/env expect'
+        echo '#!/usr/bin/env expect --'
         echo 'set timeout 120'
         echo "spawn fr24feed --signup"
         echo "sleep 3"
