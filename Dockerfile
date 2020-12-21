@@ -17,6 +17,7 @@ RUN set -x && \
         binutils \
         ca-certificates \
         curl \
+        expect \
         file \
         gnupg \
         net-tools \
