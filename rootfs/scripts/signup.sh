@@ -19,15 +19,12 @@ function write_fr24_expectscript() {
         echo 'set timeout 120'
         echo "spawn fr24feed --signup"
         echo "sleep 3"
-        echo "send \"\r\""
-        echo 'expect "Step 1.1 - Enter your email address (username@domain.tld)"'
-        echo 'expect "$:"'
+        echo 'expect "Step 1.1 - Enter your email address (username@domain.tld)\n$:"'
         echo "send \"${FR24_EMAIL}\r\""
-        echo 'expect "Step 1.2 - If you used to feed FR24 with ADS-B data before, enter your sharing key."'
-        echo 'expect "$:"'
+        echo 'expect "Step 1.2 - If you used to feed FR24 with ADS-B data before, enter your sharing key.\n$:"'
         echo "send \"\r\""
         echo 'expect "Step 1.3 - Would you like to participate in MLAT calculations? (yes/no)$:"'
-        echo "send \"yes\r\""
+        echo "send \"no\r\""
         echo "expect \"Step 3.A - Enter antenna's latitude (DD.DDDD)\""
         echo 'expect "$:"'
         echo "send \"${FEEDER_LAT}\r\""
