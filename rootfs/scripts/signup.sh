@@ -71,6 +71,8 @@ write_fr24_expectscript
 # run expect script & interpret output
 if ! expect "$TMPFILE_FR24SIGNUP_EXPECT" > "$TMPFILE_FR24SIGNUP_LOG" 2>&1; then
   echo "ERROR: Problem running flightradar24 sign-up process :-("
+  echo ""
+  cat "$TMPFILE_FR24SIGNUP_LOG"
   exit 1
 fi
 
@@ -81,6 +83,8 @@ if grep -P "$REGEX_PATTERN_FR24_SHARING_KEY" "$TMPFILE_FR24SIGNUP_LOG" > /dev/nu
   echo "FR24_SHARING_KEY=$FR24_SHARING_KEY"
 else
   echo "ERROR: Could not find flightradar24 sharing key :-("
+  echo ""
+  cat "$TMPFILE_FR24SIGNUP_LOG"
   exit 1
 fi
 
@@ -91,6 +95,8 @@ if grep -P "$REGEX_PATTERN_FR24_RADAR_ID" "$TMPFILE_FR24SIGNUP_LOG" > /dev/null 
   echo "FR24_RADAR_ID=$FR24_RADAR_ID"
 else
   echo "ERROR: Could not find flightradar24 radar ID :-("
+  echo ""
+  cat "$TMPFILE_FR24SIGNUP_LOG"
   exit 1
 fi
 
