@@ -51,7 +51,7 @@ Remember to replace:
 
 * `YOUR_FEEDER_LAT` with the latitude of your feeder's antenna
 * `YOUR_FEEDER_LONG` with the longitude of your feeder's antenna
-* `YOUR_FEEDER_ALT_FT` with the altitude of your feeder's antenna **in feet**
+* `YOUR_FEEDER_ALT_FT` with the altitude of your feeder's antenna above sea level **in feet**
 * `YOUR@EMAIL.ADDRESS` with your email address.
 
 After 30 seconds or so, you should see the following output:
@@ -75,12 +75,12 @@ docker run --rm -it --entrypoint fr24feed mikenye/fr24feed --signup
 
 This will take you through the signup process. Most of the answers don't matter as during normal operation the configuration will be set with environment variables. I would suggest answering as follows:
 
-* `Step 1.1 - Enter your email address (username@domain.tld)`: Enter you email address.
+* `Step 1.1 - Enter your email address (username@domain.tld)`: Enter your email address.
 * `Step 1.2 - If you used to feed FR24 with ADS-B data before, enter your sharing key.`: Leave blank and press enter.
 * `Step 1.3 - Would you like to participate in MLAT calculations?`: Answer `yes`.
 * `Step 3.A - Enter antenna's latitude (DD.DDDD)`: Enter your antenna's latitude.
 * `Step 3.B - Enter antenna's longitude (DDD.DDDD)`: Enter your antenna's longitude.
-* `Step 3.C - Enter antenna's altitude above the sea level (in feet)`: Enter your antenna's altitude above the sea level **in feet**.
+* `Step 3.C - Enter antenna's altitude above the sea level (in feet)`: Enter your antenna's altitude above sea level **in feet**.
 * `Would you like to continue using these settings?`: Answer `yes`.
 * `Step 4.1 - Receiver selection (in order to run MLAT please use DVB-T stick with dump1090 utility bundled with fr24feed)... Enter your receiver type (1-7)`: Answer `7`.
 * `Step 6 - Please select desired logfile mode... Select logfile mode (0-2)`: Answer `0`.
