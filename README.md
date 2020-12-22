@@ -33,24 +33,26 @@ In order to obtain a Flightradar24 sharing key, initially run the container as-p
 
 ### Script Method
 
-Inside your application directory (`/opt/adsb`), run the following commands:
+Run the following command to temporarily start the container and complete the automated signup process:
 
 ```shell
-docker pull mikenye/fr24feed:latest
-source ./.env
-FR24_EMAIL="YOUR@EMAIL.ADDRESS"
 docker run \
   --rm \
   -it \
-  -e FEEDER_LAT="$FEEDER_LAT" \
-  -e FEEDER_LONG="$FEEDER_LONG" \
-  -e FEEDER_ALT_FT="$FEEDER_ALT_FT" \
-  -e FR24_EMAIL="$FR24_EMAIL" \
+  -e FEEDER_LAT="YOUR_FEEDER_LAT" \
+  -e FEEDER_LONG="YOUR_FEEDER_LONG" \
+  -e FEEDER_ALT_FT="YOUR_FEEDER_ALT_FT" \
+  -e FR24_EMAIL="YOUR@EMAIL.ADDRESS" \
   --entrypoint /scripts/signup.sh \
   mikenye/fr24feed 
 ```
 
-Remember to replace `YOUR@EMAIL.ADDRESS` with you email address.
+Remember to replace:
+
+* `YOUR_FEEDER_LAT` with the latitude of your feeder's antenna
+* `YOUR_FEEDER_LONG` with the longitude of your feeder's antenna
+* `YOUR_FEEDER_ALT_FT` with the altitude of your feeder's antenna **in feet**
+* `YOUR@EMAIL.ADDRESS` with your email address.
 
 After 30 seconds or so, you should see the following output:
 
