@@ -21,7 +21,8 @@ function write_fr24_expectscript() {
         echo "sleep 3"
         echo 'expect "Step 1.1 - Enter your email address (username@domain.tld)\r\n$:"'
         echo "send \"${FR24_EMAIL}\n\""
-        echo 'expect "Step 1.2 - If you used to feed FR24 with ADS-B data before, enter your sharing key.\r\n$:"'
+        echo 'expect "Step 1.2 - If you used to feed FR24 with ADS-B data before, enter your sharing key.\r\n'
+        echo 'expect "$:"'
         echo "send \"\r\""
         echo 'expect "Step 1.3 - Would you like to participate in MLAT calculations? (yes/no)$:"'
         echo "send \"yes\r\""
