@@ -29,13 +29,63 @@ A note on `arm64`: FlightRadar24 only make binaries available for `amd64`, `386`
 
 First-time users should obtain a Flightradar24 sharing key.
 
-In order to obtain a Flightradar24 sharing key, initially run the container with the following command:
+In order to obtain a Flightradar24 sharing key, initially run the container as-per one of the methods below.
+
+### Script Method
+
+Run the following command to temporarily start the container and complete the automated signup process:
+
+```shell
+docker run \
+  --rm \
+  -it \
+  -e FEEDER_LAT="YOUR_FEEDER_LAT" \
+  -e FEEDER_LONG="YOUR_FEEDER_LONG" \
+  -e FEEDER_ALT_FT="YOUR_FEEDER_ALT_FT" \
+  -e FR24_EMAIL="YOUR@EMAIL.ADDRESS" \
+  --entrypoint /scripts/signup.sh \
+  mikenye/fr24feed
+```
+
+Remember to replace:
+
+* `YOUR_FEEDER_LAT` with the latitude of your feeder's antenna
+* `YOUR_FEEDER_LONG` with the longitude of your feeder's antenna
+* `YOUR_FEEDER_ALT_FT` with the altitude of your feeder's antenna above sea level **in feet**
+* `YOUR@EMAIL.ADDRESS` with your email address.
+
+After 30 seconds or so, you should see the following output:
+
+```
+FR24_SHARING_KEY=5fa9ca2g9049b615
+FR24_RADAR_ID=T-XXXX123
+```
+
+Take a note of the sharing key, as you'll need it when launching the container.
+
+### Manual Method
+
+If the script method fails (please let me know so I can fix it), you can sign up manually.
+
+Temporarily run the container with the following command:
 
 ```shell
 docker run --rm -it --entrypoint fr24feed mikenye/fr24feed --signup
 ```
 
-This will take you through the signup process. At the end of the signup process, you'll be presented with:
+This will take you through the signup process. Most of the answers don't matter as during normal operation the configuration will be set with environment variables. I would suggest answering as follows:
+
+* `Step 1.1 - Enter your email address (username@domain.tld)`: Enter your email address.
+* `Step 1.2 - If you used to feed FR24 with ADS-B data before, enter your sharing key.`: Leave blank and press enter.
+* `Step 1.3 - Would you like to participate in MLAT calculations?`: Answer `yes`.
+* `Step 3.A - Enter antenna's latitude (DD.DDDD)`: Enter your antenna's latitude.
+* `Step 3.B - Enter antenna's longitude (DDD.DDDD)`: Enter your antenna's longitude.
+* `Step 3.C - Enter antenna's altitude above the sea level (in feet)`: Enter your antenna's altitude above sea level **in feet**.
+* `Would you like to continue using these settings?`: Answer `yes`.
+* `Step 4.1 - Receiver selection (in order to run MLAT please use DVB-T stick with dump1090 utility bundled with fr24feed)... Enter your receiver type (1-7)`: Answer `7`.
+* `Step 6 - Please select desired logfile mode... Select logfile mode (0-2)`: Answer `0`.
+
+At the end of the signup process, you'll be presented with:
 
 ```
 Congratulations! You are now registered and ready to share ADS-B data with Flightradar24.
