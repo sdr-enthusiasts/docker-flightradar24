@@ -44,7 +44,7 @@ docker run \
   -e FEEDER_ALT_FT="YOUR_FEEDER_ALT_FT" \
   -e FR24_EMAIL="YOUR@EMAIL.ADDRESS" \
   --entrypoint /scripts/signup.sh \
-  mikenye/fr24feed 
+  mikenye/fr24feed
 ```
 
 Remember to replace:
@@ -61,7 +61,7 @@ FR24_SHARING_KEY=5fa9ca2g9049b615
 FR24_RADAR_ID=T-XXXX123
 ```
 
-Take a note of the sharing key, as you'll need it when launching the container. 
+Take a note of the sharing key, as you'll need it when launching the container.
 
 ### Manual Method
 
