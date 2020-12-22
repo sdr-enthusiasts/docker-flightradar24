@@ -66,7 +66,7 @@ fi
 write_fr24_expectscript
 
 # run expect script & interpret output
-if ! expect "$TMPFILE_FR24SIGNUP_EXPECT" tee "$TMPFILE_FR24SIGNUP_LOG" 2>&1; then
+if ! expect "$TMPFILE_FR24SIGNUP_EXPECT" > "$TMPFILE_FR24SIGNUP_LOG" 2>&1; then
   echo "ERROR: Problem running flightradar24 sign-up process :-("
   echo ""
   cat "$TMPFILE_FR24SIGNUP_LOG"
