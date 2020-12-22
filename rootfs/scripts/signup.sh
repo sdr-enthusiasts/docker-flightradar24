@@ -20,7 +20,7 @@ function write_fr24_expectscript() {
         echo "spawn fr24feed --signup"
         echo "sleep 3"
         echo 'expect "Step 1.1 - Enter your email address (username@domain.tld)\r\n$:"'
-        echo "send \"${FR24_EMAIL}\n\""
+        echo "send -- \"${FR24_EMAIL}\n\""
         echo 'expect "Step 1.2 - If you used to feed FR24 with ADS-B data before, enter your sharing key.\r\n"'
         echo 'expect "$:"'
         echo "send \"\r\""
@@ -28,12 +28,12 @@ function write_fr24_expectscript() {
         echo "send \"yes\r\""
         echo "expect \"Step 3.A - Enter antenna's latitude (DD.DDDD)\r\n\$:\""
         # if [[ ${FEEDER_LAT:0:1} == "-" ]]; then
-        echo "send \"${FEEDER_LAT}\r\""
+        echo "send -- \"${FEEDER_LAT}\r\""
         
         echo "expect \"Step 3.B - Enter antenna's longitude (DDD.DDDD)\r\n\$:\""
-        echo "send \"${FEEDER_LONG}\r\""
+        echo "send -- \"${FEEDER_LONG}\r\""
         echo "expect \"Step 3.C - Enter antenna's altitude above the sea level (in feet)\r\n\$:\""
-        echo "send \"${FEEDER_ALT_FT}\r\""
+        echo "send -- \"${FEEDER_ALT_FT}\r\""
         # TODO - Add better error handlin
         # eg: Handle 'Validating email/location information...ERROR'
         # Need some real-world failure logs
