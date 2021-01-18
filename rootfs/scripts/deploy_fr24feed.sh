@@ -2,6 +2,8 @@
 
 set -x
 
+RUN echo "Running on $BUILDPLATFORM, building for $TARGETPLATFORM" > /log
+
 # Get arch
 # Make sure `file` (libmagic) is available
 FILEBINARY=$(which file)
