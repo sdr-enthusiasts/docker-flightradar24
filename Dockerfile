@@ -1,5 +1,8 @@
 FROM debian:stable-slim
 
+ARG TARGETPLATFORM
+ARG BUILDPLATFORM
+
 ENV S6_BEHAVIOUR_IF_STAGE2_FAILS=2 \
     BEASTPORT=30005 \
     MLAT=no \
@@ -37,7 +40,8 @@ RUN set -x && \
         && \
     apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/* /tmp/* /src && \
-    fr24feed --version > /CONTAINER_VERSION
+    fr24feed --version > /CONTAINER_VERSION && \
+    cat /CONTAINER_VERSION
 
 EXPOSE 30334/tcp 8754/tcp 30003/tcp
 
