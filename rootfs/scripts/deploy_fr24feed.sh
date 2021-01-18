@@ -22,7 +22,7 @@ case "$TARGETPLATFORM" in
     FR24DOWNLOAD="rpi_binaries/fr24feed_1.0.25-3_armhf.deb"
     ;;
 
-  *)
+  * )
     # If we don't have an architecture at this point, there's been a problem and we can't continue
     echo "ERROR: Unable to determine architecture or unsupported architecture!"
     exit 1
@@ -55,10 +55,7 @@ FR24FEEDVERSION=$(dpkg --info /tmp/fr24feed.deb | \
                   tr -s " " | \
                   cut -d ":" -f 2 | \
                   tr -d " ")
-echo "Downloaded ${FR24FEEDVERSION} for ${ARCH} OK"
-
-# Log version downloaded
-echo "${FR24FEEDVERSION}_${FR24FEEDARCH}" >> /VERSION
+echo "Downloaded ${FR24FEEDVERSION} for ${TARGETPLATFORM} OK"
 
 # Deploy fr24feed.deb
 cd /tmp || exit 1
