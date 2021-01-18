@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-set -x
+set -ex
 
-RUN echo "Running on $BUILDPLATFORM, building for $TARGETPLATFORM" > /log
+echo "Running on $BUILDPLATFORM, building for $TARGETPLATFORM" > /log
 
 # Get arch
 # Make sure `file` (libmagic) is available
