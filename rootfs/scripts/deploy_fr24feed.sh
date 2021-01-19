@@ -22,6 +22,10 @@ case "$TARGETPLATFORM" in
     FR24DOWNLOAD="rpi_binaries/fr24feed_1.0.25-3_armhf.deb"
     ;;
 
+  "linux/arm/v6" )
+    FR24DOWNLOAD="rpi_binaries/fr24feed_1.0.25-3_armhf.deb"
+    ;;
+
   * )
     # If we don't have an architecture at this point, there's been a problem and we can't continue
     echo "ERROR: Unable to determine architecture or unsupported architecture!"
