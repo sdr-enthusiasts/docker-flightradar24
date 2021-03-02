@@ -151,7 +151,7 @@ services:
     mac_address: de:ad:be:ef:13:37
     restart: always
     devices:
-      - /dev/bus/usb/001/004:/dev/bus/usb/001/004
+      - /dev/bus/usb:/dev/bus/usb
     ports:
       - 8080:8080
       - 30005:30005
@@ -159,6 +159,8 @@ services:
       - TZ="Australia/Perth"
       - LAT=-32.463873
       - LONG=113.458482
+      - FEEDER_ID=c478b1c99-23d3-4376-1f82-47352a28cg37
+      - ALLOW_MLAT=yes
     volumes:
       - /var/cache/piaware:/var/cache/piaware
 
@@ -171,6 +173,7 @@ services:
       - 8754:8754
     environment:
       - BEASTHOST=piaware
+      - TZ="Australia/Perth"
       - FR24KEY=xxxxxxxxxxx
       - MLAT=yes
 ```
