@@ -7,23 +7,23 @@ set -ex
 echo "Running on $BUILDPLATFORM, building for $TARGETPLATFORM" > /log
 case "$TARGETPLATFORM" in
   "linux/amd64" )
-    FR24DOWNLOAD="linux_x86_64_binaries/fr24feed_1.0.25-3_amd64.deb"
+    FR24DOWNLOAD="linux_x86_64_binaries/fr24feed_1.0.28-1_amd64.deb"
     ;;
 
   "linux/386" )
-    FR24DOWNLOAD="linux_x86_binaries/fr24feed_1.0.25-3_i386.deb"
+    FR24DOWNLOAD="linux_x86_binaries/fr24feed_1.0.28-1_i386.deb"
     ;;
 
   "linux/arm64" )
-    FR24DOWNLOAD="rpi_binaries/fr24feed_1.0.25-3_armhf.deb"
+    FR24DOWNLOAD="rpi_binaries/fr24feed_1.0.28-1_armhf.deb"
     ;;
 
   "linux/arm/v7" )
-    FR24DOWNLOAD="rpi_binaries/fr24feed_1.0.25-3_armhf.deb"
+    FR24DOWNLOAD="rpi_binaries/fr24feed_1.0.28-1_armhf.deb"
     ;;
 
   "linux/arm/v6" )
-    FR24DOWNLOAD="rpi_binaries/fr24feed_1.0.25-3_armhf.deb"
+    FR24DOWNLOAD="rpi_binaries/fr24feed_1.0.28-1_armhf.deb"
     ;;
 
   * )
