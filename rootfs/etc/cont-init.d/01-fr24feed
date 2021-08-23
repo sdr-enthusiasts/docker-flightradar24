@@ -1,5 +1,6 @@
 #!/usr/bin/with-contenv bash
-#shellcheck shell=bash
+# shellcheck shell=bash
+# shellcheck disable=SC2153
 
 # Check to make sure the correct command line arguments have been set
 EXITCODE=0
