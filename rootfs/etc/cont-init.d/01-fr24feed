@@ -27,7 +27,6 @@ fi
 {
   echo receiver="beast-tcp"
   echo fr24key="${FR24KEY}"
-  # shellcheck disable=SC2153
   echo host="${BEASTHOST}:${BEASTPORT}"
   echo bs="yes"
   echo raw="yes"
