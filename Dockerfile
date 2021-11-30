@@ -1,4 +1,4 @@
-FROM debian:buster-20210927-slim
+FROM debian:buster-20211115-slim
 
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
