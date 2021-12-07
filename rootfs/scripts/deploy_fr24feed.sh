@@ -29,6 +29,8 @@ case "$TARGETPLATFORM" in
   * )
     # If we don't have an architecture at this point, there's been a problem and we can't continue
     echo "ERROR: Unable to determine architecture or unsupported architecture!"
+    echo "TARGETPLATFORM=$TARGETPLATFORM"
+    echo "BUILDPLATFORM=$BUILDPLATFORM"
     exit 1
     ;;
 
