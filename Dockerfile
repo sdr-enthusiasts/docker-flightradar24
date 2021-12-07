@@ -29,9 +29,10 @@ RUN set -x && \
         && \
     echo "========== Deploying s6-overlay ==========" && \
     curl \
-        -o /tmp/deploy-s6-overlay.sh && \
+        -o /tmp/deploy-s6-overlay.sh \
         --location \
-        https://raw.githubusercontent.com/mikenye/deploy-s6-overlay/master/deploy-s6-overlay.sh && \
+        https://raw.githubusercontent.com/mikenye/deploy-s6-overlay/master/deploy-s6-overlay.sh \
+        && \
     bash /tmp/deploy-s6-overlay.sh && \
     echo "========== Deploying fr24feed ==========" && \
     /scripts/deploy_fr24feed.sh && \
