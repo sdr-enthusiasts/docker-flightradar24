@@ -28,7 +28,12 @@ RUN set -x && \
         xmlstarlet \
         && \
     echo "========== Deploying s6-overlay ==========" && \
-    curl -s https://raw.githubusercontent.com/mikenye/deploy-s6-overlay/master/deploy-s6-overlay.sh | sh && \
+    curl \
+        -o /tmp/deploy-s6-overlay.sh \
+        --location \
+        https://raw.githubusercontent.com/mikenye/deploy-s6-overlay/master/deploy-s6-overlay.sh \
+        && \
+    bash /tmp/deploy-s6-overlay.sh && \
     echo "========== Deploying fr24feed ==========" && \
     /scripts/deploy_fr24feed.sh && \
     echo "========== Clean-up ==========" && \
