@@ -34,8 +34,18 @@ RUN set -x && \
     cp -v /tmp/fr24feed_armhf/fr24feed /usr/local/bin/ && \
     # Simple test
     qemu-arm-static /usr/local/bin/fr24feed --version && \
+    # Clean up
+    apt-get remove -y "${TEMP_PACKAGES[@]}" && \
+    apt-get autoremove -y && \
+    rm -rf /src/* /tmp/* /var/lib/apt/lists/* && \
+    # Document version
+    qemu-arm-static /usr/local/bin/fr24feed --version > /CONTAINER_VERSION && \
+    cat /CONTAINER_VERSION
 
+EXPOSE 30334/tcp 8754/tcp 30003/tcp
 
+# Add healthcheck
+HEALTHCHECK --start-period=3600s --interval=600s CMD /scripts/healthcheck.sh
 
 # OLD STUFF BELOW
 # RUN set -x && \
@@ -70,18 +80,3 @@ RUN set -x && \
 #         xmlstarlet \
 #         && \
     
-    # Clean up
-    apt-get remove -y "${TEMP_PACKAGES[@]}" && \
-    apt-get autoremove -y && \
-    rm -rf /src/* /tmp/* /var/lib/apt/lists/* && \
-
-    # Document version
-    qemu-arm-static /usr/local/bin/fr24feed --version > /CONTAINER_VERSION && \
-    cat /CONTAINER_VERSION
-
-EXPOSE 30334/tcp 8754/tcp 30003/tcp
-
-ENTRYPOINT [ "/init" ]
-
-# Add healthcheck
-HEALTHCHECK --start-period=3600s --interval=600s CMD /scripts/healthcheck.sh
