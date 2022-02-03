@@ -12,6 +12,16 @@ COPY rootfs/ /
 
 # NEW STUFF BELOW
 RUN set -x && \
+    TEMP_PACKAGES=() && \
+    KEPT_PACKAGES=() && \
+    # 'expect' required for signup
+    KEPT_PACKAGES+=(expect) && \
+    # install packages
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+        "${KEPT_PACKAGES[@]}" \
+        "${TEMP_PACKAGES[@]}" \
+        && \
     # Download fr24feed arm binary
     curl \
         --location \
@@ -59,8 +69,12 @@ RUN set -x && \
 #         gnupg \
 #         xmlstarlet \
 #         && \
+    
+    # Clean up
+    apt-get remove -y "${TEMP_PACKAGES[@]}" && \
     apt-get autoremove -y && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /src && \
+    rm -rf /src/* /tmp/* /var/lib/apt/lists/* && \
+
     # Document version
     qemu-arm-static /usr/local/bin/fr24feed --version > /CONTAINER_VERSION && \
     cat /CONTAINER_VERSION
