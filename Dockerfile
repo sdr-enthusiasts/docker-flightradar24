@@ -1,4 +1,4 @@
-FROM debian:buster-20220125-slim
+FROM ghcr.io/fredclausen/docker-baseimage:qemu
 
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
