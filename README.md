@@ -5,22 +5,17 @@
 [![Docker Image Size (tag)](https://img.shields.io/docker/image-size/mikenye/fr24feed/latest)](https://hub.docker.com/r/mikenye/fr24feed)
 [![Discord](https://img.shields.io/discord/734090820684349521)](https://discord.gg/sTf9uYF)
 
-Docker container running FlightRadar24's `fr24feed`. Designed to work in tandem with [mikenye/readsb-protobuf](https://hub.docker.com/repository/docker/mikenye/readsb-protobuf). Builds and runs on `x86_64`, `arm32v7`, `arm32v6`,`arm64` and `386`.
+Docker container running FlightRadar24's `fr24feed`. Designed to work in tandem with [mikenye/readsb-protobuf](https://hub.docker.com/repository/docker/mikenye/readsb-protobuf). Builds and runs on `x86_64`, `arm32v6`, `arm32v7` & `arm64`.
 
 `fr24feed` pulls ModeS/BEAST information from the [mikenye/readsb-protobuf](https://hub.docker.com/repository/docker/mikenye/readsb-protobuf) (or another host providing ModeS/BEAST data), and sends data to FlightRadar24.
 
 For more information on what fr24feed is, see here: [share-your-data](https://www.flightradar24.com/share-your-data).
-
-## NOTICE
-
-RPi users are reporting issues with the latest versions (`1.0.26-4` and above) of the `fr24feed` binary from FR24. RPi users are encouraged to remain on version `1.0.25-3` until these issues are resolved. I've temporarily reverted the `latest` images to `1.0.25-3` until this is resolved. See <https://github.com/mikenye/docker-flightradar24/issues/14> for further details.
 
 ## Supported tags and respective Dockerfiles
 
 * `latest` (`master` branch, `Dockerfile`)
 * `latest_nohealthcheck` is the same as the `latest` version above. However, this version has the docker healthcheck removed. This is done for people running platforms (such as [Nomad](https://www.nomadproject.io)) that don't support manually disabling healthchecks, where healthchecks are not wanted.
 * Version and architecture specific tags available
-* For `àrmv6` (e.g. Raspberrypi Zero) use the tag `mikenye/fr24feed:latest_arm_v6`.
 
 ## Multi Architecture Support
 
@@ -70,8 +65,16 @@ If the script method fails (please let me know so I can fix it), you can sign up
 
 Temporarily run the container with the following command:
 
+**For ARM platforms:**
+
 ```shell
-docker run --rm -it --entrypoint fr24feed mikenye/fr24feed --signup
+docker run --rm -it --entrypoint /usr/local/bin/fr24feed mikenye/fr24feed --signup
+```
+
+**For other platforms:**
+
+```shell
+docker run --rm -it --entrypoint qemu-arm-static mikenye/fr24feed /usr/local/bin/fr24feed --signup
 ```
 
 This will take you through the signup process. Most of the answers don't matter as during normal operation the configuration will be set with environment variables. I would suggest answering as follows:
@@ -95,12 +98,6 @@ Congratulations! You are now registered and ready to share ADS-B data with Fligh
 ```
 
 Take a note of the sharing key, as you'll need it when launching the container.
-
-## Configuring `mikenye/piaware` Container
-
-If you're using this container with the `mikenye/piaware` container to provide ModeS/BEAST data, you'll need to ensure you've opened port 30005 into the `mikenye/piaware` container, so this container can connect to it.
-
-The IP address or hostname of the docker host running the `mikenye/piaware` container should be passed to the `mikenye/fr24feed` container via the `BEASTHOST` environment variable shown below. The port can be changed from the default of 30005 with the optional `BEASTPORT` environment variable.
 
 ## Up-and-Running with `docker run`
 
