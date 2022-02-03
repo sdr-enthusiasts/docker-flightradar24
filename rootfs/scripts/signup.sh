@@ -15,11 +15,22 @@ TMPFILE_FR24SIGNUP_EXPECT="$TMPDIR_FR24SIGNUP/TMPFILE_FR24SIGNUP_EXPECT"
 TMPFILE_FR24SIGNUP_LOG="$TMPDIR_FR24SIGNUP/TMPFILE_FR24SIGNUP_LOG"
 
 
+# Check if fr24feed can be run natively
+# Test fr24feed can run natively (without qemu)
+if /usr/local/bin/fr24feed --version > /dev/null 2>&1; then 
+  # fr24feed can be run natively
+  SPAWN_CMD="spawn /usr/local/bin/fr24feed --signup"
+else
+  # fr24feed needs qemu 
+  SPAWN_CMD="spawn qemu-arm-static /usr/local/bin/fr24feed --signup"
+fi
+
+
 function write_fr24_expectscript() {
     {
         echo '#!/usr/bin/env expect --'
         echo 'set timeout 120'
-        echo "spawn qemu-arm-static /usr/local/bin/fr24feed --signup"
+        echo "${SPAWN_CMD}"
         echo "sleep 3"
         echo 'expect "Step 1.1 - Enter your email address (username@domain.tld)\r\n$:"'
         echo "send -- \"${FR24_EMAIL}\n\""
