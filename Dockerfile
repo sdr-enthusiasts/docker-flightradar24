@@ -1,4 +1,4 @@
-FROM ghcr.io/fredclausen/docker-baseimage:qemu
+FROM ghcr.io/sdr-enthusiasts/docker-baseimage:qemu
 
 ARG TARGETPLATFORM
 ARG BUILDPLATFORM
