@@ -30,7 +30,7 @@ jobs:
     - name: Pull hadolint/hadolint:latest Image
       run: docker pull hadolint/hadolint:latest
     - name: Run hadolint against Dockerfiles
-      run: docker run --rm -i -v "$PWD":/workdir --workdir /workdir --entrypoint hadolint hadolint/hadolint --ignore DL3008 $(find . -type f -iname "Dockerfile*")
+      run: docker run --rm -i -v "$PWD":/workdir --workdir /workdir --entrypoint hadolint hadolint/hadolint --ignore SC2039 --ignore DL3008 $(find . -type f -iname "Dockerfile*")
 
   markdownlint:
 

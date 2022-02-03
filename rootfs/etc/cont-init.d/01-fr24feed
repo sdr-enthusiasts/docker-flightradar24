@@ -36,4 +36,5 @@ fi
   echo mlat-without-gps="${MLAT}"
 } > /etc/fr24feed.ini
 
-# echo bind-interface="0.0.0.0"
+# prepare log file
+touch /var/log/fr24feed.log
