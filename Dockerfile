@@ -32,14 +32,16 @@ RUN set -x && \
     tar xvf /tmp/fr24feed_armhf.tgz -C /tmp/ && \
     # Copy fr24feed
     cp -v /tmp/fr24feed_armhf/fr24feed /usr/local/bin/ && \
-    # Simple test
-    qemu-arm-static /usr/local/bin/fr24feed --version && \
     # Clean up
     apt-get remove -y "${TEMP_PACKAGES[@]}" && \
     apt-get autoremove -y && \
     rm -rf /src/* /tmp/* /var/lib/apt/lists/* && \
     # Document version
-    qemu-arm-static /usr/local/bin/fr24feed --version > /CONTAINER_VERSION && \
+    if /usr/local/bin/fr24feed --version > /dev/null 2>&1; \
+        then /usr/local/bin/fr24feed --version > /CONTAINER_VERSION; \
+        else qemu-arm-static /usr/local/bin/fr24feed --version > /CONTAINER_VERSION; \
+        fi \
+        && \
     cat /CONTAINER_VERSION
 
 EXPOSE 30334/tcp 8754/tcp 30003/tcp
