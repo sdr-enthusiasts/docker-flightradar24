@@ -18,7 +18,7 @@ function write_fr24_expectscript() {
     {
         echo '#!/usr/bin/env expect --'
         echo 'set timeout 120'
-        echo "spawn fr24feed --signup"
+        echo "spawn qemu-arm-static /usr/local/bin/fr24feed --signup"
         echo "sleep 3"
         echo 'expect "Step 1.1 - Enter your email address (username@domain.tld)\r\n$:"'
         echo "send -- \"${FR24_EMAIL}\n\""
