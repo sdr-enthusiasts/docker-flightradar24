@@ -1,0 +1,114 @@
+---
+name: Pull Request
+
+on:
+  # Enable manual running of action if necessary
+  workflow_dispatch:
+  # Test build/deploy on PRs to main/master
+  pull_request:
+    # Only publish on push to main branch
+    branches:
+      - main
+    # Don't trigger if it's just a documentation update
+    paths-ignore:
+      - '**.md'
+      - '**.MD'
+      - '**.yml'
+      - 'LICENSE'
+      - '.gitattributes'
+      - '.gitignore'
+      - '.dockerignore'
+
+jobs:
+
+  shellcheck:
+    name: Run shellcheck against shell scripts
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'pull_request' }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Pull koalaman/shellcheck:stable Image
+        run: docker pull koalaman/shellcheck:stable
+      - name: Run Shellcheck against shell scripts
+        run: docker run --rm -i -v "$PWD:/mnt" koalaman/shellcheck:stable $(find . -type f -exec grep -m1 -l -E '^#!.*sh.*' {} \; | grep -v '/.git/')
+
+  hadolint:
+    name: Run hadolint against docker files
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'pull_request' }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Pull hadolint/hadolint:latest Image
+        run: docker pull hadolint/hadolint:latest
+      - name: Run hadolint against Dockerfiles
+        run: docker run --rm -i -v "$PWD":/workdir --workdir /workdir --entrypoint hadolint hadolint/hadolint --ignore DL3003 --ignore DL3006 --ignore DL3010 --ignore DL4001 --ignore DL3007 --ignore DL3008 --ignore SC2068 --ignore DL3007 --ignore SC1091 --ignore DL3013 --ignore DL3010 $(find . -type f -iname "Dockerfile*")
+
+  test_build:
+    name: Test Build
+    runs-on: ubuntu-latest
+    needs: [shellcheck, hadolint]
+    strategy:
+      matrix:
+        docker-platform:
+          - linux/amd64
+          - linux/arm64
+          - linux/arm/v6
+          - linux/arm/v7
+          - linux/i386
+
+    steps:
+
+      # Check out our code
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      # List of files to check to trigger a rebuild on this job
+      - name: Get specific changed files
+        id: changed-files-specific
+        uses: tj-actions/changed-files@v14.4
+        with:
+          files: |
+            Dockerfile
+            rootfs
+            !*.md
+            !*.MD
+
+      # Set up QEMU for multi-arch builds
+      - name: Set up QEMU
+        if: steps.changed-files-specific.outputs.any_changed == 'true'
+        uses: docker/setup-qemu-action@v1
+
+      # Set up buildx for multi platform builds
+      - name: Set up Docker Buildx
+        if: steps.changed-files-specific.outputs.any_changed == 'true'
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+
+      # Build
+      - name: Test Build
+        if: steps.changed-files-specific.outputs.any_changed == 'true'
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          no-cache: true
+          platforms: ${{ matrix.docker-platform }}
+          push: false
+
+      # Patch dockerfile to remove healthcheck
+      - name: Patch Dockerfile to remove healthcheck
+        if: steps.changed-files-specific.outputs.any_changed == 'true'
+        run: sed '/^HEALTHCHECK /d' < Dockerfile > Dockerfile.nohealthcheck
+
+      # Build nohealthcheck
+      - name: Test Build nohealthcheck
+        if: steps.changed-files-specific.outputs.any_changed == 'true'
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile.nohealthcheck
+          no-cache: true
+          platforms: ${{ matrix.docker-platform }}
+          push: false
