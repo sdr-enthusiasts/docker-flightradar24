@@ -1,0 +1,23 @@
+---
+name: Linting (Markdown)
+
+on:
+  pull_request:
+    branches:
+      - main
+      # only run these if markdown files are updated
+    paths:
+      - '**.md'
+      - '**.MD'
+
+jobs:
+  markdownlint:
+    name: Run markdownlint against markdown files
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Pull markdownlint/markdownlint:latest Image
+        run: docker pull markdownlint/markdownlint:latest
+      - name: Run markdownlint against *.md files
+        run: docker run --rm -i -v "$(pwd)":/workdir --workdir /workdir markdownlint/markdownlint:latest --rules ~MD013,~MD033,~MD026,~MD002,~MD022 $(find . -type f -iname '*.md' | grep -v '/.git/')

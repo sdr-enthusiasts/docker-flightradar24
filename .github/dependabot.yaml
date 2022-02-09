@@ -1,10 +1,21 @@
+---
 version: 2
 
 updates:
-# check for updated docker image and will create pull request
+  # Maintain dependencies for Docker
   - package-ecosystem: "docker"
     directory: "/"
     schedule:
       interval: daily
       time: "00:00"
       timezone: "Etc/UTC"
+    assignees:
+      - "mikenye"
+
+  # Maintain dependencies for GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    assignees:
+      - "mikenye"

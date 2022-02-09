@@ -1,0 +1,68 @@
+---
+
+name: Check fr24feed version
+
+on:
+  workflow_dispatch:
+  # Check for new versions of fr24feed
+  schedule:
+    - cron: "0 12 * * *"
+
+jobs:
+
+  version_in_container:
+    name: Check version in 'latest' image
+    runs-on: ubuntu-latest
+    outputs:
+      currver: ${{ steps.current-version.outputs.currver }}
+    steps:
+      - name: Get version from ghcr.io/sdr-enthusiasts/docker-flightradar24:latest
+        id: current-version
+        run: |
+          set -x
+          echo "::set-output name=currver::$(docker run --rm --entrypoint cat ghcr.io/sdr-enthusiasts/docker-flightradar24:latest /CONTAINER_VERSION)"
+
+  latest_version:
+    name: Check latest version of 'fr24feed'
+    runs-on: ubuntu-latest
+    outputs:
+      latestver: ${{ steps.latest-version.outputs.latestver }}
+    steps:
+      - name: Build image
+        uses: docker/build-push-action@v2
+        with:
+          push: false
+          load: true
+          tags: local-docker-flightradar24:latest
+      - name: Get version from newly built image
+        id: latest-version
+        run: |
+          set -x
+          echo "::set-output name=latestver::$(docker run --rm --entrypoint cat local-docker-flightradar24:latest /CONTAINER_VERSION)"
+
+  display_versions:
+    name: Display versions
+    needs: [version_in_container, latest_version]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Display versions
+        run: |
+          echo "fr24feed version in ghcr.io/sdr-enthusiasts/docker-flightradar24:latest = ${{ needs.version_in_container.outputs.currver }}"
+          echo "fr24feed version in apt repository = ${{ needs.latest_version.outputs.latestver }}"
+          echo "will a deployment be triggered = ${{ needs.version_in_container.outputs.currver != needs.latest_version.outputs.latestver }}"
+
+  trigger_deploy:
+    name: Trigger deployment on new version of 'fr24feed'
+    needs: [version_in_container, latest_version]
+    if: ${{ needs.version_in_container.outputs.currver != needs.latest_version.outputs.latestver }}
+    runs-on: ubuntu-latest
+    env:
+      WORKFLOW_AUTH_TOKEN: ${{ secrets.GH_PAT_MIKENYE }}
+      WORKFLOW_REPO: sdr-enthusiasts/docker-flightradar24
+      WORKFLOW_FILE: deploy.yml
+      WORKFLOW_REASON: "triggered via check_fr24feed_version.yml in sdr-enthusiasts/docker-flightradar24"
+    steps:
+      - name: Trigger ${{ env.WORKFLOW_FILE }} in ${{ env.WORKFLOW_REPO }}
+        run: |
+          echo "$WORKFLOW_AUTH_TOKEN" | gh auth login --with-token
+          gh workflow run --ref main --repo "$WORKFLOW_REPO" "$WORKFLOW_FILE" -f reason="$WORKFLOW_REASON"
