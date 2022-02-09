@@ -96,19 +96,3 @@ jobs:
           no-cache: true
           platforms: ${{ matrix.docker-platform }}
           push: false
-
-      # Patch dockerfile to remove healthcheck
-      - name: Patch Dockerfile to remove healthcheck
-        if: steps.changed-files-specific.outputs.any_changed == 'true'
-        run: sed '/^HEALTHCHECK /d' < Dockerfile > Dockerfile.nohealthcheck
-
-      # Build nohealthcheck
-      - name: Test Build nohealthcheck
-        if: steps.changed-files-specific.outputs.any_changed == 'true'
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          file: ./Dockerfile.nohealthcheck
-          no-cache: true
-          platforms: ${{ matrix.docker-platform }}
-          push: false
