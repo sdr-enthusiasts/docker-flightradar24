@@ -1,7 +1,6 @@
 FROM ghcr.io/sdr-enthusiasts/docker-baseimage:qemu
 
-ARG TARGETPLATFORM
-ARG BUILDPLATFORM
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 ENV S6_BEHAVIOUR_IF_STAGE2_FAILS=2 \
     BEASTPORT=30005 \
