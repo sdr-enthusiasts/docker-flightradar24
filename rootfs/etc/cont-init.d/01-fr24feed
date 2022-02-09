@@ -38,3 +38,10 @@ fi
 
 # prepare log file
 touch /var/log/fr24feed.log
+
+# prepare directories (from /usr/lib/fr24/create_missing_directories.sh)
+mkdir -p /run/fr24feed
+mkdir -p /var/log/fr24feed
+
+# prepare status file (from /usr/lib/fr24/create_missing_directories.sh)
+touch /dev/shm/decoder.txt
