@@ -28,8 +28,8 @@ fi
   echo receiver="beast-tcp"
   echo fr24key="${FR24KEY}"
   echo host="${BEASTHOST}:${BEASTPORT}"
-  echo bs="yes"
-  echo raw="yes"
+  echo bs="no"
+  echo raw="no"
   echo logmode="1"
   echo logpath="/var/log"
   echo mlat="${MLAT}"
@@ -38,3 +38,19 @@ fi
 
 # prepare log file
 touch /var/log/fr24feed.log
+
+# prepare directories (from /usr/lib/fr24/create_missing_directories.sh)
+mkdir -p /run/fr24feed
+
+# prepare status file (from /usr/lib/fr24/create_missing_directories.sh)
+touch /dev/shm/decoder.txt
+
+# Print fr24 version.
+# Test fr24feed can run natively (without qemu)
+if /usr/local/bin/fr24feed --version > /dev/null 2>&1; then 
+  # fr24feed can be run natively
+  echo "fr24feed version: $(/usr/local/bin/fr24feed --version)"
+else
+  # fr24feed needs qemu
+  echo "fr24feed version: $(qemu-arm-static /usr/local/bin/fr24feed --version)"
+fi

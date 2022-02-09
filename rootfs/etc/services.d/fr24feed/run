@@ -6,6 +6,6 @@ if /usr/local/bin/fr24feed --version > /dev/null 2>&1; then
   # fr24feed can be run natively
   /usr/local/bin/fr24feed > /dev/null 2>&1
 else
-  # fr24feed needs qemu 
+  # fr24feed needs qemu
   qemu-arm-static /usr/local/bin/fr24feed > /dev/null 2>&1
 fi

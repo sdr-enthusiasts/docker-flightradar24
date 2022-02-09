@@ -30,27 +30,11 @@ fi
 # now log checks are finished, truncate log
 truncate -s 0 /var/log/fr24feed.log > /dev/null 2>&1
 
-# make sure we're listening on port 30334 
-if netstat -an | grep LISTEN | grep 30334 > /dev/null; then
-    echo "listening for connections on port 30334. HEALTHY"
-else
-    echo "not listening for connections on port 30334. UNHEALTHY"
-    EXITCODE=1
-fi
-
 # make sure we're listening on port 8754 
 if netstat -an | grep LISTEN | grep 8754 > /dev/null; then
     echo "listening for connections on port 8754. HEALTHY"
 else
     echo "not listening for connections on port 8754. UNHEALTHY"
-    EXITCODE=1
-fi
-
-# make sure we're listening on port 30003 
-if netstat -an | grep LISTEN | grep 30003 > /dev/null; then
-    echo "listening for connections on port 30003. HEALTHY"
-else
-    echo "not listening for connections on port 30003. UNHEALTHY"
     EXITCODE=1
 fi
 
@@ -79,5 +63,25 @@ else
     echo "${SERVICENAME} error deaths: $SERVICE_DEATHS. HEALTHY"
 fi
 s6-svdt-clear "${SERVICEDIR}"
+
+# the following checks are taken from /usr/local/bin/fr24feed-status
+MONITOR_FILE="/dev/shm/decoder.txt"
+# feed_status
+FEED_STATUS=$(grep "feed_status=" ${MONITOR_FILE} | cut -d= -f2)
+if [ "$FEED_STATUS" != 'connected' ]; then
+    echo "fr24 feed_status=${FEED_STATUS}. UNHEALTHY"
+    grep "feed_status_message=" ${MONITOR_FILE}
+    EXITCODE=1
+else
+    echo "fr24 feed_status=${FEED_STATUS}. HEALTHY"
+fi
+# rx_connected
+RX_CONNECTED=$(grep "rx_connected=" ${MONITOR_FILE} | cut -d= -f2)
+if [ "$RX_CONNECTED" != '1' ]; then
+    echo "fr24 rx_connected=${RX_CONNECTED}. UNHEALTHY"
+    EXITCODE=1
+else
+    echo "fr24 rx_connected=${RX_CONNECTED} ($(grep num_messages= ${MONITOR_FILE} 2>/dev/null | cut -d'=' -f2) MSGS/$(grep num_resyncs= ${MONITOR_FILE} 2>/dev/null | cut -d'=' -f2) SYNC). HEALTHY"
+fi
 
 exit $EXITCODE

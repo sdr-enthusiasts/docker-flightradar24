@@ -1,7 +1,6 @@
 FROM ghcr.io/sdr-enthusiasts/docker-baseimage:qemu
 
-ARG TARGETPLATFORM
-ARG BUILDPLATFORM
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 ENV S6_BEHAVIOUR_IF_STAGE2_FAILS=2 \
     BEASTPORT=30005 \
@@ -12,26 +11,55 @@ COPY rootfs/ /
 
 # NEW STUFF BELOW
 RUN set -x && \
+    # add armhf architecture
+    dpkg --add-architecture armhf && \
+    # define packages to install
     TEMP_PACKAGES=() && \
     KEPT_PACKAGES=() && \
     # 'expect' required for signup
     KEPT_PACKAGES+=(expect) && \
+    # required for adding fr24 repo
+    TEMP_PACKAGES+=(gnupg) && \
+    # required to extract .deb file
+    TEMP_PACKAGES+=(binutils) && \
     # install packages
     apt-get update && \
     apt-get install -y --no-install-recommends \
         "${KEPT_PACKAGES[@]}" \
         "${TEMP_PACKAGES[@]}" \
         && \
-    # Download fr24feed arm binary
-    curl \
-        --location \
-        -o "/tmp/fr24feed_armhf.tgz" \
-        "https://repo-feed.flightradar24.com/rpi_binaries/fr24feed_1.0.29-7_armhf.tgz" \
+    # import flightradar24 gpg key
+    gpg --list-keys && \
+    gpg \
+        --no-default-keyring \
+        --keyring /usr/share/keyrings/flightradar24.gpg \
+        --keyserver hkp://keyserver.ubuntu.com:80 \
+        --recv-keys C969F07840C430F5 \
         && \
-    # Extract fr24feed
-    tar xvf /tmp/fr24feed_armhf.tgz -C /tmp/ && \
-    # Copy fr24feed
-    cp -v /tmp/fr24feed_armhf/fr24feed /usr/local/bin/ && \
+    gpg --list-keys && \
+    # add flightradar24 repo
+    echo 'deb [arch=armhf signed-by=/usr/share/keyrings/flightradar24.gpg] http://repo.feed.flightradar24.com flightradar24 raspberrypi-stable' > /etc/apt/sources.list.d/flightradar24.list && \
+    apt-get update && \
+    # get fr24feed:
+    # instead of apt-get install, we use apt-get download.
+    # this is done because the package has dependencies,
+    # which we don't want in a container.
+    # also, there are pre/post install tasks that won't work cross platform.
+    # instead, we download, extract and manually install rbfeeder,
+    # and install the dependencies manually.
+    mkdir -p /tmp/fr24feed && \
+    pushd /tmp/fr24feed && \
+    apt-get download fr24feed:armhf && \
+    popd && \
+    # extract .deb file
+    ar x --output=/tmp/fr24feed -- /tmp/fr24feed/*.deb && \
+    # extract data.tar.gz file
+    mkdir -p /tmp/fr24feed/extracted && \
+    tar xvf /tmp/fr24feed/data.tar.gz -C /tmp/fr24feed/extracted && \
+    # copy required files
+    cp -v /tmp/fr24feed/extracted/usr/bin/fr24feed /usr/local/bin/fr24feed && \
+    cp -v /tmp/fr24feed/extracted/usr/bin/fr24feed-status /usr/local/bin/fr24feed-status && \
+    chmod -v a+x /usr/local/bin/fr24feed /usr/local/bin/fr24feed-status && \
     # Clean up
     apt-get remove -y "${TEMP_PACKAGES[@]}" && \
     apt-get autoremove -y && \
