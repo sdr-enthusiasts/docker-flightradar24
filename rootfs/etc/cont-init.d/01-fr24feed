@@ -36,9 +36,6 @@ fi
   echo mlat-without-gps="${MLAT}"
 } > /etc/fr24feed.ini
 
-# prepare log file
-touch /var/log/fr24feed.log
-
 # prepare directories (from /usr/lib/fr24/create_missing_directories.sh)
 mkdir -p /run/fr24feed
 
@@ -54,3 +51,7 @@ else
   # fr24feed needs qemu
   echo "fr24feed version: $(qemu-arm-static /usr/local/bin/fr24feed --version)"
 fi
+
+# prepare log file
+rm /var/log/fr24feed.log > /dev/null 2>&1
+touch /var/log/fr24feed.log
