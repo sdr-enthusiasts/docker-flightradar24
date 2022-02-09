@@ -1,25 +1,19 @@
-# mikenye/flightradar24
+# sdr-enthusiasts/docker-flightradar24
 
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/mikenye/docker-flightradar24/Deploy%20to%20Docker%20Hub)](https://github.com/mikenye/docker-flightradar24/actions?query=workflow%3A%22Deploy+to+Docker+Hub%22)
-[![Docker Pulls](https://img.shields.io/docker/pulls/mikenye/fr24feed.svg)](https://hub.docker.com/r/mikenye/fr24feed)
 [![Docker Image Size (tag)](https://img.shields.io/docker/image-size/mikenye/fr24feed/latest)](https://hub.docker.com/r/mikenye/fr24feed)
 [![Discord](https://img.shields.io/discord/734090820684349521)](https://discord.gg/sTf9uYF)
 
-Docker container running FlightRadar24's `fr24feed`. Designed to work in tandem with [mikenye/readsb-protobuf](https://hub.docker.com/repository/docker/mikenye/readsb-protobuf). Builds and runs on `x86_64`, `arm32v6`, `arm32v7` & `arm64`.
+Docker container running FlightRadar24's `fr24feed`. Designed to work in tandem with [sdr-enthusiasts/docker-readsb-protobuf](https://github.com/sdr-enthusiasts/docker-readsb-protobuf). Builds and runs on `x86_64`, `arm32v6`, `arm32v7` & `arm64`.
 
-`fr24feed` pulls ModeS/BEAST information from the [mikenye/readsb-protobuf](https://hub.docker.com/repository/docker/mikenye/readsb-protobuf) (or another host providing ModeS/BEAST data), and sends data to FlightRadar24.
+`fr24feed` pulls ModeS/BEAST information from the [sdr-enthusiasts/docker-readsb-protobuf](https://github.com/sdr-enthusiasts/docker-readsb-protobuf) (or another host providing ModeS/BEAST data), and sends data to FlightRadar24.
 
 For more information on what fr24feed is, see here: [share-your-data](https://www.flightradar24.com/share-your-data).
 
 ## Supported tags and respective Dockerfiles
 
-* `latest` (`master` branch, `Dockerfile`)
+* `latest` (`main` branch, `Dockerfile`)
 * `latest_nohealthcheck` is the same as the `latest` version above. However, this version has the docker healthcheck removed. This is done for people running platforms (such as [Nomad](https://www.nomadproject.io)) that don't support manually disabling healthchecks, where healthchecks are not wanted.
 * Version and architecture specific tags available
-
-## Multi Architecture Support
-
-A note on `arm64`: FlightRadar24 only make binaries available for `amd64`, `386` and `armhf`. The `arm64` version of this container uses the `armhf` binaries which are compiled for `arm32`. `arm32` support is optional on `arm64`. In practice, there is only one `arm64` CPU that omits legacy `arm32` instruction set support - Cavium ThunderX. Thus, this image should work on any `arm64` system that doesn't have the Cavium ThunderX CPU. [Reference](https://askubuntu.com/questions/928249/how-to-run-armhf-executables-on-an-arm64-system).
 
 ## Obtaining a Flightradar24 Sharing Key
 
@@ -40,7 +34,7 @@ docker run \
   -e FEEDER_ALT_FT="YOUR_FEEDER_ALT_FT" \
   -e FR24_EMAIL="YOUR@EMAIL.ADDRESS" \
   --entrypoint /scripts/signup.sh \
-  mikenye/fr24feed
+  ghcr.io/sdr-enthusiasts/docker-flightradar24:latest
 ```
 
 Remember to replace:
@@ -68,13 +62,13 @@ Temporarily run the container with the following command:
 **For ARM platforms:**
 
 ```shell
-docker run --rm -it --entrypoint /usr/local/bin/fr24feed mikenye/fr24feed --signup
+docker run --rm -it --entrypoint /usr/local/bin/fr24feed ghcr.io/sdr-enthusiasts/docker-flightradar24:latest --signup
 ```
 
 **For other platforms:**
 
 ```shell
-docker run --rm -it --entrypoint qemu-arm-static mikenye/fr24feed /usr/local/bin/fr24feed --signup
+docker run --rm -it --entrypoint qemu-arm-static ghcr.io/sdr-enthusiasts/docker-flightradar24:latest /usr/local/bin/fr24feed --signup
 ```
 
 This will take you through the signup process. Most of the answers don't matter as during normal operation the configuration will be set with environment variables. I would suggest answering as follows:
@@ -111,7 +105,7 @@ docker run \
  -e MLAT=yes \
  -e FR24KEY=xxxxxxxxxxx \
  -p 8754:8754 \
- mikenye/fr24feed
+ ghcr.io/sdr-enthusiasts/docker-flightradar24:latest
 ```
 
 ## Up-and-Running with Docker Compose
@@ -121,7 +115,7 @@ version: '2.0'
 
 services:
   fr24feed:
-    image: mikenye/fr24feed:latest
+    image: ghcr.io/sdr-enthusiasts/docker-flightradar24:latest
     tty: true
     container_name: fr24feed
     restart: always
@@ -133,49 +127,6 @@ services:
       - MLAT=yes
       - FR24KEY=xxxxxxxxxxx
 ```
-
-## Up-and-Running with Docker Compose, including `mikenye/piaware`
-
-```shell
-version: '2.0'
-
-services:
-
-  piaware:
-    image: mikenye/piaware:latest
-    tty: true
-    container_name: piaware
-    mac_address: de:ad:be:ef:13:37
-    restart: always
-    devices:
-      - /dev/bus/usb:/dev/bus/usb
-    ports:
-      - 8080:8080
-      - 30005:30005
-    environment:
-      - TZ="Australia/Perth"
-      - LAT=-32.463873
-      - LONG=113.458482
-      - FEEDER_ID=c478b1c99-23d3-4376-1f82-47352a28cg37
-      - ALLOW_MLAT=yes
-    volumes:
-      - /var/cache/piaware:/var/cache/piaware
-
-  fr24feed:
-    image: mikenye/fr24feed:latest
-    tty: true
-    container_name: fr24feed
-    restart: always
-    ports:
-      - 8754:8754
-    environment:
-      - BEASTHOST=piaware
-      - TZ="Australia/Perth"
-      - FR24KEY=xxxxxxxxxxx
-      - MLAT=yes
-```
-
-For an explanation of the `mikenye/piaware` image's configuration, see that image's readme.
 
 ## Runtime Environment Variables
 
@@ -205,6 +156,6 @@ The following ports are used by this container:
 
 ## Getting Help
 
-Having troubles with the container or have questions?  Please [create a new issue](https://github.com/mikenye/docker-flightradar24/issues).
+Having troubles with the container or have questions?  Please [create a new issue](https://github.com/sdr-enthusiasts/docker-flightradar24/issues).
 
 I also have a [Discord channel](https://discord.gg/sTf9uYF), feel free to [join](https://discord.gg/sTf9uYF) and converse.
