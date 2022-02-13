@@ -134,11 +134,11 @@ There are a series of available environment variables:
 
 | Environment Variable | Purpose                         | Default |
 | -------------------- | ------------------------------- | ------- |
-| `BEASTHOST`          | Required. IP/Hostname of a Mode-S/BEAST provider (dump1090) | |
-| `BEASTPORT`          | Optional. TCP port number of Mode-S/BEAST provider (dump1090) | 30005 |
+| `BEASTHOST`          | Required. IP/Hostname of a Mode-S/BEAST provider (dump1090) | `readsb` |
+| `BEASTPORT`          | Optional. TCP port number of Mode-S/BEAST provider (dump1090) | `30005` |
 | `FR24KEY`            | Required. Flightradar24 Sharing Key | |
-| `TZ`                 | Your local timezone (optional)  | GMT     |
-| `MLAT`               | Enable multilateration (optional) | no |
+| `TZ`                 | Your local timezone (optional)  | `GMT` |
+| `MLAT`               | Enable multilateration (optional) | `no` |
 | `VERBOSE_LOGGING`    | Set to `true` to enable verbose logging (optional) | `false` |
 
 ## Ports
