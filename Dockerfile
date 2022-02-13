@@ -3,6 +3,7 @@ FROM ghcr.io/sdr-enthusiasts/docker-baseimage:qemu
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 ENV S6_BEHAVIOUR_IF_STAGE2_FAILS=2 \
+    BEASTHOST=readsb \
     BEASTPORT=30005 \
     MLAT=no \
     VERBOSE_LOGGING=false
