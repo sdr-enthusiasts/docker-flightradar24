@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'pull_request' }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Pull koalaman/shellcheck:stable Image
         run: docker pull koalaman/shellcheck:stable
       - name: Run Shellcheck against shell scripts
@@ -37,7 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'pull_request' }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Pull hadolint/hadolint:latest Image
         run: docker pull hadolint/hadolint:latest
       - name: Run hadolint against Dockerfiles
@@ -60,7 +60,7 @@ jobs:
 
       # Check out our code
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
