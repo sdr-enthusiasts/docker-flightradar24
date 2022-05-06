@@ -70,7 +70,7 @@ jobs:
 
       # Log into docker hub (so we can push images)
       - name: Login to DockerHub
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
           username: ${{ env.DOCKERHUB_REPO }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -170,7 +170,7 @@ jobs:
 
       # Log into docker hub (so we can push images)
       - name: Login to DockerHub
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
           username: ${{ env.DOCKERHUB_REPO }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -263,7 +263,7 @@ jobs:
 
       # Log into ghcr (so we can push images)
       - name: Login to ghcr.io
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
           registry: ${{ env.GHCR_REGISTRY }}
           username: ${{ github.repository_owner }}
@@ -371,7 +371,7 @@ jobs:
 
       # Log into ghcr (so we can push images)
       - name: Login to ghcr.io
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
           registry: ${{ env.GHCR_REGISTRY }}
           username: ${{ github.repository_owner }}
