@@ -32,8 +32,8 @@ fi
   echo raw="no"
   echo logmode="1"
   echo logpath="/var/log"
-  echo mlat="${MLAT}"
-  echo mlat-without-gps="${MLAT}"
+  echo mlat="no"
+  echo mlat-without-gps="no"
 } > /etc/fr24feed.ini
 
 # prepare directories (from /usr/lib/fr24/create_missing_directories.sh)

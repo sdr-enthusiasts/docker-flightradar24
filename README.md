@@ -75,10 +75,7 @@ This will take you through the signup process. Most of the answers don't matter 
 
 * `Step 1.1 - Enter your email address (username@domain.tld)`: Enter your email address.
 * `Step 1.2 - If you used to feed FR24 with ADS-B data before, enter your sharing key.`: Leave blank and press enter.
-* `Step 1.3 - Would you like to participate in MLAT calculations?`: Answer `yes`.
-* `Step 3.A - Enter antenna's latitude (DD.DDDD)`: Enter your antenna's latitude.
-* `Step 3.B - Enter antenna's longitude (DDD.DDDD)`: Enter your antenna's longitude.
-* `Step 3.C - Enter antenna's altitude above the sea level (in feet)`: Enter your antenna's altitude above sea level **in feet**.
+* `Step 1.3 - Would you like to participate in MLAT calculations?`: Answer `no`.
 * `Would you like to continue using these settings?`: Answer `yes`.
 * `Step 4.1 - Receiver selection (in order to run MLAT please use DVB-T stick with dump1090 utility bundled with fr24feed)... Enter your receiver type (1-7)`: Answer `7`.
 * `Step 6 - Please select desired logfile mode... Select logfile mode (0-2)`: Answer `0`.
@@ -102,7 +99,6 @@ docker run \
  --name fr24feed \
  -e TZ="YOUR_TIMEZONE" \
  -e BEASTHOST=beasthost \
- -e MLAT=yes \
  -e FR24KEY=xxxxxxxxxxx \
  -p 8754:8754 \
  ghcr.io/sdr-enthusiasts/docker-flightradar24:latest
@@ -124,7 +120,6 @@ services:
     environment:
       - TZ="Australia/Perth"
       - BEASTHOST=beasthost
-      - MLAT=yes
       - FR24KEY=xxxxxxxxxxx
 ```
 
@@ -138,7 +133,6 @@ There are a series of available environment variables:
 | `BEASTPORT`          | Optional. TCP port number of Mode-S/BEAST provider (dump1090) | `30005` |
 | `FR24KEY`            | Required. Flightradar24 Sharing Key | |
 | `TZ`                 | Your local timezone (optional)  | `GMT` |
-| `MLAT`               | Enable multilateration (optional) | `no` |
 | `VERBOSE_LOGGING`    | Set to `true` to enable verbose logging (optional) | `false` |
 
 ## Ports
