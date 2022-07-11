@@ -55,7 +55,17 @@ function write_fr24_expectscript() {
         echo "send \"yes\r\""
         echo 'expect "Step 4.1 - Receiver selection (in order to run MLAT please use DVB-T stick with dump1090 utility bundled with fr24feed):"'
         echo 'expect "Enter your receiver type (1-7)$:"'
-        echo "send \"7\r\""
+        echo "send \"4\r\""
+        echo 'expect "Enter your connection type (1-2)$:"'
+        echo "send \"1\r\""
+        echo 'expect "$:"'
+        echo "send \"127.0.0.1\r\""
+        echo 'expect "$:"'
+        echo "send \"30005\r\""
+        echo 'expect "Step 5.1 - Would you like to enable RAW data feed on port 30334 (yes/no)$:"'
+        echo "send \"no\r\""
+        echo 'expect "Step 5.2 - Would you like to enable Basestation data feed on port 30003 (yes/no)$:"'
+        echo "send \"no\r\""
         echo 'expect "Step 6 - Please select desired logfile mode:"'
         echo 'expect "Select logfile mode (0-2)$:"'
         echo "send \"0\r\""
