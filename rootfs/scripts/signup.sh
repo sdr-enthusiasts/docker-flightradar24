@@ -64,8 +64,7 @@ function write_fr24_expectscript() {
         echo "send \"30005\r\""
         echo 'expect "Step 5.1 - Would you like to enable RAW data feed on port 30334 (yes/no)$:"'
         echo "send \"no\r\""
-        echo 'expect "Step 5.2 - Would you like to enable Basestation data feed on port 30003 (yes/no)$:
-"'
+        echo 'expect "Step 5.2 - Would you like to enable Basestation data feed on port 30003 (yes/no)$:"'
         echo "send \"no\r\""
         echo 'expect "Step 6 - Please select desired logfile mode:"'
         echo 'expect "Select logfile mode (0-2)$:"'
