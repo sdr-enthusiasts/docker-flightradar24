@@ -16,11 +16,13 @@ if [ $EXITCODE -ne 0 ]; then
   exit 1
 fi
 
-# Set up timezone
-if [ -z "${TZ}" ]; then
-  echo "WARNING: TZ environment variable not set"
-else
-  ln -snf "/usr/share/zoneinfo/${TZ}" /etc/localtime && echo "${TZ}" > /etc/timezone
+# If the timezone is not GMT, then fr24feed throws warnings and errors, eg:
+# 22-12-15 16:19:09.421 [E][:] Local time: 2022-12-15 16:19:09 +0800
+# 22-12-15 16:19:09.421 [E][:] GMT+0 time: 2022-12-15 08:19:09 +0800
+# 22-12-15 16:19:09.421 [E][:] Your machine should be set as GMT+0 time zone!
+# 22-12-15 16:19:09.421 [W][:] Time zone is not set to GMT+0
+if [ -n "${TZ}" ]; then
+  echo "WARNING: Setting timezone via TZ is not supported in this container. fr24feed requires the container has a timezone of GMT (+0)."
 fi
 
 # Set up fr24feed
