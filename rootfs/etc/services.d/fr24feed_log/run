@@ -10,5 +10,5 @@ else
   # filter out noisy info, notice & warning messages
   # stdbuf/sed filters out blank lines
   # awk filters out noise
-  tail -F /var/log/fr24feed.log 2> /dev/null | stdbuf -o0 sed --unbuffered '/^\s*$/d' | mawk -W Interactive '! /\[[a-zA-Z]+\]\[(i|n|w)\]/'
+  tail -F /var/log/fr24feed.log 2> /dev/null | stdbuf -o0 sed --unbuffered '/^\s*$/d' | mawk -W Interactive '! /\[[a-zA-Z]+\]\[(i|n|w)\]/' | grep -vE ".* \[D\]\[:\] sent [0-9]+ of [0-9]+ .*"
 fi

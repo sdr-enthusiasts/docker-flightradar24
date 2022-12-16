@@ -97,7 +97,6 @@ docker run \
  -d \
  --rm \
  --name fr24feed \
- -e TZ="YOUR_TIMEZONE" \
  -e BEASTHOST=beasthost \
  -e FR24KEY=xxxxxxxxxxx \
  -p 8754:8754 \
@@ -118,7 +117,6 @@ services:
     ports:
       - 8754:8754
     environment:
-      - TZ="Australia/Perth"
       - BEASTHOST=beasthost
       - FR24KEY=xxxxxxxxxxx
 ```
@@ -133,7 +131,6 @@ There are a series of available environment variables:
 | `BEASTPORT`          | Optional. TCP port number of Mode-S/BEAST provider (dump1090) | `30005` |
 | `FR24KEY`            | Required. Flightradar24 Sharing Key | |
 | `BIND_INTERFACE`     | Optional. Set a bind interface such as `0.0.0.0` to allow access from non-private IP addresses | _none_ |
-| `TZ`                 | Your local timezone (optional)  | `GMT` |
 | `VERBOSE_LOGGING`    | Set to `true` to enable verbose logging (optional) | `false` |
 
 ## Ports
