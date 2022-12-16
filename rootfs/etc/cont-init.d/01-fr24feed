@@ -24,6 +24,7 @@ fi
 if [ -n "${TZ}" ]; then
   echo "WARNING: Setting timezone via TZ is not supported in this container. fr24feed requires the container has a timezone of GMT (+0)."
 fi
+printf "GMT" > /var/run/s6/container_environment/TZ
 
 # Set up fr24feed
 {
