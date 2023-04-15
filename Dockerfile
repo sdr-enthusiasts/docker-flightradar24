@@ -51,9 +51,9 @@ RUN set -x && \
     mkdir -p /tmp/fr24feed && \
     pushd /tmp/fr24feed && \
     if [ "$TARGETPLATFORM" = "linux/amd64" ] ; then \
-    wget $(curl --silent "https://repo-feed.flightradar24.com/fr24feed_versions.json" | jq -r '.platform["linux_x86_64_deb"]["url"]["software"]') -P /tmp/fr24feed; \
+    wget -q $(curl --silent "https://repo-feed.flightradar24.com/fr24feed_versions.json" | jq -r '.platform["linux_x86_64_deb"]["url"]["software"]') -P /tmp/fr24feed; \
     elif [ "$TARGETPLATFORM" = "linux/386" ] ; then \
-    wget $(curl --silent "https://repo-feed.flightradar24.com/fr24feed_versions.json" | jq -r '.platform["linux_x86_deb"]["url"]["software"]') -P /tmp/fr24feed; \
+    wget -q $(curl --silent "https://repo-feed.flightradar24.com/fr24feed_versions.json" | jq -r '.platform["linux_x86_deb"]["url"]["software"]') -P /tmp/fr24feed; \
     else \
     echo 'deb [arch=armhf signed-by=/usr/share/keyrings/flightradar24.gpg] http://repo.feed.flightradar24.com flightradar24 raspberrypi-stable' > /etc/apt/sources.list.d/flightradar24.list && \
     apt-get update && \
