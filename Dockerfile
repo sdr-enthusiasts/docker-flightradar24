@@ -24,7 +24,7 @@ RUN set -x && \
     # required to extract .deb file
     TEMP_PACKAGES+=(binutils) && \
     # required to figure out fr24feed for amd64
-    TEMP_PACKAGES+=(jq wget curl) && \
+    TEMP_PACKAGES+=(jq) && \
     # install packages
     apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -51,9 +51,9 @@ RUN set -x && \
     mkdir -p /tmp/fr24feed && \
     pushd /tmp/fr24feed && \
     if [ "$TARGETPLATFORM" = "linux/amd64" ] ; then \
-    wget -q $(curl --silent "https://repo-feed.flightradar24.com/fr24feed_versions.json" | jq -r '.platform["linux_x86_64_deb"]["url"]["software"]') -P /tmp/fr24feed; \
+    curl -sSLO $(curl -sSL "https://repo-feed.flightradar24.com/fr24feed_versions.json" | jq -r '.platform["linux_x86_64_deb"]["url"]["software"]'); \
     elif [ "$TARGETPLATFORM" = "linux/386" ] ; then \
-    wget -q $(curl --silent "https://repo-feed.flightradar24.com/fr24feed_versions.json" | jq -r '.platform["linux_x86_deb"]["url"]["software"]') -P /tmp/fr24feed; \
+    curl -sSLO $(curl -sSL "https://repo-feed.flightradar24.com/fr24feed_versions.json" | jq -r '.platform["linux_x86_deb"]["url"]["software"]'); \
     else \
     echo 'deb [arch=armhf signed-by=/usr/share/keyrings/flightradar24.gpg] http://repo.feed.flightradar24.com flightradar24 raspberrypi-stable' > /etc/apt/sources.list.d/flightradar24.list && \
     apt-get update && \
