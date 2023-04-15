@@ -8,12 +8,12 @@ ENV S6_BEHAVIOUR_IF_STAGE2_FAILS=2 \
     MLAT=no \
     VERBOSE_LOGGING=false
 
+ARG TARGETPLATFORM
+
 COPY rootfs/ /
 
 # NEW STUFF BELOW
 RUN set -x && \
-    # add armhf architecture
-    dpkg --add-architecture armhf && \
     # define packages to install
     TEMP_PACKAGES=() && \
     KEPT_PACKAGES=() && \
@@ -23,6 +23,8 @@ RUN set -x && \
     TEMP_PACKAGES+=(gnupg) && \
     # required to extract .deb file
     TEMP_PACKAGES+=(binutils) && \
+    # required to figure out fr24feed for amd64
+    TEMP_PACKAGES+=(jq wget curl) && \
     # install packages
     apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -38,9 +40,6 @@ RUN set -x && \
         --recv-keys C969F07840C430F5 \
         && \
     gpg --list-keys && \
-    # add flightradar24 repo
-    echo 'deb [arch=armhf signed-by=/usr/share/keyrings/flightradar24.gpg] http://repo.feed.flightradar24.com flightradar24 raspberrypi-stable' > /etc/apt/sources.list.d/flightradar24.list && \
-    apt-get update && \
     # get fr24feed:
     # instead of apt-get install, we use apt-get download.
     # this is done because the package has dependencies,
@@ -48,9 +47,18 @@ RUN set -x && \
     # also, there are pre/post install tasks that won't work cross platform.
     # instead, we download, extract and manually install rbfeeder,
     # and install the dependencies manually.
+    # add flightradar24 repo
     mkdir -p /tmp/fr24feed && \
     pushd /tmp/fr24feed && \
-    apt-get download fr24feed:armhf && \
+    if [ "$TARGETPLATFORM" = "linux/amd64" ] ; then \
+    wget $(curl --silent "https://repo-feed.flightradar24.com/fr24feed_versions.json" | jq -r '.platform["linux_x86_64_deb"]["url"]["software"]') -P /tmp/fr24feed; \
+    elif [ "$TARGETPLATFORM" = "linux/386" ] ; then \
+    wget $(curl --silent "https://repo-feed.flightradar24.com/fr24feed_versions.json" | jq -r '.platform["linux_x86_deb"]["url"]["software"]') -P /tmp/fr24feed; \
+    else \
+    echo 'deb [arch=armhf signed-by=/usr/share/keyrings/flightradar24.gpg] http://repo.feed.flightradar24.com flightradar24 raspberrypi-stable' > /etc/apt/sources.list.d/flightradar24.list && \
+    apt-get update && \
+    apt-get download fr24feed:armhf; \
+    fi && \
     popd && \
     # extract .deb file
     ar x --output=/tmp/fr24feed -- /tmp/fr24feed/*.deb && \
