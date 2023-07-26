@@ -35,8 +35,13 @@ printf "GMT" > /var/run/s6/container_environment/TZ
   echo raw="no"
   echo logmode="1"
   echo logpath="/var/log"
-  echo mlat="no"
-  echo mlat-without-gps="no"
+  if [ -z "${MLAT}" ]; then
+    echo mlat="no"
+    echo mlat-without-gps="no"
+  else
+    echo mlat="${MLAT}"
+    echo mlat-without-gps="${MLAT}"
+  fi
   if [ -n "${BIND_INTERFACE}" ]; then
     echo bind-interface="${BIND_INTERFACE}"
   fi

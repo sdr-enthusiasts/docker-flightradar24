@@ -130,6 +130,7 @@ There are a series of available environment variables:
 | `BEASTHOST`          | Required. IP/Hostname of a Mode-S/BEAST provider (dump1090) | `readsb` |
 | `BEASTPORT`          | Optional. TCP port number of Mode-S/BEAST provider (dump1090) | `30005` |
 | `FR24KEY`            | Required. Flightradar24 Sharing Key | |
+| `MLAT`    | Set to `yes` to enable MLAT (optional) | `no` |
 | `BIND_INTERFACE`     | Optional. Set a bind interface such as `0.0.0.0` to allow access from non-private IP addresses | _none_ |
 | `VERBOSE_LOGGING`    | Set to `true` to enable verbose logging (optional) | `false` |
 
