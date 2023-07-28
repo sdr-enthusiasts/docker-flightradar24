@@ -47,8 +47,10 @@ jobs:
       - name: Log dispatch reason
         env:
           INPUTS_REASON: ${{ github.event.inputs.reason }}
+          INPUTS_USE_TEST_IMAGE: ${{ github.event.inputs.use_test_image }}
         run: |
           echo "Workflow dispatch reason: $INPUTS_REASON"
+          echo "Use test image: $INPUTS_USE_TEST_IMAGE"
 
   hadolint:
     name: Run hadolint against docker files
