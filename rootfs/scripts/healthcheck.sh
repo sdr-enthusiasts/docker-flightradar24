@@ -30,7 +30,7 @@ fi
 # now log checks are finished, truncate log
 truncate -s 0 /var/log/fr24feed.log > /dev/null 2>&1
 
-# make sure we're listening on port 8754 
+# make sure we're listening on port 8754
 if netstat -an | grep LISTEN | grep 8754 > /dev/null; then
     echo "listening for connections on port 8754. HEALTHY"
 else
@@ -39,7 +39,7 @@ else
 fi
 
 # death count for fr24feed
-SERVICEDIR=/run/s6/services/fr24feed
+SERVICEDIR=/run/s6/legacy-services/fr24feed
 SERVICENAME=$(basename "${SERVICEDIR}")
 # shellcheck disable=SC2126
 SERVICE_DEATHS=$(s6-svdt "${SERVICEDIR}" | grep -v "exitcode 0" | wc -l)
@@ -52,7 +52,7 @@ fi
 s6-svdt-clear "${SERVICEDIR}"
 
 # death count for fr24feed_log
-SERVICEDIR=/run/s6/services/fr24feed_log
+SERVICEDIR=/run/s6/legacy-services/fr24feed_log
 SERVICENAME=$(basename "${SERVICEDIR}")
 # shellcheck disable=SC2126
 SERVICE_DEATHS=$(s6-svdt "${SERVICEDIR}" | grep -v "exitcode 0" | wc -l)
