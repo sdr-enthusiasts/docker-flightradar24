@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/command/with-contenv
 set -e
 
 EXITCODE=0
@@ -39,7 +39,7 @@ else
 fi
 
 # death count for fr24feed
-SERVICEDIR=/run/s6/legacy-services/fr24feed
+SERVICEDIR=/run/service/fr24feed
 SERVICENAME=$(basename "${SERVICEDIR}")
 # shellcheck disable=SC2126
 SERVICE_DEATHS=$(s6-svdt "${SERVICEDIR}" | grep -v "exitcode 0" | wc -l)
@@ -52,7 +52,7 @@ fi
 s6-svdt-clear "${SERVICEDIR}"
 
 # death count for fr24feed_log
-SERVICEDIR=/run/s6/legacy-services/fr24feed_log
+SERVICEDIR=/run/service/fr24feed_log
 SERVICENAME=$(basename "${SERVICEDIR}")
 # shellcheck disable=SC2126
 SERVICE_DEATHS=$(s6-svdt "${SERVICEDIR}" | grep -v "exitcode 0" | wc -l)
