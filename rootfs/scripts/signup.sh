@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/command/with-contenv
 # shellcheck disable=SC2028
 
 

@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/command/with-contenv bash
 
 white="\e[0;97m"
 reset="\e[0m"
