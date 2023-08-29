@@ -1,4 +1,4 @@
-#!/command/with-contenv
+#!/command/with-contenv bash
 # shellcheck disable=SC2028
 
 
@@ -17,11 +17,11 @@ TMPFILE_FR24SIGNUP_LOG="$TMPDIR_FR24SIGNUP/TMPFILE_FR24SIGNUP_LOG"
 
 # Check if fr24feed can be run natively
 # Test fr24feed can run natively (without qemu)
-if /usr/local/bin/fr24feed --version > /dev/null 2>&1; then 
+if /usr/local/bin/fr24feed --version > /dev/null 2>&1; then
   # fr24feed can be run natively
   SPAWN_CMD="spawn /usr/local/bin/fr24feed --signup"
 else
-  # fr24feed needs qemu 
+  # fr24feed needs qemu
   SPAWN_CMD="spawn qemu-arm-static /usr/local/bin/fr24feed --signup"
 fi
 
@@ -42,7 +42,7 @@ function write_fr24_expectscript() {
         echo "expect \"Step 3.A - Enter antenna's latitude (DD.DDDD)\r\n\$:\""
         # if [[ ${FEEDER_LAT:0:1} == "-" ]]; then
         echo "send -- \"${FEEDER_LAT}\r\""
-        
+
         echo "expect \"Step 3.B - Enter antenna's longitude (DDD.DDDD)\r\n\$:\""
         echo "send -- \"${FEEDER_LONG}\r\""
         echo "expect \"Step 3.C - Enter antenna's altitude above the sea level (in feet)\r\n\$:\""
