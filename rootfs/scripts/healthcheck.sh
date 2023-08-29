@@ -1,4 +1,4 @@
-#!/command/with-contenv
+#!/command/with-contenv bash
 set -e
 
 EXITCODE=0
