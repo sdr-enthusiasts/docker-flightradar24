@@ -89,7 +89,7 @@ jobs:
       # Build
       - name: Test Build
         if: steps.changed-files-specific.outputs.any_changed == 'true'
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v5
         with:
           context: .
           file: ./Dockerfile
