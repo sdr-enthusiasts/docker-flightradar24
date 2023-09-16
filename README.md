@@ -33,7 +33,7 @@ docker run \
   -e FEEDER_LONG="YOUR_FEEDER_LONG" \
   -e FEEDER_ALT_FT="YOUR_FEEDER_ALT_FT" \
   -e FR24_EMAIL="YOUR@EMAIL.ADDRESS" \
-  --entrypoint /scripts/signup.sh \
+  -e FR24_SIGNUP=1 \
   ghcr.io/sdr-enthusiasts/docker-flightradar24:latest
 ```
 
@@ -54,6 +54,8 @@ FR24_RADAR_ID=T-XXXX123
 Take a note of the sharing key, as you'll need it when launching the container.
 
 ### Manual Method
+
+### THIS APPEARS TO BE BROKEN FOR NOW
 
 If the script method fails (please let me know so I can fix it), you can sign up manually.
 
