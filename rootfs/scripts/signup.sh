@@ -1,6 +1,5 @@
 #!/command/with-contenv bash
-# shellcheck disable=SC2028
-
+# shellcheck shell=bash disable=SC2028
 
 # Regular Expressions
 # shellcheck disable=SC1112
