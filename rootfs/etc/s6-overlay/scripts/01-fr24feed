@@ -12,6 +12,11 @@ if [ -z "${FR24KEY}" ]; then
   echo "ERROR: FR24KEY environment variable not set"
   EXITCODE=1
 fi
+if [ -n "${FR24_SIGNUP}" ]; then
+  echo "even with missing keys, simply start the signup script"
+  EXITCODE=0
+  SIGNUP=1
+fi
 if [ $EXITCODE -ne 0 ]; then
   exit 1
 fi
@@ -25,6 +30,11 @@ if [ -n "${TZ}" ]; then
   echo "WARNING: Setting timezone via TZ is not supported in this container. fr24feed requires the container has a timezone of GMT (+0)."
 fi
 printf "GMT" > /var/run/s6/container_environment/TZ
+
+if [ "$SIGNUP" = "1" ]; then
+  bash /scripts/signup.sh
+  exit 0
+fi
 
 # Set up fr24feed
 {
