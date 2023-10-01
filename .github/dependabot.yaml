@@ -7,10 +7,9 @@ updates:
     directory: "/"
     schedule:
       interval: daily
-      time: "00:00"
-      timezone: "Etc/UTC"
     assignees:
       - "mikenye"
+      - "fredclausen"
 
   # Maintain dependencies for GitHub Actions
   - package-ecosystem: "github-actions"
@@ -19,3 +18,4 @@ updates:
       interval: "daily"
     assignees:
       - "mikenye"
+      - "fredclausen"
