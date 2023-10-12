@@ -7,8 +7,8 @@ on:
       - main
       # only run these if markdown files are updated
     paths:
-      - '**.md'
-      - '**.MD'
+      - "**.md"
+      - "**.MD"
 
 jobs:
   markdownlint:

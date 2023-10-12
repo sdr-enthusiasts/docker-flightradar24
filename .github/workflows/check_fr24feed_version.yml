@@ -1,5 +1,4 @@
 ---
-
 name: Check fr24feed version
 
 on:
@@ -9,7 +8,6 @@ on:
     - cron: "0 12 * * *"
 
 jobs:
-
   version_in_container:
     name: Check version in 'latest' image
     runs-on: ubuntu-latest

@@ -11,9 +11,9 @@ For more information on what fr24feed is, see here: [share-your-data](https://ww
 
 ## Supported tags and respective Dockerfiles
 
-* `latest` (`main` branch, `Dockerfile`)
-* `latest_nohealthcheck` is the same as the `latest` version above. However, this version has the docker healthcheck removed. This is done for people running platforms (such as [Nomad](https://www.nomadproject.io)) that don't support manually disabling healthchecks, where healthchecks are not wanted.
-* Version and architecture specific tags available
+- `latest` (`main` branch, `Dockerfile`)
+- `latest_nohealthcheck` is the same as the `latest` version above. However, this version has the docker healthcheck removed. This is done for people running platforms (such as [Nomad](https://www.nomadproject.io)) that don't support manually disabling healthchecks, where healthchecks are not wanted.
+- Version and architecture specific tags available
 
 ## Obtaining a Flightradar24 Sharing Key
 
@@ -39,10 +39,10 @@ docker run \
 
 Remember to replace:
 
-* `YOUR_FEEDER_LAT` with the latitude of your feeder's antenna
-* `YOUR_FEEDER_LONG` with the longitude of your feeder's antenna
-* `YOUR_FEEDER_ALT_FT` with the altitude of your feeder's antenna above sea level **in feet**
-* `YOUR@EMAIL.ADDRESS` with your email address.
+- `YOUR_FEEDER_LAT` with the latitude of your feeder's antenna
+- `YOUR_FEEDER_LONG` with the longitude of your feeder's antenna
+- `YOUR_FEEDER_ALT_FT` with the altitude of your feeder's antenna above sea level **in feet**
+- `YOUR@EMAIL.ADDRESS` with your email address.
 
 After 30 seconds or so, you should see the following output:
 
@@ -75,12 +75,12 @@ docker run --rm -it --entrypoint qemu-arm-static ghcr.io/sdr-enthusiasts/docker-
 
 This will take you through the signup process. Most of the answers don't matter as during normal operation the configuration will be set with environment variables. I would suggest answering as follows:
 
-* `Step 1.1 - Enter your email address (username@domain.tld)`: Enter your email address.
-* `Step 1.2 - If you used to feed FR24 with ADS-B data before, enter your sharing key.`: Leave blank and press enter.
-* `Step 1.3 - Would you like to participate in MLAT calculations?`: Answer `no`.
-* `Would you like to continue using these settings?`: Answer `yes`.
-* `Step 4.1 - Receiver selection (in order to run MLAT please use DVB-T stick with dump1090 utility bundled with fr24feed)... Enter your receiver type (1-7)`: Answer `7`.
-* `Step 6 - Please select desired logfile mode... Select logfile mode (0-2)`: Answer `0`.
+- `Step 1.1 - Enter your email address (username@domain.tld)`: Enter your email address.
+- `Step 1.2 - If you used to feed FR24 with ADS-B data before, enter your sharing key.`: Leave blank and press enter.
+- `Step 1.3 - Would you like to participate in MLAT calculations?`: Answer `no`.
+- `Would you like to continue using these settings?`: Answer `yes`.
+- `Step 4.1 - Receiver selection (in order to run MLAT please use DVB-T stick with dump1090 utility bundled with fr24feed)... Enter your receiver type (1-7)`: Answer `7`.
+- `Step 6 - Please select desired logfile mode... Select logfile mode (0-2)`: Answer `0`.
 
 At the end of the signup process, you'll be presented with:
 
@@ -127,30 +127,30 @@ services:
 
 There are a series of available environment variables:
 
-| Environment Variable | Purpose                         | Default |
-| -------------------- | ------------------------------- | ------- |
-| `BEASTHOST`          | Required. IP/Hostname of a Mode-S/BEAST provider (dump1090) | `readsb` |
-| `BEASTPORT`          | Optional. TCP port number of Mode-S/BEAST provider (dump1090) | `30005` |
-| `FR24KEY`            | Required. Flightradar24 Sharing Key | |
-| `MLAT`    | Set to `yes` to enable MLAT (optional) | `no` |
-| `BIND_INTERFACE`     | Optional. Set a bind interface such as `0.0.0.0` to allow access from non-private IP addresses | _none_ |
-| `VERBOSE_LOGGING`    | Set to `true` to enable verbose logging (optional) | `false` |
+| Environment Variable | Purpose                                                                                        | Default  |
+| -------------------- | ---------------------------------------------------------------------------------------------- | -------- |
+| `BEASTHOST`          | Required. IP/Hostname of a Mode-S/BEAST provider (dump1090)                                    | `readsb` |
+| `BEASTPORT`          | Optional. TCP port number of Mode-S/BEAST provider (dump1090)                                  | `30005`  |
+| `FR24KEY`            | Required. Flightradar24 Sharing Key                                                            |          |
+| `MLAT`               | Set to `yes` to enable MLAT (optional)                                                         | `no`     |
+| `BIND_INTERFACE`     | Optional. Set a bind interface such as `0.0.0.0` to allow access from non-private IP addresses | _none_   |
+| `VERBOSE_LOGGING`    | Set to `true` to enable verbose logging (optional)                                             | `false`  |
 
 ## Ports
 
 The following ports are used by this container:
 
-* `8754` - fr24feed web interface - optional but recommended
-* `30003` - fr24feed TCP BaseStation output listen port - optional, recommended to leave unmapped unless explicitly needed
-* `30334` - fr24feed TCP Raw output listen port - optional, recommended to leave unmapped unless explicitly needed
+- `8754` - fr24feed web interface - optional but recommended
+- `30003` - fr24feed TCP BaseStation output listen port - optional, recommended to leave unmapped unless explicitly needed
+- `30334` - fr24feed TCP Raw output listen port - optional, recommended to leave unmapped unless explicitly needed
 
 ## Logging
 
-* The `fr24feed` process is logged to the container's stdout, and can be viewed with `docker logs [-f] container`.
-* `fr24feed` log file exists at `/var/log/fr24feed.log`, with automatic log rotation.
+- The `fr24feed` process is logged to the container's stdout, and can be viewed with `docker logs [-f] container`.
+- `fr24feed` log file exists at `/var/log/fr24feed.log`, with automatic log rotation.
 
 ## Getting Help
 
-Having troubles with the container or have questions?  Please [create a new issue](https://github.com/sdr-enthusiasts/docker-flightradar24/issues).
+Having troubles with the container or have questions? Please [create a new issue](https://github.com/sdr-enthusiasts/docker-flightradar24/issues).
 
 I also have a [Discord channel](https://discord.gg/sTf9uYF), feel free to [join](https://discord.gg/sTf9uYF) and converse.

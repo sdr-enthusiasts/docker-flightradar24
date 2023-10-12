@@ -13,6 +13,7 @@ ARG TARGETPLATFORM
 COPY rootfs/ /
 
 # NEW STUFF BELOW
+# hadolint ignore=DL3008,SC2086,SC2039,SC2068
 RUN set -x && \
     # define packages to install
     TEMP_PACKAGES=() && \
@@ -28,17 +29,17 @@ RUN set -x && \
     # install packages
     apt-get update && \
     apt-get install -y --no-install-recommends \
-        "${KEPT_PACKAGES[@]}" \
-        "${TEMP_PACKAGES[@]}" \
-        && \
+    "${KEPT_PACKAGES[@]}" \
+    "${TEMP_PACKAGES[@]}" \
+    && \
     # import flightradar24 gpg key
     gpg --list-keys && \
     gpg \
-        --no-default-keyring \
-        --keyring /usr/share/keyrings/flightradar24.gpg \
-        --keyserver hkp://keyserver.ubuntu.com:80 \
-        --recv-keys C969F07840C430F5 \
-        && \
+    --no-default-keyring \
+    --keyring /usr/share/keyrings/flightradar24.gpg \
+    --keyserver hkp://keyserver.ubuntu.com:80 \
+    --recv-keys C969F07840C430F5 \
+    && \
     gpg --list-keys && \
     # get fr24feed:
     # instead of apt-get install, we use apt-get download.
@@ -75,10 +76,10 @@ RUN set -x && \
     rm -rf /src/* /tmp/* /var/lib/apt/lists/* && \
     # Document version
     if /usr/local/bin/fr24feed --version > /dev/null 2>&1; \
-        then /usr/local/bin/fr24feed --version > /CONTAINER_VERSION; \
-        else qemu-arm-static /usr/local/bin/fr24feed --version > /CONTAINER_VERSION; \
-        fi \
-        && \
+    then /usr/local/bin/fr24feed --version > /CONTAINER_VERSION; \
+    else qemu-arm-static /usr/local/bin/fr24feed --version > /CONTAINER_VERSION; \
+    fi \
+    && \
     cat /CONTAINER_VERSION
 
 EXPOSE 30334/tcp 8754/tcp 30003/tcp

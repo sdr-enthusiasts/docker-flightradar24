@@ -2,7 +2,7 @@
 #shellcheck shell=bash
 
 # Test fr24feed can run natively (without qemu)
-if /usr/local/bin/fr24feed --version > /dev/null 2>&1; then 
+if /usr/local/bin/fr24feed --version > /dev/null 2>&1; then
   # fr24feed can be run natively
   /usr/local/bin/fr24feed > /dev/null 2>&1
 else

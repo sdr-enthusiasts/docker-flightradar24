@@ -2,10 +2,10 @@ name: Cancelling Duplicates
 on:
   workflow_run:
     workflows:
-      - 'Pull Request'
-      - 'Deploy'
-      - 'Linting (Non-Image)'
-    types: ['requested']
+      - "Pull Request"
+      - "Deploy"
+      - "Linting (Non-Image)"
+    types: ["requested"]
 
 jobs:
   cancel-duplicate-workflow-runs:
