@@ -64,7 +64,7 @@ jobs:
       # List of files to check to trigger a rebuild on this job
       - name: Get specific changed files
         id: changed-files-specific
-        uses: tj-actions/changed-files@v40.2.3
+        uses: tj-actions/changed-files@v41.0.1
         with:
           files: |
             Dockerfile
