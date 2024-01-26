@@ -7,7 +7,7 @@ WATCH_INTERVAL="${WATCH_INTERVAL:-300}"
 TRAFFIC_FILE="${TRAFFIC_FILE:-/tmp/packets_rcvd}"
 
 while true; do
-  packets_rcvd="$(sed -z 's/\n/; /g;s/; $//;s/^.*\s\([0-9]\+\) packets captured.*$/\1/g' <<< "$(timeout "$WATCH_INTERVAL" tcpdump -p port "${BEASTPORT:-30005}" 2>/dev/stdout 1>/dev/null)")"
+  packets_rcvd="$(sed -z 's/\n/; /g;s/; $//;s/^.*\s\([0-9]\+\) packets captured.*$/\1/g' <<< "$(timeout "$WATCH_INTERVAL" tcpdump -p tcp src port "${BEASTPORT:-30005}" 2>/dev/stdout 1>/dev/null)")"
   echo "$(date +%s) $packets_rcvd" > "${TRAFFIC_FILE}"
   tail -100 "${TRAFFIC_FILE}" > "${TRAFFIC_FILE}".1
   mv -f "${TRAFFIC_FILE}".1 "${TRAFFIC_FILE}"
