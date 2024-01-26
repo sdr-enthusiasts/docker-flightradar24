@@ -3,6 +3,9 @@
 
 # monitor traffic for 5 minutes and write to logfile
 
+# shellcheck disable=SC1091
+source /scripts/common
+
 WATCH_INTERVAL="${WATCH_INTERVAL:-300}"
 TRAFFIC_FILE="${TRAFFIC_FILE:-/tmp/packets_rcvd}"
 
@@ -11,4 +14,7 @@ while true; do
   echo "$(date +%s) $packets_rcvd" > "${TRAFFIC_FILE}"
   tail -100 "${TRAFFIC_FILE}" > "${TRAFFIC_FILE}".1
   mv -f "${TRAFFIC_FILE}".1 "${TRAFFIC_FILE}"
+  if chk_enabled "$VERBOSE_LOGGING"; then
+    s6wrap --quiet --timestamps --prepend="$(basename "$0")" --args echo "$packets_rcvd packets received from $BEASTHOST in the past 5 minutes"
+  fi 
 done

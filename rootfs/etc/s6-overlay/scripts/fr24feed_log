@@ -3,7 +3,10 @@
 
 set -o pipefail
 
-if [ "$VERBOSE_LOGGING" = "true" ]; then
+# shellcheck disable=SC1091
+source /scripts/common
+
+if chk_enabled "$VERBOSE_LOGGING"; then
   # show everything
   tail -F /var/log/fr24feed.log 2> /dev/null
 else
