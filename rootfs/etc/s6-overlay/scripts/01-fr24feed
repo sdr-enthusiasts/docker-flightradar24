@@ -27,7 +27,7 @@ fi
 # 22-12-15 16:19:09.421 [E][:] Your machine should be set as GMT+0 time zone!
 # 22-12-15 16:19:09.421 [W][:] Time zone is not set to GMT+0
 if [ -n "${TZ}" ]; then
-  echo "WARNING: Setting timezone via TZ is not supported in this container. fr24feed requires the container has a timezone of GMT (+0)."
+  echo "WARNING: Setting timezone via TZ is ignored for this container because fr24feed requires the container to use timezone GMT (+0)."
 fi
 printf "GMT" > /var/run/s6/container_environment/TZ
 

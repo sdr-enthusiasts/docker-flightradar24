@@ -16,17 +16,31 @@ else
     EXITCODE=1
 fi
 
-# Check /var/log/fr24feed.log for sent data in last 5 minutes
-LOG_LAST_ENTRY=$(grep -a '\[feed\]\[i\]sent' /var/log/fr24feed.log | tail -1)
-LOG_LAST_ENTRY_TIMESTAMP=$(date --date="$(echo "$LOG_LAST_ENTRY" | cut -d ' ' -f 1,2)" +%s.%N)
-TIMESTAMP_NOW=$(date +%s.%N)
-RECENT_LINE_IN_LOG=$(echo "($TIMESTAMP_NOW - $LOG_LAST_ENTRY_TIMESTAMP) < 300" | bc)
-if [ "$RECENT_LINE_IN_LOG" -eq 1 ]; then
-    echo "Data sent to fr24feed in past 5 mins. HEALTHY"
-else
-    echo "No data sent data to fr24feed in past 5 mins. UNHEALTHY"
-    EXITCODE=1
+# Logging is broken in fr24feeder v1.0.46-1 -- disabling this check for now
+# # Check /var/log/fr24feed.log for sent data in last 5 minutes
+# LOG_LAST_ENTRY=$(grep -a '\[feed\]\[i\]sent' /var/log/fr24feed.log | tail -1)
+# LOG_LAST_ENTRY_TIMESTAMP=$(date --date="$(echo "$LOG_LAST_ENTRY" | cut -d ' ' -f 1,2)" +%s.%N)
+# TIMESTAMP_NOW=$(date +%s.%N)
+# RECENT_LINE_IN_LOG=$(echo "($TIMESTAMP_NOW - $LOG_LAST_ENTRY_TIMESTAMP) < 300" | bc)
+# if [ "$RECENT_LINE_IN_LOG" -eq 1 ]; then
+#     echo "Data sent to fr24feed in past 5 mins. HEALTHY"
+# else
+#     echo "No data sent data to fr24feed in past 5 mins. UNHEALTHY"
+#     EXITCODE=1
+# fi
+
+# Check traffic over the last 5 minutes
+TRAFFIC_FILE="${TRAFFIC_FILE:-/tmp/packets_rcvd}"
+if [[ -f "${TRAFFIC_FILE}" ]]; then
+    read -ra traffic <<< "$(tail -1 "${TRAFFIC_FILE}")"
+    if (( $(date +%s) - traffic[0] > 600 )) || (( traffic[1] < 1 )); then
+        echo "No data received from $BEASTHOST in the past 5 mins. UNHEALTHY"
+        EXITCODE=1
+    else
+        echo "${traffic[1]} packets received from $BEASTHOST in the past 5 mins. HEALTHY"
+    fi
 fi
+
 
 # now log checks are finished, truncate log
 truncate -s 0 /var/log/fr24feed.log > /dev/null 2>&1
