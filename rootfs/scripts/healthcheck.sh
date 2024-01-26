@@ -33,7 +33,7 @@ fi
 TRAFFIC_FILE="${TRAFFIC_FILE:-/tmp/packets_rcvd}"
 if [[ -f "${TRAFFIC_FILE}" ]]; then
     read -ra traffic <<< "$(tail -1 "${TRAFFIC_FILE}")"
-    if (( $(date %s) - traffic[0] > 600 )) || (( traffic[1] < 1 )); then
+    if (( $(date +%s) - traffic[0] > 600 )) || (( traffic[1] < 1 )); then
         echo "No data received from $BEASTHOST in the past 5 mins. UNHEALTHY"
         EXITCODE=1
     else
