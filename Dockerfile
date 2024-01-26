@@ -87,4 +87,4 @@ RUN set -x && \
 EXPOSE 30334/tcp 8754/tcp 30003/tcp
 
 # Add healthcheck
-HEALTHCHECK --start-period=3600s --interval=600s CMD /scripts/healthcheck.sh
+HEALTHCHECK --start-period=600s --interval=600s CMD /scripts/healthcheck.sh
