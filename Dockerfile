@@ -26,6 +26,8 @@ RUN set -x && \
     TEMP_PACKAGES+=(binutils) && \
     # required to figure out fr24feed for amd64
     TEMP_PACKAGES+=(jq) && \
+    # required monitor incoming traffic from beasthost
+    TEMP_PACKAGES+=(tcpdump) && \
     # install packages
     apt-get update && \
     apt-get install -y --no-install-recommends \
