@@ -57,6 +57,15 @@ fi
   fi
 } > /etc/fr24feed.ini
 
+if [[ -n "$FR24KEY_UAT" ]]; then
+  {
+    echo "receiver=\"uat-tcp\""
+    echo "fr24key=\"$FR24KEY_UAT\""
+    echo "uat-host=${UATHOST:-dump978}"
+    echo "uat-port=\"${UATPORT:-30978}\""
+  } > /etc/fr24uat-feed.ini
+fi
+
 # prepare directories (from /usr/lib/fr24/create_missing_directories.sh)
 mkdir -p /run/fr24feed
 
