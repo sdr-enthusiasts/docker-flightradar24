@@ -154,6 +154,9 @@ UAT is a second frequency on which ADSB data is available. It is only used in th
 If you have a UAT deployment with an existing `dump978` container, you can add this to your feed like this:
 
 1. Signup for a UAT sharing key. Note - you CANNOT reuse your existing ADSB sharing key. Run the following script and follow the questions
+
+```bash
+docker run --rm -it --entry-point /scripts/signup-uat.sh ghrc.io/sdr-enthusiasts/docker-flightradar24 ```
    - Step 1.1: Enter the email address associated with your existing (ADSB) FlightRadar24 account.
    - Step 1.2: Leave this BLANK - you will get assigned a new key. You cannot reuse your existing ADSB `FR24KEY`.
    - Steps 3.A/3.B/3.C: enter your latitude/longitude/height (ft)
@@ -168,8 +171,8 @@ Congratulations! You are now registered and ready to share UAT data with Flightr
 + Please make sure to start sharing data within one month from now as otherwise your ID/KEY will be deleted.
 ```
 
-2. Make note of your Sharing Key value (`fxxxxxxxxxxx4` in the example above) and add it to the `FR24KEY_UAT` variable
-3. If your UAT receiver is not the `dump978` container and port `30978`, you can set those as optionally as well:
+1. Make note of your Sharing Key value (`fxxxxxxxxxxx4` in the example above) and add it to the `FR24KEY_UAT` variable
+2. If your UAT receiver is not the `dump978` container and port `30978`, you can set those as optionally as well:
 
 ```yaml
   - FR24KEY_UAT=fxxxxxxxxxxx4
