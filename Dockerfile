@@ -23,11 +23,11 @@ RUN set -x && \
     # required monitor incoming traffic from beasthost
     KEPT_PACKAGES+=(tcpdump) && \
     # required for adding fr24 repo
-    TEMP_PACKAGES+=(gnupg) && \
+    KEPT_PACKAGES+=(gnupg) && \
     # required to extract .deb file
-    TEMP_PACKAGES+=(binutils) && \
+    KEPT_PACKAGES+=(binutils) && \
     # required to figure out fr24feed for amd64
-    TEMP_PACKAGES+=(jq) && \
+    KEPT_PACKAGES+=(jq) && \
     # install packages
     apt-get update && \
     apt-get install -y --no-install-recommends \
