@@ -46,7 +46,7 @@ Remember to replace:
 
 After 30 seconds or so, you should see the following output:
 
-```
+```text
 FR24_SHARING_KEY=5fa9ca2g9049b615
 FR24_RADAR_ID=T-XXXX123
 ```
@@ -84,7 +84,7 @@ This will take you through the signup process. Most of the answers don't matter 
 
 At the end of the signup process, you'll be presented with:
 
-```
+```text
 Congratulations! You are now registered and ready to share ADS-B data with Flightradar24.
 + Your sharing key (xxxxxxxxxxxx) has been configured and emailed to you for backup purposes.
 + Your radar id is X-XXXXXXX, please include it in all email communication with us.
@@ -135,14 +135,49 @@ There are a series of available environment variables:
 | `MLAT`               | Set to `yes` to enable MLAT (optional)                                                         | `no`     |
 | `BIND_INTERFACE`     | Optional. Set a bind interface such as `0.0.0.0` to allow access from non-private IP addresses | _none_   |
 | `VERBOSE_LOGGING`    | Set to `true` to enable verbose logging (optional)                                             | `false`  |
+| `FR24KEY_UAT`        | Optional. Only used if you are feeding UAT data - see section below                            | _empty_  |
+| `UATHOST`            | Optional. Only used if you are feeding UAT data and you don't use the default value                             | `dump978`  |
+| `UATPORT`            | Optional. Only used if you are feeding UAT data and you don't use the default value                             | `30978`    |
 
 ## Ports
 
 The following ports are used by this container:
 
-- `8754` - fr24feed web interface - optional but recommended
+- `8754` - fr24feed (adsb) web interface - optional but recommended
+- `8755` - fr24feed-uat web interface - optional, only interesting if you are feeding UAT data
 - `30003` - fr24feed TCP BaseStation output listen port - optional, recommended to leave unmapped unless explicitly needed
 - `30334` - fr24feed TCP Raw output listen port - optional, recommended to leave unmapped unless explicitly needed
+
+## UAT configuration (USA only)
+
+UAT is a second frequency on which ADSB data is available. It is only used in the US.
+If you have a UAT deployment with an existing `dump978` container, you can add this to your feed like this:
+
+1. Signup for a UAT sharing key. Note - you CANNOT reuse your existing ADSB sharing key. Run the following script and follow the questions
+   - Step 1.1: Enter the email address associated with your existing (ADSB) FlightRadar24 account.
+   - Step 1.2: Leave this BLANK - you will get assigned a new key. You cannot reuse your existing ADSB `FR24KEY`.
+   - Steps 3.A/3.B/3.C: enter your latitude/longitude/height (ft)
+   - Step 4.1: Enter `2` (DVBT Stick (DUMP978-FA RAW TCP))
+   - Step 4.2: You can leave the default value of `30978`
+   - Now you see a text like this:
+
+```text
+Congratulations! You are now registered and ready to share UAT data with Flightradar24.
++ Your sharing key (fxxxxxxxxxxx4) has been configured and emailed to you for backup purposes.
++ Your radar id is T-XXXX120, please include it in all email communication with us.
++ Please make sure to start sharing data within one month from now as otherwise your ID/KEY will be deleted.
+```
+
+2. Make note of your Sharing Key value (`fxxxxxxxxxxx4` in the example above) and add it to the `FR24KEY_UAT` variable
+3. If your UAT receiver is not the `dump978` container and port `30978`, you can set those as optionally as well:
+
+```yaml
+  - FR24KEY_UAT=fxxxxxxxxxxx4
+  - UATHOST=hostname
+  - UATPORT=12345
+```
+
+Restart the container. After a few minutes, you can see on [https://www.flightradar24.com/account/data-sharing](https://www.flightradar24.com/account/data-sharing) that data is received.
 
 ## Logging
 
