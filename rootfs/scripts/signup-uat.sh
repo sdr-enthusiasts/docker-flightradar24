@@ -1,8 +1,7 @@
 #!/command/with-contenv bash
 # shellcheck shell=bash disable=SC2028
 
-apt update -qq >/dev/null 2>&1
-apt install -y --no-install-recommends expect tcpdump gnupg binutils jq
+echo "Please be patient while we get a suitable version of fr24feed..."
 
 gpg \
     --no-default-keyring \
@@ -10,10 +9,33 @@ gpg \
     --keyserver hkp://keyserver.ubuntu.com:80 \
     --recv-keys C969F07840C430F5
 
-touch /run/.pause-fr24feed
-pkill /usr/local/bin/fr24feed
+mkdir -p /tmp/fr24feed
+pushd /tmp/fr24feed >/dev/null 2>&1 || exit
+  if [ "$TARGETPLATFORM" = "linux/amd64" ]; then 
+    curl -sSLO "$(curl -sSL "https://repo-feed.flightradar24.com/fr24feed_versions.json" | jq -r '.platform["linux_x86_64_deb"]["url"]["software"]')";
+  elif [ "$TARGETPLATFORM" = "linux/386" ]; then
+    curl -sSLO "$(curl -sSL "https://repo-feed.flightradar24.com/fr24feed_versions.json" | jq -r '.platform["linux_x86_deb"]["url"]["software"]')";
+  elif [ "$TARGETPLATFORM" = "linux/arm64" ]; then
+    curl -sSLO "$(curl -sSL "https://repo-feed.flightradar24.com/fr24feed_versions.json" | jq -r '.platform["linux_arm64_deb"]["url"]["software"]')";
+  else
+    echo 'deb [arch=armhf signed-by=/usr/share/keyrings/flightradar24.gpg] http://repo.feed.flightradar24.com flightradar24 raspberrypi-stable' > /etc/apt/sources.list.d/flightradar24.list
+    apt-get update && \
+    apt-get download fr24feed:armhf; \
+  fi
+popd >/dev/null 2>&1 || exit
+# extract .deb file
+ar x --output=/tmp/fr24feed -- /tmp/fr24feed/*.deb && \
+# extract data.tar.gz file
+mkdir -p /tmp/fr24feed/extracted && \
+tar xf /tmp/fr24feed/data.tar.gz -C /tmp/fr24feed/extracted
+chmod a+x /tmp/fr24feed/extracted/usr/bin/fr24feed
+cp -f /tmp/fr24feed/extracted/usr/bin/fr24feed /usr/local/bin/fr24feed
+cp -f /tmp/fr24feed/extracted/usr/bin/fr24feed /usr/bin/fr24feed
 
-/usr/local/bin/fr24feed --signup --uat --configfile=/tmp/config.txt
+touch /run/.pause-fr24feed
+pkill -f /usr/local/bin/fr24feed
+
+/usr/bin/fr24feed --signup --uat --configfile=/tmp/config.txt
 key="$(sed -n 's|fr24key=\(.*\)|\1|p' /tmp/config.txt >/dev/null)"
 echo "Your FR24KEY_UAT is: $key"
 
