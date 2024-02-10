@@ -14,8 +14,8 @@ done
 # Test fr24feed can run natively (without qemu)
 if /usr/local/bin/fr24feed --version > /dev/null 2>&1; then
   # fr24feed can be run natively
-  /usr/local/bin/fr24feed --monitor-file=/dev/shm/uat-decoder.txt --http-listen-port=8755 --config-file=/etc/fr24uat-feed.ini --unit=fr24uat-feed > /dev/null 2>&1;
+  /usr/local/bin/fr24feed --monitor-file=/dev/shm/uat-decoder.txt --http-listen-port=8755 --config-file=/etc/fr24uat-feed.ini --unit=fr24uat-feed
 else
   # fr24feed needs qemu
-  qemu-arm-static /usr/local/bin/fr24feed --monitor-file=/dev/shm/uat-decoder.txt --http-listen-port=8755 --config-file=/etc/fr24uat-feed.ini --unit=fr24uat-feed > /dev/null 2>&1;
+  qemu-arm-static /usr/local/bin/fr24feed --monitor-file=/dev/shm/uat-decoder.txt --http-listen-port=8755 --config-file=/etc/fr24uat-feed.ini --unit=fr24uat-feed
 fi
