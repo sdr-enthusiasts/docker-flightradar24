@@ -2,7 +2,10 @@
 
 # This is a slightly updated version of FR24's install script that is available here:
 # 
-#!/bin/bash
+
+# the debian installer calls systemctl and udevadm. Let's make sure that doesn't fail
+echo '#/bin/bash' > /bin/systemctl
+echo '#/bin/bash' > /bin/udevadm
 
 # Stop on first error
 set -e
@@ -41,8 +44,9 @@ case "$ARCH" in
 		;;
 esac
 
-apt-get update -y
-apt-get install dirmngr -y
+# already installed in Dockerfile, no need to do it twice
+# apt-get update -y
+# apt-get install dirmngr -y
 
 if [ ! -e "/etc/apt/keyrings" ]; then
 	mkdir /etc/apt/keyrings
@@ -63,7 +67,10 @@ apt-get install -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force
 
 ln -s /usr/bin/fr24feed /usr/local/bin/fr24feed
 
-
+# Remove the fake systemctl and udevadm again:
+# the debian installer calls systemctl and udevadm. Let's make sure that doesn't fail
+rm -f /bin/systemctl
+rm -f /bin/udevadm
 
 
 

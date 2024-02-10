@@ -29,6 +29,7 @@ RUN set -x && \
     # required to figure out fr24feed for amd64
     KEPT_PACKAGES+=(jq) && \
     # install packages
+    KEPT_PACKAGES+=(dirmngr) && \
     apt-get update && \
     apt-get install -y --no-install-recommends \
     "${KEPT_PACKAGES[@]}" \
