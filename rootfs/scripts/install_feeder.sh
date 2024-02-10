@@ -8,9 +8,6 @@ echo '#/bin/bash' > /bin/systemctl
 echo '#/bin/bash' > /bin/udevadm
 chmod a+x /bin/systemctl /bin/udevadm
 
-# Stop on first error
-set -e
-
 if ! gpg --version >/dev/null 2>&1; then
     apt update -y
     apt install -y --no-install-recommends gnupg binutils dirmngr
