@@ -16,6 +16,7 @@ ARG TARGETPLATFORM
 
 COPY rootfs/ /
 COPY --from=build /usr/bin/fr24feed /usr/bin/fr24feed
+COPY --from=build /usr/bin/fr24feed-status /usr/bin/fr24feed-status
 
 # NEW STUFF BELOW
 # hadolint ignore=DL3008,SC2086,SC2039,SC2068
