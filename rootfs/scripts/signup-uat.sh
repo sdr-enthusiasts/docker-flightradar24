@@ -11,13 +11,14 @@ gpg \
 
 mkdir -p /tmp/fr24feed
 pushd /tmp/fr24feed >/dev/null 2>&1 || exit
-  if [ "$TARGETPLATFORM" = "linux/amd64" ]; then 
+  if [[ "$(uname -m)" == "x86_64x" ]]; then
+    echo "Getting x86 binary"
     curl -sSLO "$(curl -sSL "https://repo-feed.flightradar24.com/fr24feed_versions.json" | jq -r '.platform["linux_x86_64_deb"]["url"]["software"]')";
-  elif [ "$TARGETPLATFORM" = "linux/386" ]; then
-    curl -sSLO "$(curl -sSL "https://repo-feed.flightradar24.com/fr24feed_versions.json" | jq -r '.platform["linux_x86_deb"]["url"]["software"]')";
-  elif [ "$TARGETPLATFORM" = "linux/arm64" ]; then
+  elif [[ "$(uname -m)" == "aarch64" ]]; then
+    echo "Getting arm64 binary"
     curl -sSLO "$(curl -sSL "https://repo-feed.flightradar24.com/fr24feed_versions.json" | jq -r '.platform["linux_arm64_deb"]["url"]["software"]')";
   else
+    echo "Getting armhf binary"
     echo 'deb [arch=armhf signed-by=/usr/share/keyrings/flightradar24.gpg] http://repo.feed.flightradar24.com flightradar24 raspberrypi-stable' > /etc/apt/sources.list.d/flightradar24.list
     apt-get update && \
     apt-get download fr24feed:armhf; \
@@ -29,7 +30,6 @@ ar x --output=/tmp/fr24feed -- /tmp/fr24feed/*.deb && \
 mkdir -p /tmp/fr24feed/extracted && \
 tar xf /tmp/fr24feed/data.tar.gz -C /tmp/fr24feed/extracted
 chmod a+x /tmp/fr24feed/extracted/usr/bin/fr24feed
-cp -f /tmp/fr24feed/extracted/usr/bin/fr24feed /usr/local/bin/fr24feed
 cp -f /tmp/fr24feed/extracted/usr/bin/fr24feed /usr/bin/fr24feed
 
 touch /run/.pause-fr24feed
@@ -40,7 +40,7 @@ key="$(sed -n 's|fr24key=\(.*\)|\1|p' /tmp/config.txt >/dev/null)"
 echo "Your FR24KEY_UAT is: $key"
 
 echo "Please save this key as an environment variable to the fr24 service in your docker-compose.yml:"
-echo "    - FR25KEY_UAT=$key"
+echo "    - FR24KEY_UAT=$key"
 echo "Then (re)start your fr24 container to apply the value"
 
 rm -f /run/.pause_fr24feed
