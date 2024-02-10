@@ -6,6 +6,7 @@
 # the debian installer calls systemctl and udevadm. Let's make sure that doesn't fail
 echo '#/bin/bash' > /bin/systemctl
 echo '#/bin/bash' > /bin/udevadm
+chmod a+x /bin/systemctl /bin/udevadm
 
 # Stop on first error
 set -e
