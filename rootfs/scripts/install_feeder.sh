@@ -13,7 +13,7 @@ set -e
 
 if ! gpg --version >/dev/null 2>&1; then
     apt update -y
-    apt install -y --no-install-recommends gnupg binutils dirmgr
+    apt install -y --no-install-recommends gnupg binutils dirmngr
 fi
 
 # to skip any questions from APT
