@@ -60,20 +60,14 @@ fi
 wget -O- https://repo-feed.flightradar24.com/flightradar24.pub | gpg --dearmor > /etc/apt/keyrings/flightradar24.gpg
 
 # Add APT repository to the config file, removing older entries if exist
-#echo "deb [signed-by=/etc/apt/keyrings/flightradar24.gpg] https://${REPO} flightradar24 ${SYSTEM}-${CHANNEL}" > /etc/apt/sources.list.d/fr24feed.list
-echo "deb [signed-by=/etc/apt/keyrings/flightradar24.gpg] https://${REPO} flightradar24 raspberrypi-${CHANNEL}" > /etc/apt/sources.list.d/fr24feed.list
-dpkg --add-architecture armhf
+echo "deb [signed-by=/etc/apt/keyrings/flightradar24.gpg] https://${REPO} flightradar24 ${SYSTEM}-${CHANNEL}" > /etc/apt/sources.list.d/fr24feed.list
 apt-get update -y
-apt-get install -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" -y fr24feed:armhf
-
-exec qemu-arm-static /usr/bin/fr24feed --signup --uat --configfile=/tmp/config.txt
-# key="$(sed -n 's|fr24key=\(.*\)|\1|p' /tmp/config.txt >/dev/null)"
-# echo "Your FR24KEY_UAT is: $key"
+apt-get install -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" -y fr24feed
 
 # # Remove the fake systemctl and udevadm again:
 # # the debian installer calls systemctl and udevadm. Let's make sure that doesn't fail
-# rm -f /bin/systemctl
-# rm -f /bin/udevadm
+rm -f /bin/systemctl
+rm -f /bin/udevadm
 
 
 
