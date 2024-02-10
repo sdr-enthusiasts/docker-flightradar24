@@ -11,10 +11,14 @@ chmod a+x /bin/systemctl /bin/udevadm
 # Stop on first error
 set -e
 
+if ! gpg --version >/dev/null 2>&1; then
+    apt update -y
+    apt install -y --no-install-recommends gnupg binutils dirmgr
+fi
+
 # to skip any questions from APT
 export DEBIAN_FRONTEND=noninteractive
 
-AUTO_SIGNUP=0
 CHANNEL=stable
 SYSTEM=raspberrypi
 REPO="repo-feed.flightradar24.com"
