@@ -60,8 +60,6 @@ fi
 wget -O- https://repo-feed.flightradar24.com/flightradar24.pub | gpg --dearmor > /etc/apt/keyrings/flightradar24.gpg
 
 # Add APT repository to the config file, removing older entries if exist
-[[ -f /etc/apt/sources.list ]] && mv /etc/apt/sources.list /etc/apt/sources.list.bak || true
-grep -v flightradar24 /etc/apt/sources.list.bak > /etc/apt/sources.list  || true
 #echo "deb [signed-by=/etc/apt/keyrings/flightradar24.gpg] https://${REPO} flightradar24 ${SYSTEM}-${CHANNEL}" > /etc/apt/sources.list.d/fr24feed.list
 echo "deb [signed-by=/etc/apt/keyrings/flightradar24.gpg] https://${REPO} flightradar24 raspberrypi-${CHANNEL}" > /etc/apt/sources.list.d/fr24feed.list
 dpkg --add-architecture armhf
