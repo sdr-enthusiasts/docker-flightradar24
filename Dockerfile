@@ -25,23 +25,25 @@ RUN set -x && \
     TEMP_PACKAGES=() && \
     KEPT_PACKAGES=() && \
     # 'expect' required for signup
-    KEPT_PACKAGES+=(expect) && \
+    #KEPT_PACKAGES+=(expect) && \
     # required monitor incoming traffic from beasthost
     KEPT_PACKAGES+=(tcpdump) && \
     # required for adding fr24 repo
-    KEPT_PACKAGES+=(gnupg) && \
+    #KEPT_PACKAGES+=(gnupg) && \
     # required to extract .deb file
-    KEPT_PACKAGES+=(binutils) && \
+    #KEPT_PACKAGES+=(binutils) && \
     # required to figure out fr24feed for amd64
     KEPT_PACKAGES+=(jq) && \
     # install packages
-    KEPT_PACKAGES+=(dirmngr) && \
+    #KEPT_PACKAGES+=(dirmngr) && \
     apt-get update && \
     apt-get install -y --no-install-recommends \
     "${KEPT_PACKAGES[@]}" \
     "${TEMP_PACKAGES[@]}" && \
     #
     ln -s /usr/bin/fr24feed /usr/local/bin/fr24feed && \
+    ln -s /usr/bin/fr24feed-status /usr/local/bin/fr24feed-status && \
+    sed 's|systemctl status fr24feed|grep -q /bin/fr24feed <<< $(ps -ef)|g' /usr/bin/fr24feed-status && \
     apt-get remove -y "${TEMP_PACKAGES[@]}" && \
     apt-get autoremove -y && \
     rm -rf /src/* /tmp/* /var/lib/apt/lists/* && \
