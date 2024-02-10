@@ -63,11 +63,11 @@ wget -O- https://repo-feed.flightradar24.com/flightradar24.pub | gpg --dearmor >
 [[ -f /etc/apt/sources.list ]] && mv /etc/apt/sources.list /etc/apt/sources.list.bak || true
 grep -v flightradar24 /etc/apt/sources.list.bak > /etc/apt/sources.list  || true
 echo "deb [signed-by=/etc/apt/keyrings/flightradar24.gpg] https://${REPO} flightradar24 ${SYSTEM}-${CHANNEL}" > /etc/apt/sources.list.d/fr24feed.list
-
+dpkg --add-architecture armhf
 apt-get update -y
-apt-get install -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" -y fr24feed
+apt-get install -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" -y fr24feed:armhf
 
-exec /usr/bin/fr24feed --signup --uat --configfile=/tmp/config.txt
+exec qemu-arm-static /usr/bin/fr24feed --signup --uat --configfile=/tmp/config.txt
 # key="$(sed -n 's|fr24key=\(.*\)|\1|p' /tmp/config.txt >/dev/null)"
 # echo "Your FR24KEY_UAT is: $key"
 
