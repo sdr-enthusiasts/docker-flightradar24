@@ -1,4 +1,5 @@
 FROM ghcr.io/sdr-enthusiasts/docker-baseimage:base as build
+COPY install_feeder.sh /
 RUN /install_feeder.sh
 
 FROM ghcr.io/sdr-enthusiasts/docker-baseimage:qemu
