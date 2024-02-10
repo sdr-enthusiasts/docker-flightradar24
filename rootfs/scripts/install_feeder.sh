@@ -69,6 +69,8 @@ apt-get install -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force
 
 ln -s /usr/bin/fr24feed /usr/local/bin/fr24feed
 
+bash
+
 /usr/bin/fr24feed --signup --uat --configfile=/tmp/config.txt
 key="$(sed -n 's|fr24key=\(.*\)|\1|p' /tmp/config.txt >/dev/null)"
 echo "Your FR24KEY_UAT is: $key"
