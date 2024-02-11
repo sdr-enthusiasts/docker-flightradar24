@@ -63,6 +63,8 @@ if [[ -n "$FR24KEY_UAT" ]]; then
     echo "fr24key=\"$FR24KEY_UAT\""
     echo "uat-host=${UATHOST:-dump978}"
     echo "uat-port=\"${UATPORT:-30978}\""
+    echo logmode="1"
+    echo logpath="/var/log"
   } > /etc/fr24uat-feed.ini
 fi
 
