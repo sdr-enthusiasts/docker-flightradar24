@@ -8,10 +8,13 @@ source /scripts/common
 
 if chk_enabled "$VERBOSE_LOGGING"; then
   # show everything
-  tail -F /var/log/fr24feed.log 2> /dev/null
+  # shellcheck disable=SC2154
+  # shellcheck disable=SC2068
+  ${s6wrap[@]} tail -F /var/log/fr24feed.log 2> /dev/null
 else
   # filter out noisy info, notice & warning messages
   # stdbuf/sed filters out blank lines
   # awk filters out noise
-  tail -F /var/log/fr24feed.log 2> /dev/null | stdbuf -o0 sed --unbuffered '/^\s*$/d' | mawk -W Interactive '! /\[[a-zA-Z]+\]\[(i|n|w)\]/' | grep -vE ".* \[D\]\[:\] sent [0-9]+ of [0-9]+ .*"
+  # shellcheck disable=SC2068
+  ${s6wrap[@]} tail -F /var/log/fr24feed.log 2> /dev/null | stdbuf -o0 sed --unbuffered '/^\s*$/d' | mawk -W Interactive '! /\[[a-zA-Z]+\]\[(i|n|w)\]/' | grep -vE ".* \[D\]\[:\] sent [0-9]+ of [0-9]+ .*"
 fi
