@@ -43,7 +43,7 @@ RUN set -x && \
     #
     ln -s /usr/bin/fr24feed /usr/local/bin/fr24feed && \
     ln -s /usr/bin/fr24feed-status /usr/local/bin/fr24feed-status && \
-    sed 's|systemctl status fr24feed|grep -q /bin/fr24feed <<< $(ps -ef)|g' /usr/bin/fr24feed-status && \
+    sed -i 's|systemctl status fr24feed|grep -q /bin/fr24feed <<< $(ps -ef)|g' /usr/bin/fr24feed-status && \
     apt-get remove -y "${TEMP_PACKAGES[@]}" && \
     apt-get autoremove -y && \
     rm -rf /src/* /tmp/* /var/lib/apt/lists/* && \
