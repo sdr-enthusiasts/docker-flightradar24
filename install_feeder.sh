@@ -19,6 +19,7 @@ export DEBIAN_FRONTEND=noninteractive
 CHANNEL=stable
 SYSTEM=raspberrypi
 REPO="repo-feed.flightradar24.com"
+FEEDER=fr24feed
 
 ARCH_PATH=$(which arch || true)
 LSCPU_PATH=$(which lscpu || true)
@@ -46,6 +47,16 @@ case "$ARCH" in
 		;;
 esac
 
+# temp workaround to get the latest version of fr24feed also running in x86:
+case "$ARCH" in
+	x86_64|amd64)
+	ARCH=arm64
+	SYSTEM="raspberrypi"
+	dpkg --add-architecture arm64
+	FEEDER="$FEEDER:arm64"
+	;;
+esac
+
 # already installed in Dockerfile, no need to do it twice
 # apt-get update -y
 # apt-get install dirmngr -y
@@ -62,7 +73,7 @@ wget -O- https://repo-feed.flightradar24.com/flightradar24.pub | gpg --dearmor >
 # Add APT repository to the config file, removing older entries if exist
 echo "deb [signed-by=/etc/apt/keyrings/flightradar24.gpg] https://${REPO} flightradar24 ${SYSTEM}-${CHANNEL}" > /etc/apt/sources.list.d/fr24feed.list
 apt-get update -y
-apt-get install -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" -y fr24feed
+apt-get install -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" -y $FEEDER
 
 # # Remove the fake systemctl and udevadm again:
 # # the debian installer calls systemctl and udevadm. Let's make sure that doesn't fail
