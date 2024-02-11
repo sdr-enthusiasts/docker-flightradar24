@@ -52,8 +52,8 @@ case "$ARCH" in
 	x86_64|amd64)
 	ARCH=arm64
 	SYSTEM="raspberrypi"
-	dpkg --add-architecture arm64
-	FEEDER="$FEEDER:arm64"
+	dpkg --add-architecture armhf
+	FEEDER="$FEEDER:armhf"
 	;;
 esac
 
