@@ -60,7 +60,7 @@ esac
 
 # If $INSTALL_X86_NATIVE == "false" then we'll install the armhf build on x86 systems - the container will run that binary in qemu-arm-static instead of natively
 # This is done because for x86, the repo is stuck on a version 1.0.44 which is not compatible with the "new" UAT feeder code (which needs >=1.0.46-1)
-if [[ "${INSTALL_X86_NATIVE,,} == "false" ]] && ( [[ "$ARCH" == "x86_64" ]] || [[ "$ARCH" == "amd64" ]] ); then
+if [[ "${INSTALL_X86_NATIVE,,}" == "false" ]] && ( [[ "$ARCH" == "x86_64" ]] || [[ "$ARCH" == "amd64" ]] ); then
 	ARCH=arm64
 	SYSTEM="raspberrypi"
 	dpkg --add-architecture armhf
