@@ -17,10 +17,12 @@ fi
 # Test fr24feed can run natively (without qemu)
 if /usr/local/bin/fr24feed --version > /dev/null 2>&1; then
   # fr24feed can be run natively
-    # shellcheck disable=SC2068,SC2154
+  # shellcheck disable=SC2068,SC2154
+  ${s6wrap[@]} echo "starting /usr/local/bin/fr24feed natively"
   ${s6wrap[@]} /usr/local/bin/fr24feed --monitor-file=/dev/shm/uat-decoder.txt --http-listen-port=8755 --config-file=/etc/fr24uat-feed.ini --unit=fr24uat-feed | stdbuf -oL grep -v '[feed]'
 else
   # fr24feed needs qemu
-    # shellcheck disable=SC2068
+  # shellcheck disable=SC2068
+  ${s6wrap[@]} echo "starting /usr/local/bin/fr24feed in qemu"
   ${s6wrap[@]} qemu-arm-static /usr/local/bin/fr24feed --monitor-file=/dev/shm/uat-decoder.txt --http-listen-port=8755 --config-file=/etc/fr24uat-feed.ini --unit=fr24uat-feed | stdbuf -oL grep -v '[feed]'
 fi
