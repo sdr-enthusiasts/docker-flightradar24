@@ -7,7 +7,7 @@
 # This is done because for x86, the repo is stuck on a version 1.0.44 which is not compatible with the "new" UAT feeder code (which needs >=1.0.46-1)
 # INSTALL_X86_FROMDEB overrides INSTALL_X86_NATIVE and will pull a hardcoded 1.0.46-1 deb binary using curl / install that one.
 INSTALL_X86_NATIVE="${INSTALL_X86_NATIVE:-false}"
-INSTALL_X86_FROMDEB=true
+INSTALL_X86_FROMDEB="${INSTALL_X86_FROMDEB:-true}"
 
 # the debian installer calls systemctl and udevadm. Let's make sure that doesn't fail if they aren't present in a container
 # (Note we don't need them because we're using S6 to control system services, and the device drivers are already disabled in the host system)
