@@ -21,9 +21,9 @@ if ! which udevadm; then
 fi
 
 # If this is run from a base container, we check if gpg exist, and if not we need to install a few packages:
-if ! gpg --version >/dev/null 2>&1; then
+if ! gpg --version >/dev/null 2>&1 || ! curl --version  >/dev/null 2>&1; then
     apt update -y
-    apt install -y --no-install-recommends gnupg binutils dirmngr
+    apt install -y --no-install-recommends gnupg binutils dirmngr curl
 fi
 
 # to skip any questions from APT
@@ -65,7 +65,7 @@ if [ ! -e "/etc/apt/keyrings" ]; then
 fi
 
 if [[ "${INSTALL_X86_FROMDEB,,}" == "true" ]] && ( [[ "$ARCH" == "x86_64" ]] || [[ "$ARCH" == "amd64" ]] ); then
-	wget https://repo-feed.flightradar24.com/linux_binaries/fr24feed_1.0.46-1_amd64.deb  
+	curl -sSL https://repo-feed.flightradar24.com/linux_binaries/fr24feed_1.0.46-1_amd64.deb > fr24feed_1.0.46-1_amd64.deb
 	dpkg -i fr24feed_1.0.46-1_amd64.deb 
 else
 	# If $INSTALL_X86_NATIVE == "false" then we'll install the armhf build on x86 systems - the container will run that binary in qemu-arm-static instead of natively
@@ -78,7 +78,7 @@ else
 	fi
 	# Import GPG key for the APT repository
 	# C969F07840C430F5
-	wget -O- https://repo-feed.flightradar24.com/flightradar24.pub | gpg --dearmor > /etc/apt/keyrings/flightradar24.gpg
+	curl -sSL https://repo-feed.flightradar24.com/flightradar24.pub | gpg --dearmor > /etc/apt/keyrings/flightradar24.gpg
 	# Add APT repository to the config file, removing older entries if exist
 	echo "deb [signed-by=/etc/apt/keyrings/flightradar24.gpg] https://${REPO} flightradar24 ${SYSTEM}-${CHANNEL}" > /etc/apt/sources.list.d/fr24feed.list
 	apt-get update -y
