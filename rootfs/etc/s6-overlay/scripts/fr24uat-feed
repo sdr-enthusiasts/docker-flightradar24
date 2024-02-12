@@ -22,16 +22,20 @@ if /usr/local/bin/fr24feed --version > /dev/null 2>&1; then
   # fr24feed can be run natively
   # shellcheck disable=SC2068,SC2154
   if chk_enabled "$VERBOSE_LOGGING"; then
+    ${s6wrap[@]} echo "Starting fr24feed (uat) natively in Verbose Logging mode" 
     ${s6wrap[@]} /usr/local/bin/fr24feed --monitor-file=/dev/shm/uat-decoder.txt --http-listen-port=8755 --config-file=/etc/fr24uat-feed.ini --unit=fr24uat-feed | stdbuf -oL grep -v '\[feed\]'
   else
-    ${s6wrap[@]} /usr/local/bin/fr24feed --monitor-file=/dev/shm/uat-decoder.txt --http-listen-port=8755 --config-file=/etc/fr24uat-feed.ini --unit=fr24uat-feed | stdbuf -oL grep -v '\[feed\]' | grep '\[stats\]'
+    ${s6wrap[@]} echo "Starting fr24feed (uat) natively in Non-verbose Logging mode. Only [stats] items will be shown"
+    ${s6wrap[@]} /usr/local/bin/fr24feed --monitor-file=/dev/shm/uat-decoder.txt --http-listen-port=8755 --config-file=/etc/fr24uat-feed.ini --unit=fr24uat-feed | stdbuf -oL grep '\[stats\]'
   fi
 else
   # fr24feed needs qemu
   # shellcheck disable=SC2068
   if chk_enabled "$VERBOSE_LOGGING"; then
+    ${s6wrap[@]} echo "Starting fr24feed (uat) in qemu with Verbose Logging mode"
     ${s6wrap[@]} qemu-arm-static /usr/local/bin/fr24feed --monitor-file=/dev/shm/uat-decoder.txt --http-listen-port=8755 --config-file=/etc/fr24uat-feed.ini --unit=fr24uat-feed | stdbuf -oL grep -v '\[feed\]'
   else
-    ${s6wrap[@]} qemu-arm-static /usr/local/bin/fr24feed --monitor-file=/dev/shm/uat-decoder.txt --http-listen-port=8755 --config-file=/etc/fr24uat-feed.ini --unit=fr24uat-feed | stdbuf -oL grep -v '\[feed\]' | grep '\[stats\]'
+    ${s6wrap[@]} echo "Starting fr24feed (uat) in qemu with Non-verbose Logging mode. Only [stats] items will be shown"
+    ${s6wrap[@]} qemu-arm-static /usr/local/bin/fr24feed --monitor-file=/dev/shm/uat-decoder.txt --http-listen-port=8755 --config-file=/etc/fr24uat-feed.ini --unit=fr24uat-feed | stdbuf -oL grep '\[stats\]'
   fi   
 fi
