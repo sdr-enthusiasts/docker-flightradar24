@@ -14,7 +14,6 @@ ENV S6_BEHAVIOUR_IF_STAGE2_FAILS=2 \
 
 ARG TARGETPLATFORM
 
-COPY rootfs/ /
 COPY --from=build /usr/bin/fr24feed /usr/bin/fr24feed
 COPY --from=build /usr/bin/fr24feed-status /usr/bin/fr24feed-status
 
@@ -54,6 +53,8 @@ RUN set -x && \
     fi \
     && \
     cat /CONTAINER_VERSION
+
+COPY rootfs/ /
 
 EXPOSE 30334/tcp 8754/tcp 30003/tcp
 
