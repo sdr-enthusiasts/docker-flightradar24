@@ -5,9 +5,9 @@
 source /scripts/common
 
 # don't start if the signup-uat.sh script is running
-while [[ -f /run/.pause-fr24feed ]]; do
-  sleep 1
-done
+#while [[ -f /run/.pause-fr24feed ]]; do
+#  sleep 1
+#done
 
 # Test fr24feed can run natively (without qemu)
 if /usr/local/bin/fr24feed --version > /dev/null 2>&1; then
