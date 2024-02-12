@@ -14,6 +14,9 @@ fi
 #  sleep 1
 #done
 
+# wait a while so the adsb feeder instance is running
+sleep 15
+
 # Test fr24feed can run natively (without qemu)
 if /usr/local/bin/fr24feed --version > /dev/null 2>&1; then
   # fr24feed can be run natively
