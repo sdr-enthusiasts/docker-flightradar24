@@ -60,15 +60,6 @@ case "$ARCH" in
 		;;
 esac
 
-# If $INSTALL_X86_NATIVE == "false" then we'll install the armhf build on x86 systems - the container will run that binary in qemu-arm-static instead of natively
-# This is done because for x86, the repo is stuck on a version 1.0.44 which is not compatible with the "new" UAT feeder code (which needs >=1.0.46-1)
-if [[ "${INSTALL_X86_NATIVE,,}" == "false" ]] && ( [[ "$ARCH" == "x86_64" ]] || [[ "$ARCH" == "amd64" ]] ); then
-	ARCH=arm64
-	SYSTEM="raspberrypi"
-	dpkg --add-architecture armhf
-	FEEDER="$FEEDER:armhf"
-fi
-
 if [ ! -e "/etc/apt/keyrings" ]; then
 	mkdir -p -m 0755 /etc/apt/keyrings
 fi
@@ -77,6 +68,14 @@ if [[ "${INSTALL_X86_FROMDEB,,}" == "true" ]] && ( [[ "$ARCH" == "x86_64" ]] || 
 	wget https://repo-feed.flightradar24.com/linux_binaries/fr24feed_1.0.46-1_amd64.deb  
 	dpkg -i fr24feed_1.0.46-1_amd64.deb 
 else
+	# If $INSTALL_X86_NATIVE == "false" then we'll install the armhf build on x86 systems - the container will run that binary in qemu-arm-static instead of natively
+	# This is done because for x86, the repo is stuck on a version 1.0.44 which is not compatible with the "new" UAT feeder code (which needs >=1.0.46-1)
+	if [[ "${INSTALL_X86_NATIVE,,}" == "false" ]] && ( [[ "$ARCH" == "x86_64" ]] || [[ "$ARCH" == "amd64" ]] ); then
+		ARCH=arm64
+		SYSTEM="raspberrypi"
+		dpkg --add-architecture armhf
+		FEEDER="$FEEDER:armhf"
+	fi
 	# Import GPG key for the APT repository
 	# C969F07840C430F5
 	wget -O- https://repo-feed.flightradar24.com/flightradar24.pub | gpg --dearmor > /etc/apt/keyrings/flightradar24.gpg
