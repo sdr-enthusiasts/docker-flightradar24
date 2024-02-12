@@ -1,6 +1,7 @@
 #!/command/execlineb
-# shellcheck shell=sh
+# shellcheck shell=bash
 
-sleep infinity # debug
+sleep infinity
+# debug
 
 s6-log -bp T 1 n20 s1000000 T /var/log/fr24feed
