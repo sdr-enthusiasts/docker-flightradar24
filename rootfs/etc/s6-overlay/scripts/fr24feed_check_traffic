@@ -15,9 +15,9 @@ while true; do
   pcap_log=$(timeout --preserve-status "$WATCH_INTERVAL" tcpdump -p tcp src port "${BEASTPORT:-30005}" 2>/dev/stdout 1>/dev/null)
   if [[ "$?" != "0" ]]; then
     s6wrap --quiet --timestamps --prepend="$(basename "$0")" --args tail <<< "$pcap_log"
-    packets_rcvd=$(sed -z 's/\n/; /g;s/; $//;s/^.*\s\([0-9]\+\) packets captured.*$/\1/g' <<< "$pcap_log")
+     packets_rcvd="-1"   
   else
-    packets_rcvd="-1"
+    packets_rcvd=$(sed -z 's/\n/; /g;s/; $//;s/^.*\s\([0-9]\+\) packets captured.*$/\1/g' <<< "$pcap_log")
   fi
 
   echo "$(date +%s) $packets_rcvd" > "${TRAFFIC_FILE}"
