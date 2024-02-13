@@ -57,7 +57,7 @@ s6-svdt-clear "${SERVICEDIR}"
 
 # death count for fr24uat_feed
 if [[ -n "$FR24KEY_UAT" ]]; then
-    SERVICEDIR=/run/service/fr24uat_feed
+    SERVICEDIR=/run/service/fr24uat-feed
     SERVICENAME=$(basename "${SERVICEDIR}")
     # shellcheck disable=SC2126
     SERVICE_DEATHS=$(s6-svdt "${SERVICEDIR}" | grep -v "exitcode 0" | wc -l)
@@ -92,7 +92,7 @@ fi
 
 # the following checks are taken from /usr/local/bin/fr24feed-status for UAT
 if [[ -n "$FR24KEY_UAT" ]]; then
-    MONITOR_FILE="/dev/shm/decoder.txt"
+    MONITOR_FILE="/dev/shm/uat-decoder.txt"
     # feed_status
     FEED_STATUS=$(grep "feed_status=" ${MONITOR_FILE} | cut -d= -f2)
     if [ "$FEED_STATUS" != 'connected' ]; then
