@@ -9,25 +9,28 @@ source /scripts/common
 #  sleep 1
 #done
 
+FR24_CMD=()
+
 # Test fr24feed can run natively (without qemu)
 if /usr/local/bin/fr24feed --version > /dev/null 2>&1; then
   # fr24feed can be run natively
-  # shellcheck disable=SC2068,SC2154
-  if chk_enabled "$VERBOSE_LOGGING"; then
-    ${s6wrap[@]} echo "Starting fr24feed (adsb) natively in Verbose Logging mode"
-    ${s6wrap[@]} /usr/local/bin/fr24feed | stdbuf -oL grep -v '\[feed\]'
-  else
-    ${s6wrap[@]} echo "Starting fr24feed (adsb) natively in Non-verbose Logging mode. Only [stats] items will be shown"
-    ${s6wrap[@]} /usr/local/bin/fr24feed | stdbuf -oL grep -v '\[feed\]' | grep '\[stats\]'
-  fi
+  NATIVE="natively"
 else
   # fr24feed needs qemu
-  # shellcheck disable=SC2068
-  if chk_enabled "$VERBOSE_LOGGING"; then
-    ${s6wrap[@]} echo "Starting fr24feed (adsb) in qemu with Verbose Logging mode"
-    ${s6wrap[@]} qemu-arm-static /usr/local/bin/fr24feed | stdbuf -oL grep -v '\[feed\]'
-  else
-    ${s6wrap[@]} echo "Starting fr24feed (adsb) in qemu with Non-verbose Logging mode. Only [stats] items will be shown"
-    ${s6wrap[@]} qemu-arm-static /usr/local/bin/fr24feed | stdbuf -oL grep -v '\[feed\]' | grep '\[stats\]'
-  fi
+  FR24_CMD+=("qemu-arm-static")
+  NATIVE="using qemu"
 fi
+
+FR24_CMD+=("/usr/local/bin/fr24feed")
+
+FILTER_TERMS=("-e" "[feed][i]sent" "-e" "[feed][n]syncing")
+
+if chk_enabled "$VERBOSE_LOGGING"; then
+  VERBOSE_REMARK="in Verbose Logging mode"
+else
+  FILTER_TERMS+=("-e" "[mlat]")
+  VERBOSE_REMARK="in non-verbose Logging mode"
+fi
+
+"${s6wrap[@]}" echo "Starting fr24feed (adsb) $NATIVE $VERBOSE_REMARK"
+"${s6wrap[@]}" "${FR24_CMD[@]}" | stdbuf -oL grep -v -F "${FILTER_TERMS[@]}"
