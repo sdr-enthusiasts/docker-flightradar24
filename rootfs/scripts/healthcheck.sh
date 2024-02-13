@@ -79,7 +79,7 @@ if [ "$FEED_STATUS" != 'connected' ]; then
     grep "feed_status_message=" ${MONITOR_FILE}
     EXITCODE=1
 else
-    echo "[UNHEALTHY] fr24 ADSB feed_status=${FEED_STATUS}"
+    echo "[HEALTHY] fr24 ADSB feed_status=${FEED_STATUS}"
 fi
 # rx_connected
 RX_CONNECTED=$(grep "rx_connected=" ${MONITOR_FILE} | cut -d= -f2)
@@ -100,7 +100,7 @@ if [[ -n "$FR24KEY_UAT" ]]; then
         grep "feed_status_message=" ${MONITOR_FILE}
         EXITCODE=1
     else
-        echo "[UNHEALTHY] fr24 UAT feed_status=${FEED_STATUS}"
+        echo "[HEALTHY] fr24 UAT feed_status=${FEED_STATUS}"
     fi
     # rx_connected
     RX_CONNECTED=$(grep "rx_connected=" ${MONITOR_FILE} | cut -d= -f2)
