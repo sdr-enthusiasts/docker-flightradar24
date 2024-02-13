@@ -10,11 +10,22 @@ WATCH_INTERVAL="${WATCH_INTERVAL:-300}"
 TRAFFIC_FILE="${TRAFFIC_FILE:-/tmp/packets_rcvd}"
 
 while true; do
-  packets_rcvd="$(sed -z 's/\n/; /g;s/; $//;s/^.*\s\([0-9]\+\) packets captured.*$/\1/g' <<< "$(timeout "$WATCH_INTERVAL" tcpdump -p tcp src port "${BEASTPORT:-30005}" 2>/dev/stdout 1>/dev/null)")"
+  sleep "$WATCH_INTERVAL" &
+
+  pcap_log=$(timeout --preserve-status "$WATCH_INTERVAL" tcpdump -p tcp src port "${BEASTPORT:-30005}" 2>/dev/stdout 1>/dev/null)
+  if [[ "$?" != "0" ]]; then
+    s6wrap --quiet --timestamps --prepend="$(basename "$0")" --args tail <<< "$pcap_log"
+     packets_rcvd="-1"   
+  else
+    packets_rcvd=$(sed -z 's/\n/; /g;s/; $//;s/^.*\s\([0-9]\+\) packets captured.*$/\1/g' <<< "$pcap_log")
+  fi
+
   echo "$(date +%s) $packets_rcvd" > "${TRAFFIC_FILE}"
   tail -100 "${TRAFFIC_FILE}" > "${TRAFFIC_FILE}".1
   mv -f "${TRAFFIC_FILE}".1 "${TRAFFIC_FILE}"
   if chk_enabled "$VERBOSE_LOGGING"; then
     s6wrap --quiet --timestamps --prepend="$(basename "$0")" --args echo "$packets_rcvd packets received from $BEASTHOST in the past 5 minutes"
   fi 
+
+  wait
 done

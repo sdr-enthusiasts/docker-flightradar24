@@ -17,25 +17,30 @@ fi
 # wait a while so the adsb feeder instance is running
 sleep 15
 
+
+FR24_CMD=()
+
 # Test fr24feed can run natively (without qemu)
 if /usr/local/bin/fr24feed --version > /dev/null 2>&1; then
   # fr24feed can be run natively
-  # shellcheck disable=SC2068,SC2154
-  if chk_enabled "$VERBOSE_LOGGING"; then
-    ${s6wrap[@]} echo "Starting fr24feed (uat) natively in Verbose Logging mode" 
-    ${s6wrap[@]} /usr/local/bin/fr24feed --monitor-file=/dev/shm/uat-decoder.txt --http-listen-port=8755 --config-file=/etc/fr24uat-feed.ini --unit=fr24uat-feed | stdbuf -oL grep -v '\[feed\]'
-  else
-    ${s6wrap[@]} echo "Starting fr24feed (uat) natively in Non-verbose Logging mode. Only [stats] items will be shown"
-    ${s6wrap[@]} /usr/local/bin/fr24feed --monitor-file=/dev/shm/uat-decoder.txt --http-listen-port=8755 --config-file=/etc/fr24uat-feed.ini --unit=fr24uat-feed | stdbuf -oL grep '\[stats\]'
-  fi
+  NATIVE_REMARK="natively"
 else
   # fr24feed needs qemu
-  # shellcheck disable=SC2068
-  if chk_enabled "$VERBOSE_LOGGING"; then
-    ${s6wrap[@]} echo "Starting fr24feed (uat) in qemu with Verbose Logging mode"
-    ${s6wrap[@]} qemu-arm-static /usr/local/bin/fr24feed --monitor-file=/dev/shm/uat-decoder.txt --http-listen-port=8755 --config-file=/etc/fr24uat-feed.ini --unit=fr24uat-feed | stdbuf -oL grep -v '\[feed\]'
-  else
-    ${s6wrap[@]} echo "Starting fr24feed (uat) in qemu with Non-verbose Logging mode. Only [stats] items will be shown"
-    ${s6wrap[@]} qemu-arm-static /usr/local/bin/fr24feed --monitor-file=/dev/shm/uat-decoder.txt --http-listen-port=8755 --config-file=/etc/fr24uat-feed.ini --unit=fr24uat-feed | stdbuf -oL grep '\[stats\]'
-  fi   
+  FR24_CMD+=("qemu-arm-static")
+  NATIVE_REMARK="using qemu"
 fi
+
+FR24_CMD+=("/usr/local/bin/fr24feed")
+FR24_CMD+="--monitor-file=/dev/shm/uat-decoder.txt" "--http-listen-port=8755" "--config-file=/etc/fr24uat-feed.ini" "--unit=fr24uat-feed")
+
+FILTER_TERMS=("-e" "[feed][i]sent" "-e" "[feed][n]syncing")
+
+if chk_enabled "$VERBOSE_LOGGING"; then
+  VERBOSE_REMARK="in Verbose Logging mode"
+else
+  FILTER_TERMS+=("-e" "[mlat]")
+  VERBOSE_REMARK="in non-verbose Logging mode"
+fi
+
+"${s6wrap[@]}" echo "Starting fr24feed (adsb) $NATIVE_REMARK $VERBOSE_REMARK"
+"${s6wrap[@]}" "${FR24_CMD[@]}" | stdbuf -oL grep -v -F "${FILTER_TERMS[@]}"
