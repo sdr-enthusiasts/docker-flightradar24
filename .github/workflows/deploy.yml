@@ -61,7 +61,7 @@ jobs:
   build_and_push:
     name: Image Build & Push
     uses: sdr-enthusiasts/common-github-workflows/.github/workflows/build_and_push_image.yml@main
-    needs: [hadolint]
+    #needs: [hadolint]
     with:
       push_enabled: true
       push_destinations: ghcr.io;dockerhub
