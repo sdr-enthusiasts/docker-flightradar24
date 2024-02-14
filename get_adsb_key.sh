@@ -2,7 +2,7 @@
 
 mkdir -p /run/tmp
 
-curl -sSL https://raw.githubusercontent.com/sdr-enthusiasts/docker-flightradar24/new-uat/install_feeder.sh > /run/tmp/install_feeder.sh
+curl -sSL https://raw.githubusercontent.com/sdr-enthusiasts/docker-flightradar24/main/install_feeder.sh > /run/tmp/install_feeder.sh
 chmod a+x /run/tmp/install_feeder.sh
 INSTALL_X86_FROMDEB=true /run/tmp/install_feeder.sh
 
