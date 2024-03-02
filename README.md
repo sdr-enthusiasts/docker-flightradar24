@@ -34,8 +34,11 @@ This will start up a container. After installing a bunch of software (which may 
 - `Step 1.2 - If you used to feed FR24 with ADS-B data before, enter your sharing key.`: Leave blank and press enter
 - `Step 1.3 - Would you like to participate in MLAT calculations?`: Answer `no`
 - `Would you like to continue using these settings?`: Answer `yes`
-- `Step 4.1 - Receiver selection (in order to run MLAT please use DVB-T stick with dump1090 utility bundled with fr24feed)... Enter your receiver type (1-7)`: Answer `7`.
-- `Step 6 - Please select desired logfile mode... Select logfile mode (0-2)`: Answer `0`.
+- `Step 4.1 - Receiver selection (in order to run MLAT please use DVB-T stick with dump1090 utility bundled with fr24feed)... Enter your receiver type (1-7)`: Answer `4`.
+- `Enter your connection type`: Answer `1`.
+- `host`: Answer: 127.0.0.1
+- `port`: Answer: 30005
+- `Step 5`: Answer: 2x `no`
 
 Note that there is a limit of 3 feeders per FR24 account. ADSB and UAT (see below) both count as 1 feeder. If you have more than 3 feeders, you will need to contact <support@fr24.com> to request an additional Feeder Key. Make sure to send them your account email-address, latitude, longitude, altitude, and if the key is for an ADSB or UAT feeder.
 
