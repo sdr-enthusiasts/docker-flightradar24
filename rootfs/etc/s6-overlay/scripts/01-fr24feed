@@ -65,6 +65,9 @@ if [[ -n "$FR24KEY_UAT" ]]; then
     echo "uat-port=\"${UATPORT:-30978}\""
     echo logmode="1"
     echo logpath="/var/log"
+  if [ -n "${BIND_INTERFACE}" ]; then
+    echo bind-interface="${BIND_INTERFACE}"
+  fi    
   } > /etc/fr24uat-feed.ini
 fi
 
