@@ -9,6 +9,10 @@ if [[ -z "$FR24KEY_UAT" ]]; then
   sleep infinity
 fi
 
+# fr24feed regularly uses fcntl on all available fds, causing CPU / syscall load
+# limit fr24feed to 128 open file descriptors to work around this issue
+ulimit -n 128
+
 # don't start if the signup-uat.sh script is running
 #while [[ -f /run/.pause-fr24feed ]]; do
 #  sleep 1
