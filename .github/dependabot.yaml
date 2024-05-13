@@ -6,7 +6,10 @@ updates:
   - package-ecosystem: "docker"
     directory: "/"
     schedule:
-      interval: weekly
+      interval: "weekly"
+      day: "saturday"
+      time: "00:00"
+      timezone: "Etc/UTC"
     assignees:
       - "mikenye"
       - "fredclausen"
@@ -15,7 +18,10 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "weekly"
+      day: "saturday"
+      time: "00:00"
+      timezone: "Etc/UTC"
     assignees:
       - "mikenye"
       - "fredclausen"
