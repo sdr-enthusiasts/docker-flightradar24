@@ -27,7 +27,7 @@ jobs:
       latestver: ${{ steps.latest-version.outputs.latestver }}
     steps:
       - name: Build image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v5.3.0
         with:
           push: false
           load: true
