@@ -37,7 +37,7 @@ fi
 FR24_CMD+=("/usr/local/bin/fr24feed")
 FR24_CMD+=("--monitor-file=/dev/shm/uat-decoder.txt" "--http-listen-port=8755" "--config-file=/etc/fr24uat-feed.ini" "--unit=fr24uat-feed")
 
-FILTER_TERMS=("-e" "[feed][i]sent" "-e" "[feed][n]syncing")
+FILTER_TERMS=("-e" "[feed][i]sent" "-e" "[feed][n]syncing" "-e" "[feed][n]ping")
 
 if chk_enabled "$VERBOSE_LOGGING"; then
   VERBOSE_REMARK="in Verbose Logging mode"

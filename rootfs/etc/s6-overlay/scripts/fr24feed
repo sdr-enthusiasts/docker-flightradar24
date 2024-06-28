@@ -31,7 +31,7 @@ FILTER_TERMS=("-e" "[feed][i]sent" "-e" "[feed][n]syncing")
 if chk_enabled "$VERBOSE_LOGGING"; then
   VERBOSE_REMARK="in Verbose Logging mode"
 else
-  FILTER_TERMS+=("-e" "[mlat]")
+  FILTER_TERMS+=("-e" "[mlat]" "-e " "[feed][i]filtering")
   VERBOSE_REMARK="in non-verbose Logging mode"
 fi
 
