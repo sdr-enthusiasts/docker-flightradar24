@@ -45,7 +45,7 @@ fi
   echo raw="no"
   echo logmode="1"
   echo logpath="/var/log"
-  if [ -z "${MLAT}" ]; then
+  if ! chk_enabled "${MLAT}"; then
     echo mlat="no"
     echo mlat-without-gps="no"
   else
@@ -84,7 +84,7 @@ if /usr/local/bin/fr24feed --version > /dev/null 2>&1; then
   echo "fr24feed version: $(/usr/local/bin/fr24feed --version)"
 else
   # fr24feed needs qemu
-  echo "fr24feed version: $(qemu-arm-static /usr/local/bin/fr24feed --version)"
+  echo "fr24feed version: $(qemu-arm-static /usr/local/bin/fr24feed --version) (using qemu)"
 fi
 
 # prepare log file

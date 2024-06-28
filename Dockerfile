@@ -1,55 +1,51 @@
-FROM ghcr.io/sdr-enthusiasts/docker-baseimage:base as build
+FROM ghcr.io/sdr-enthusiasts/docker-baseimage:mlatclient as build
+SHELL ["/bin/bash", "-x", "-o", "pipefail", "-c"]
 COPY install_feeder.sh /
-RUN /install_feeder.sh
+# hadolint ignore=SC2016
+RUN \
+    /install_feeder.sh && \
+    sed -i "s|systemctl status fr24feed|grep -q /bin/fr24feed <<< \$(ps -ef)|g" /usr/bin/fr24feed-status
 
-FROM ghcr.io/sdr-enthusiasts/docker-baseimage:qemu
-
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-
+FROM ghcr.io/sdr-enthusiasts/docker-baseimage:base
+SHELL ["/bin/bash", "-x", "-o", "pipefail", "-c"]
 ENV S6_BEHAVIOUR_IF_STAGE2_FAILS=2 \
     BEASTHOST=readsb \
     BEASTPORT=30005 \
     MLAT=no \
     VERBOSE_LOGGING=false
-
 ARG TARGETPLATFORM
-
-COPY --from=build /usr/bin/fr24feed /usr/bin/fr24feed
-COPY --from=build /usr/bin/fr24feed-status /usr/bin/fr24feed-status
 
 # NEW STUFF BELOW
 # hadolint ignore=DL3008,SC2086,SC2039,SC2068
-RUN set -x && \
+RUN --mount=type=bind,from=build,source=/,target=/build/ \
     # define packages to install
     TEMP_PACKAGES=() && \
     KEPT_PACKAGES=() && \
-    # 'expect' required for signup
-    #KEPT_PACKAGES+=(expect) && \
     # required monitor incoming traffic from beasthost
     KEPT_PACKAGES+=(tcpdump) && \
-    # required for adding fr24 repo
-    #KEPT_PACKAGES+=(gnupg) && \
-    # required to extract .deb file
-    #KEPT_PACKAGES+=(binutils) && \
-    # required to figure out fr24feed for amd64
     KEPT_PACKAGES+=(jq) && \
-    # install packages
-    #KEPT_PACKAGES+=(dirmngr) && \
+    # required for mlatclient:
+    KEPT_PACKAGES+=(python3-pkg-resources) && \
+    if [[ "${TARGETARCH:0:3}" != "arm" ]]; then \
+        KEPT_PACKAGES+=(qemu-user-static); \
+    fi && \
     apt-get update && \
     apt-get install -y --no-install-recommends \
     "${KEPT_PACKAGES[@]}" \
     "${TEMP_PACKAGES[@]}" && \
     #
+    cp -f /build/usr/bin/fr24feed /usr/bin/fr24feed && \
+    cp -f /build/usr/bin/fr24feed-status /usr/bin/fr24feed-status && \
     ln -s /usr/bin/fr24feed /usr/local/bin/fr24feed && \
     ln -s /usr/bin/fr24feed-status /usr/local/bin/fr24feed-status && \
-    sed -i 's|systemctl status fr24feed|grep -q /bin/fr24feed <<< $(ps -ef)|g' /usr/bin/fr24feed-status && \
+    tar zxf /build/mlatclient.tgz -C / && \
     apt-get remove -y "${TEMP_PACKAGES[@]}" && \
     apt-get autoremove -y && \
     rm -rf /src/* /tmp/* /var/lib/apt/lists/* && \
     # Document version
     if /usr/local/bin/fr24feed --version > /dev/null 2>&1; \
-    then /usr/local/bin/fr24feed --version > /CONTAINER_VERSION; \
-    else qemu-arm-static /usr/local/bin/fr24feed --version > /CONTAINER_VERSION; \
+    then /usr/local/bin/fr24feed --version > /.CONTAINER_VERSION; \
+    else qemu-arm-static /usr/local/bin/fr24feed --version > /.CONTAINER_VERSION; \
     fi \
     && \
     cat /CONTAINER_VERSION
