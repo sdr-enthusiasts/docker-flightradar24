@@ -1,4 +1,4 @@
-FROM ghcr.io/sdr-enthusiasts/docker-baseimage:mlatclient as build
+FROM ghcr.io/sdr-enthusiasts/docker-baseimage:mlatclient AS build
 SHELL ["/bin/bash", "-x", "-o", "pipefail", "-c"]
 COPY install_feeder.sh /
 # hadolint ignore=SC2016
@@ -13,7 +13,7 @@ ENV S6_BEHAVIOUR_IF_STAGE2_FAILS=2 \
     BEASTPORT=30005 \
     MLAT=no \
     VERBOSE_LOGGING=false
-ARG TARGETPLATFORM
+ARG TARGETPLATFORM TARGETARCH
 
 # NEW STUFF BELOW
 # hadolint ignore=DL3008,SC2086,SC2039,SC2068
