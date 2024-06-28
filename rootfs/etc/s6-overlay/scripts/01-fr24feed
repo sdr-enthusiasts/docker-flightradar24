@@ -90,5 +90,5 @@ else
 fi
 
 # prepare log file
-rm /var/log/fr24feed.log > /dev/null 2>&1
+rm -f /var/log/fr24feed.log
 touch /var/log/fr24feed.log
