@@ -48,7 +48,7 @@ RUN --mount=type=bind,from=build,source=/,target=/build/ \
     else qemu-arm-static /usr/local/bin/fr24feed --version > /.CONTAINER_VERSION; \
     fi \
     && \
-    cat /CONTAINER_VERSION
+    cat /.CONTAINER_VERSION
 
 COPY rootfs/ /
 
