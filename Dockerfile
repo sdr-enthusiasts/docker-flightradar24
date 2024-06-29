@@ -14,7 +14,8 @@ ENV S6_BEHAVIOUR_IF_STAGE2_FAILS=2 \
     MLAT=no \
     VERBOSE_LOGGING=false \
 
-ARG VERSION_REPO="sdr-enthusiasts/docker-flightradar24" VERSION_BRANCH="##BRANCH##"
+ARG VERSION_REPO="sdr-enthusiasts/docker-flightradar24" \
+    VERSION_BRANCH="##BRANCH##"
 
 # NEW STUFF BELOW
 # hadolint ignore=DL3008,SC2086,SC2039,SC2068
