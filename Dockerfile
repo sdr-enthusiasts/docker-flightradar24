@@ -12,7 +12,7 @@ ENV S6_BEHAVIOUR_IF_STAGE2_FAILS=2 \
     BEASTHOST=readsb \
     BEASTPORT=30005 \
     MLAT=no \
-    VERBOSE_LOGGING=false \
+    VERBOSE_LOGGING=false
 
 ARG VERSION_REPO="sdr-enthusiasts/docker-flightradar24" \
     VERSION_BRANCH="##BRANCH##"
