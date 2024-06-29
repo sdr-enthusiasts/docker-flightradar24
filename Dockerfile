@@ -1,58 +1,48 @@
-FROM ghcr.io/sdr-enthusiasts/docker-baseimage:base as build
+FROM ghcr.io/sdr-enthusiasts/docker-baseimage:base AS build
+SHELL ["/bin/bash", "-x", "-o", "pipefail", "-c"]
 COPY install_feeder.sh /
-RUN /install_feeder.sh
+# hadolint ignore=SC2016
+RUN \
+    /install_feeder.sh && \
+    sed -i "s|systemctl status fr24feed|grep -q /bin/fr24feed <<< \$(ps -ef)|g" /usr/bin/fr24feed-status
 
-FROM ghcr.io/sdr-enthusiasts/docker-baseimage:qemu
-
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-
+FROM ghcr.io/sdr-enthusiasts/docker-baseimage:base
+SHELL ["/bin/bash", "-x", "-o", "pipefail", "-c"]
 ENV S6_BEHAVIOUR_IF_STAGE2_FAILS=2 \
     BEASTHOST=readsb \
     BEASTPORT=30005 \
     MLAT=no \
     VERBOSE_LOGGING=false
 
-ARG TARGETPLATFORM
-
-COPY --from=build /usr/bin/fr24feed /usr/bin/fr24feed
-COPY --from=build /usr/bin/fr24feed-status /usr/bin/fr24feed-status
+ARG VERSION_REPO="sdr-enthusiasts/docker-flightradar24" \
+    VERSION_BRANCH="##BRANCH##"
 
 # NEW STUFF BELOW
 # hadolint ignore=DL3008,SC2086,SC2039,SC2068
-RUN set -x && \
+RUN --mount=type=bind,from=build,source=/,target=/build/ \
     # define packages to install
     TEMP_PACKAGES=() && \
     KEPT_PACKAGES=() && \
-    # 'expect' required for signup
-    #KEPT_PACKAGES+=(expect) && \
     # required monitor incoming traffic from beasthost
     KEPT_PACKAGES+=(tcpdump) && \
-    # required for adding fr24 repo
-    #KEPT_PACKAGES+=(gnupg) && \
-    # required to extract .deb file
-    #KEPT_PACKAGES+=(binutils) && \
-    # required to figure out fr24feed for amd64
     KEPT_PACKAGES+=(jq) && \
-    # install packages
-    #KEPT_PACKAGES+=(dirmngr) && \
     apt-get update && \
     apt-get install -y --no-install-recommends \
     "${KEPT_PACKAGES[@]}" \
     "${TEMP_PACKAGES[@]}" && \
     #
+    cp -f /build/usr/bin/fr24feed /usr/bin/fr24feed && \
+    cp -f /build/usr/bin/fr24feed-status /usr/bin/fr24feed-status && \
     ln -s /usr/bin/fr24feed /usr/local/bin/fr24feed && \
     ln -s /usr/bin/fr24feed-status /usr/local/bin/fr24feed-status && \
-    sed -i 's|systemctl status fr24feed|grep -q /bin/fr24feed <<< $(ps -ef)|g' /usr/bin/fr24feed-status && \
     apt-get remove -y "${TEMP_PACKAGES[@]}" && \
-    apt-get autoremove -y && \
+    apt-get autoremove -q -o APT::Autoremove::RecommendsImportant=0 -o APT::Autoremove::SuggestsImportant=0 -y && \
+    apt-get clean -q -y && \
     rm -rf /src/* /tmp/* /var/lib/apt/lists/* && \
     # Document version
-    if /usr/local/bin/fr24feed --version > /dev/null 2>&1; \
-    then /usr/local/bin/fr24feed --version > /CONTAINER_VERSION; \
-    else qemu-arm-static /usr/local/bin/fr24feed --version > /CONTAINER_VERSION; \
-    fi \
-    && \
-    cat /CONTAINER_VERSION
+    if [[ "${VERSION_BRANCH:0:1}" == "#" ]]; then VERSION_BRANCH="main"; fi && \
+    echo "$(TZ=UTC date +%Y%m%d-%H%M%S)_$(curl -ssL https://api.github.com/repos/${VERSION_REPO}/commits/${VERSION_BRANCH} | awk '{if ($1=="\"sha\":") {print substr($2,2,7); exit}}')_${VERSION_BRANCH}_$(/usr/local/bin/fr24feed --version)" > /.CONTAINER_VERSION && \
+    cat /.CONTAINER_VERSION
 
 COPY rootfs/ /
 

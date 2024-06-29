@@ -1,19 +1,21 @@
 #!/command/with-contenv bash
 # shellcheck shell=bash
-# shellcheck disable=SC2153
+# shellcheck disable=SC2153,SC1091,SC2154
+
+source /scripts/common
 
 # Check to make sure the correct command line arguments have been set
 EXITCODE=0
 if [ -z "${BEASTHOST}" ]; then
-  echo "ERROR: BEASTHOST environment variable not set"
+  "${s6wrap[@]}" echo "ERROR: BEASTHOST environment variable not set"
   EXITCODE=1
 fi
 if [ -z "${FR24KEY}" ]; then
-  echo "ERROR: FR24KEY environment variable not set"
+  "${s6wrap[@]}" echo "ERROR: FR24KEY environment variable not set"
   EXITCODE=1
 fi
 if [ -n "${FR24_SIGNUP}" ]; then
-  echo "even with missing keys, simply start the signup script"
+  "${s6wrap[@]}" echo "even with missing keys, simply start the signup script"
   EXITCODE=0
   SIGNUP=1
 fi
@@ -27,7 +29,7 @@ fi
 # 22-12-15 16:19:09.421 [E][:] Your machine should be set as GMT+0 time zone!
 # 22-12-15 16:19:09.421 [W][:] Time zone is not set to GMT+0
 if [ -n "${TZ}" ]; then
-  echo "WARNING: Setting timezone via TZ is ignored for this container because fr24feed requires the container to use timezone GMT (+0)."
+  "${s6wrap[@]}" echo "WARNING: Setting timezone via TZ is ignored for this container because fr24feed requires the container to use timezone GMT (+0)."
 fi
 printf "GMT" > /var/run/s6/container_environment/TZ
 
@@ -45,7 +47,7 @@ fi
   echo raw="no"
   echo logmode="1"
   echo logpath="/var/log"
-  if [ -z "${MLAT}" ]; then
+  if ! chk_enabled "${MLAT}"; then
     echo mlat="no"
     echo mlat-without-gps="no"
   else
@@ -81,12 +83,12 @@ touch /dev/shm/decoder.txt
 # Test fr24feed can run natively (without qemu)
 if /usr/local/bin/fr24feed --version > /dev/null 2>&1; then
   # fr24feed can be run natively
-  echo "fr24feed version: $(/usr/local/bin/fr24feed --version)"
+  "${s6wrap[@]}" echo "fr24feed version: $(/usr/local/bin/fr24feed --version)"
 else
   # fr24feed needs qemu
-  echo "fr24feed version: $(qemu-arm-static /usr/local/bin/fr24feed --version)"
+  "${s6wrap[@]}" echo "fr24feed version: $(qemu-arm-static /usr/local/bin/fr24feed --version) (using qemu)"
 fi
 
 # prepare log file
-rm /var/log/fr24feed.log > /dev/null 2>&1
+rm -f /var/log/fr24feed.log
 touch /var/log/fr24feed.log
