@@ -38,7 +38,7 @@ RUN --mount=type=bind,from=build,source=/,target=/build/ \
     cp -f /build/usr/bin/fr24feed-status /usr/bin/fr24feed-status && \
     ln -s /usr/bin/fr24feed /usr/local/bin/fr24feed && \
     ln -s /usr/bin/fr24feed-status /usr/local/bin/fr24feed-status && \
-    tar zxf /build/mlatclient.tgz -C / && \
+ #   tar zxf /build/mlatclient.tgz -C / && \
     apt-get remove -y "${TEMP_PACKAGES[@]}" && \
     apt-get autoremove -y && \
     rm -rf /src/* /tmp/* /var/lib/apt/lists/* && \
