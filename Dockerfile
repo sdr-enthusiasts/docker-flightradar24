@@ -1,4 +1,4 @@
-FROM ghcr.io/sdr-enthusiasts/docker-baseimage:mlatclient AS build
+FROM ghcr.io/sdr-enthusiasts/docker-baseimage:base AS build
 SHELL ["/bin/bash", "-x", "-o", "pipefail", "-c"]
 COPY install_feeder.sh /
 # hadolint ignore=SC2016
@@ -24,8 +24,6 @@ RUN --mount=type=bind,from=build,source=/,target=/build/ \
     # required monitor incoming traffic from beasthost
     KEPT_PACKAGES+=(tcpdump) && \
     KEPT_PACKAGES+=(jq) && \
-    # required for mlatclient:
-    KEPT_PACKAGES+=(python3-pkg-resources) && \
     if [[ "${TARGETARCH:0:3}" != "arm" ]]; then \
         KEPT_PACKAGES+=(qemu-user-static); \
     fi && \
@@ -38,9 +36,9 @@ RUN --mount=type=bind,from=build,source=/,target=/build/ \
     cp -f /build/usr/bin/fr24feed-status /usr/bin/fr24feed-status && \
     ln -s /usr/bin/fr24feed /usr/local/bin/fr24feed && \
     ln -s /usr/bin/fr24feed-status /usr/local/bin/fr24feed-status && \
- #   tar zxf /build/mlatclient.tgz -C / && \
     apt-get remove -y "${TEMP_PACKAGES[@]}" && \
-    apt-get autoremove -y && \
+    apt-get autoremove -q -o APT::Autoremove::RecommendsImportant=0 -o APT::Autoremove::SuggestsImportant=0 -y && \
+    apt-get clean -q -y && \
     rm -rf /src/* /tmp/* /var/lib/apt/lists/* && \
     # Document version
     if /usr/local/bin/fr24feed --version > /dev/null 2>&1; \
