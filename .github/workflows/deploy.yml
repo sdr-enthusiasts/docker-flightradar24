@@ -72,7 +72,7 @@ jobs:
       platform_linux_arm32v6_enabled: false
       platform_linux_arm64v8_enabled: true
       platform_linux_i386_enabled: false
-      get_version_method: file_in_container:file=/.CONTAINER_VERSION
+      get_version_method: file_in_container:file=/.FR24_VERSION
       # set build_latest to true if github.event.inputs.use_test_image is false
       build_latest: ${{ github.event.inputs.use_test_image == 'false' || github.event.inputs.use_test_image == ''  }}
       build_baseimage_test: ${{ github.event.inputs.use_test_image == 'true' }}
