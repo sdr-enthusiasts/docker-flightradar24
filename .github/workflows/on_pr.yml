@@ -64,7 +64,7 @@ jobs:
       # List of files to check to trigger a rebuild on this job
       - name: Get specific changed files
         id: changed-files-specific
-        uses: tj-actions/changed-files@v44.5.3
+        uses: tj-actions/changed-files@v44.5.5
         with:
           files: |
             Dockerfile
@@ -86,7 +86,7 @@ jobs:
       # Build
       - name: Test Build
         if: steps.changed-files-specific.outputs.any_changed == 'true'
-        uses: docker/build-push-action@v6.1.0
+        uses: docker/build-push-action@v6.2.0
         with:
           context: .
           file: ./Dockerfile
