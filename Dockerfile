@@ -12,8 +12,9 @@ ENV S6_BEHAVIOUR_IF_STAGE2_FAILS=2 \
     BEASTHOST=readsb \
     BEASTPORT=30005 \
     MLAT=no \
-    VERBOSE_LOGGING=false
-ARG TARGETPLATFORM TARGETARCH
+    VERBOSE_LOGGING=false \
+
+ARG VERSION_REPO="sdr-enthusiasts/docker-flightradar24" VERSION_BRANCH="##BRANCH##"
 
 # NEW STUFF BELOW
 # hadolint ignore=DL3008,SC2086,SC2039,SC2068
@@ -24,9 +25,6 @@ RUN --mount=type=bind,from=build,source=/,target=/build/ \
     # required monitor incoming traffic from beasthost
     KEPT_PACKAGES+=(tcpdump) && \
     KEPT_PACKAGES+=(jq) && \
-    # if [[ "${TARGETARCH:0:3}" != "arm" ]]; then \
-    #     KEPT_PACKAGES+=(qemu-user-static); \
-    # fi && \
     apt-get update && \
     apt-get install -y --no-install-recommends \
     "${KEPT_PACKAGES[@]}" \
@@ -41,11 +39,8 @@ RUN --mount=type=bind,from=build,source=/,target=/build/ \
     apt-get clean -q -y && \
     rm -rf /src/* /tmp/* /var/lib/apt/lists/* && \
     # Document version
-    if /usr/local/bin/fr24feed --version > /dev/null 2>&1; \
-    then /usr/local/bin/fr24feed --version > /.CONTAINER_VERSION; \
-    else qemu-arm-static /usr/local/bin/fr24feed --version > /.CONTAINER_VERSION; \
-    fi \
-    && \
+    if [[ "${VERSION_BRANCH:0:1}" == "#" ]]; then VERSION_BRANCH="main"; fi && \
+    echo "$(TZ=UTC date +%Y%m%d-%H%M%S)_$(curl -ssL https://api.github.com/repos/${VERSION_REPO}/commits/${VERSION_BRANCH} | awk '{if ($1=="\"sha\":") {print substr($2,2,7); exit}}')_${VERSION_BRANCH}_$(/usr/local/bin/fr24feed --version)" > /.CONTAINER_VERSION && \
     cat /.CONTAINER_VERSION
 
 COPY rootfs/ /
