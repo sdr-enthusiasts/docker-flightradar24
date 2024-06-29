@@ -24,9 +24,9 @@ RUN --mount=type=bind,from=build,source=/,target=/build/ \
     # required monitor incoming traffic from beasthost
     KEPT_PACKAGES+=(tcpdump) && \
     KEPT_PACKAGES+=(jq) && \
-    if [[ "${TARGETARCH:0:3}" != "arm" ]]; then \
-        KEPT_PACKAGES+=(qemu-user-static); \
-    fi && \
+    # if [[ "${TARGETARCH:0:3}" != "arm" ]]; then \
+    #     KEPT_PACKAGES+=(qemu-user-static); \
+    # fi && \
     apt-get update && \
     apt-get install -y --no-install-recommends \
     "${KEPT_PACKAGES[@]}" \
