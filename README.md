@@ -54,6 +54,8 @@ This will start up a container. After installing a bunch of software (which may 
 
 Note that there is a limit of 3 feeders per FR24 account. ADSB and UAT (see below) both count as 1 feeder. If you have more than 3 feeders, you will need to contact <support@fr24.com> to request an additional Feeder Key. Make sure to send them your account email-address, latitude, longitude, altitude, and if the key is for an ADSB or UAT feeder.
 
+If your longitude or latitude is close to 0, use 0.11 instead to work around bad programming by fr24. (invalid longitude error)
+
 ## Up-and-Running with `docker run`
 
 ```shell
