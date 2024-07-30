@@ -40,4 +40,9 @@ else
 fi
 
 "${s6wrap[@]}" echo "Starting fr24feed (adsb) $NATIVE $VERBOSE_REMARK"
-"${s6wrap[@]}" "${FR24_CMD[@]}" | stdbuf -oL grep -v -F "${FILTER_TERMS[@]}"
+
+if [[ ${#FILTER_TERMS[@]} == 0 ]]; then
+    "${s6wrap[@]}" "${FR24_CMD[@]}"
+else
+    "${s6wrap[@]}" "${FR24_CMD[@]}" | stdbuf -oL grep -v -F "${FILTER_TERMS[@]}"
+fi
