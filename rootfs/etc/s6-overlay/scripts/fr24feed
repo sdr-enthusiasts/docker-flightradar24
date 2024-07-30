@@ -35,6 +35,7 @@ else
   FILTER_TERMS+=("-e" "[feed][i]sent")
   FILTER_TERMS+=("-e" "[feed][n]syncing")
   FILTER_TERMS+=("-e" "[feed][n]ping 1")
+  FILTER_TERMS+=("-e" "[feed][i]filtering")
   VERBOSE_REMARK="in non-verbose logging mode"
 fi
 
