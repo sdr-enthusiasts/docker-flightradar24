@@ -12,16 +12,16 @@ Docker container running FlightRadar24's `fr24feed`. Designed to work in tandem 
 For more information on what fr24feed is, see here: [share-your-data](https://www.flightradar24.com/share-your-data).
 
 - [sdr-enthusiasts/docker-flightradar24](#sdr-enthusiastsdocker-flightradar24)
-  - [Supported tags and respective Dockerfiles](#supported-tags-and-respective-dockerfiles)
-  - [Obtaining a Flightradar24 Sharing Key for ADSB](#obtaining-a-flightradar24-sharing-key-for-adsb)
-  - [Up-and-Running with `docker run`](#up-and-running-with-docker-run)
-  - [Up-and-Running with Docker Compose](#up-and-running-with-docker-compose)
-  - [Runtime Environment Variables](#runtime-environment-variables)
-  - [Ports](#ports)
-  - [UAT configuration (USA only)](#uat-configuration-usa-only)
-  - [Logging](#logging)
-  - [Troubleshooting](#troubleshooting)
-  - [Getting Help](#getting-help)
+   - [Supported tags and respective Dockerfiles](#supported-tags-and-respective-dockerfiles)
+   - [Obtaining a Flightradar24 Sharing Key for ADSB](#obtaining-a-flightradar24-sharing-key-for-adsb)
+   - [Up-and-Running with `docker run`](#up-and-running-with-docker-run)
+   - [Up-and-Running with Docker Compose](#up-and-running-with-docker-compose)
+   - [Runtime Environment Variables](#runtime-environment-variables)
+   - [Ports](#ports)
+   - [UAT configuration (USA only)](#uat-configuration-usa-only)
+   - [Logging](#logging)
+   - [Troubleshooting](#troubleshooting)
+   - [Getting Help](#getting-help)
 
 ## Supported tags and respective Dockerfiles
 
@@ -155,12 +155,6 @@ Restart the container. After a few minutes, you can see on [https://www.flightra
 
 - The `fr24feed` process is logged to the container's stdout, and can be viewed with `docker logs [-f] container`.
 - `fr24feed` log file exists at `/var/log/fr24feed.log`, with automatic log rotation.
-
-## Troubleshooting
-
-- This error is shown in the Container Logs: `[WARNING] Cannot check data flow because tcpdump fails to execute. Try adding NET_ADMIN and NET_RAW capabilities to your container`. Solutions:
-  - Add `NET_ADMIN` and `NET_RAW` capabilities to your container service definition. If you can't do this:
-  - set `WATCH_INTERVAL=infinity` in your container environment variables
 
 ## Getting Help
 

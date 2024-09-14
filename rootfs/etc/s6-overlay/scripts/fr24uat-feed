@@ -6,7 +6,7 @@ source /scripts/common
 
 # sleep forever if UAT is not available
 if [[ -z "$FR24KEY_UAT" ]]; then
-  sleep infinity
+    stop_service
 fi
 
 # fr24feed regularly uses fcntl on all available fds, causing CPU / syscall load
