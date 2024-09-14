@@ -4,20 +4,13 @@ set -e
 
 EXITCODE=0
 
-# Check traffic over the last 5 minutes
-# Note - we are only checking ADSB traffic as there are generally messages even during low-traffic times
-#        UAT traffic is a lot more scarse and we won't check it to avoid false UNHEALTHY reports.
-TRAFFIC_FILE="${TRAFFIC_FILE:-/tmp/packets_rcvd}"
-if [[ -f "${TRAFFIC_FILE}" ]]; then
-    read -ra traffic <<< "$(tail -1 "${TRAFFIC_FILE}")"
-    if (( $(date +%s) - traffic[0] > 600 )) || (( ${traffic[1]:-0} == 0 )); then
-        echo "[UNHEALTHY] No data received from $BEASTHOST in the past 5 mins"
-        EXITCODE=1
-    elif (( traffic[1] == -1 )); then
-        echo "[WARNING] - Cannot check data flow, try adding NET_ADMIN and NET_RAW capabilities to your container"
-    else
-        echo "[HEALTHY] ${traffic[1]} packets received from $BEASTHOST in the past 5 mins"
-    fi
+# Check TCP connection to BEASTHOST
+# this matches only on the port as it's simpler and good enough for most cases
+if ! netstat -tpn | grep -qs -e ":$BEASTPORT *ESTABLISHED.*fr24feed"; then
+    echo "[UNHEALTHY] No TCP connection to $BEASTHOST"
+    EXITCODE=1
+else
+    echo "[HEALTHY] TCP connection to $BEASTHOST is established"
 fi
 
 

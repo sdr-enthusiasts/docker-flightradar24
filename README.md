@@ -156,12 +156,6 @@ Restart the container. After a few minutes, you can see on [https://www.flightra
 - The `fr24feed` process is logged to the container's stdout, and can be viewed with `docker logs [-f] container`.
 - `fr24feed` log file exists at `/var/log/fr24feed.log`, with automatic log rotation.
 
-## Troubleshooting
-
-- This error is shown in the Container Logs: `[WARNING] Cannot check data flow because tcpdump fails to execute. Try adding NET_ADMIN and NET_RAW capabilities to your container`. Solutions:
-  - Add `NET_ADMIN` and `NET_RAW` capabilities to your container service definition. If you can't do this:
-  - set `WATCH_INTERVAL=infinity` in your container environment variables
-
 ## Getting Help
 
 Having troubles with the container or have questions? Best support is available on the #adsb-containers channel of the [SDR-Enthusiasts Discord seerver](https://discord.gg/sTf9uYF). Feel free to [join](https://discord.gg/sTf9uYF) and converse.
