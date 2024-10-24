@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4.2.0
+      - uses: actions/checkout@v4.2.1
       - name: Pull markdownlint/markdownlint:latest Image
         run: docker pull markdownlint/markdownlint:latest
       - name: Run markdownlint against *.md files
