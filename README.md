@@ -77,7 +77,6 @@ version: '2.0'
 services:
   fr24feed:
     image: ghcr.io/sdr-enthusiasts/docker-flightradar24:latest
-    tty: true
     container_name: fr24feed
     restart: always
     ports:
