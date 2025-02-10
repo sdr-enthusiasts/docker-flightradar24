@@ -22,7 +22,7 @@ on:
 jobs:
   shellcheck:
     name: Run shellcheck against shell scripts
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     if: ${{ github.event_name == 'pull_request' }}
     steps:
       - uses: actions/checkout@v4.2.2
@@ -33,7 +33,7 @@ jobs:
 
   hadolint:
     name: Run hadolint against docker files
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     if: ${{ github.event_name == 'pull_request' }}
     steps:
       - uses: actions/checkout@v4.2.2
@@ -44,7 +44,7 @@ jobs:
 
   test_build:
     name: Test Build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     needs: [shellcheck, hadolint]
     strategy:
       matrix:
