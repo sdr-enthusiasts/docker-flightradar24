@@ -77,10 +77,9 @@ jobs:
       build_latest: ${{ github.event.inputs.use_test_image == 'false' || github.event.inputs.use_test_image == ''  }}
       build_baseimage_test: ${{ github.event.inputs.use_test_image == 'true' }}
       # only build the entire stack if we are not using the test image
-      build_version_specific: ${{ github.event.inputs.use_test_image == 'false' || github.event.inputs.use_test_image == ''  }}
-      # build_platform_specific: ${{ github.event.inputs.use_test_image == 'false' || github.event.inputs.use_test_image == ''  }}
+      build_version_specific: false
       build_platform_specific: false
-      build_nohealthcheck: ${{ github.event.inputs.use_test_image == 'false' || github.event.inputs.use_test_image == ''  }}
+      build_nohealthcheck: false
       build_baseimage_url: :qemu/:qemu-test-pr
     secrets:
       ghcr_token: ${{ secrets.GITHUB_TOKEN }}
