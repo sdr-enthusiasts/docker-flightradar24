@@ -84,6 +84,7 @@ services:
     environment:
       - BEASTHOST=beasthost
       - FR24KEY=xxxxxxxxxxx
+    dns_search: . # prevents rare connection issues related to a bug in docker and fr24feed
 ```
 
 ## Runtime Environment Variables
