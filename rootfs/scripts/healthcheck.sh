@@ -13,12 +13,11 @@ else
     echo "[HEALTHY] TCP connection to $BEASTHOST is established"
 fi
 
-
 # now log checks are finished, truncate log
-truncate -s 0 /var/log/fr24feed.log > /dev/null 2>&1
+truncate -s 0 /var/log/fr24feed.log >/dev/null 2>&1
 
 # make sure we're listening on port 8754
-if netstat -an | grep LISTEN | grep 8754 > /dev/null; then
+if netstat -an | grep LISTEN | grep 8754 >/dev/null; then
     echo "[HEALTHY] ADSB status website is listening for connections on port 8754"
 else
     echo "[UNHEALTHY] ADSB status website is not listening for connections on port 8754"
@@ -27,7 +26,7 @@ fi
 
 # make sure we're listening on port 8755 if UAT is enabled
 if [[ -n "$FR24KEY_UAT" ]]; then
-    if netstat -an | grep LISTEN | grep 8755 > /dev/null; then
+    if netstat -an | grep LISTEN | grep 8755 >/dev/null; then
         echo "[HEALTHY] UAT status website is listening for connections on port 8755"
     else
         echo "[UNHEALTHY] UAT status website is not listening for connections on port 8755"
@@ -38,8 +37,9 @@ fi
 # death count for fr24feed
 SERVICEDIR=/run/service/fr24feed
 SERVICENAME=$(basename "${SERVICEDIR}")
-# shellcheck disable=SC2126
-SERVICE_DEATHS=$(s6-svdt "${SERVICEDIR}" | grep -v "exitcode 0" | wc -l)
+
+SERVICE_DEATHS=$(s6-svdt "${SERVICEDIR}" | grep -cv "exitcode 0")
+
 if [ "$SERVICE_DEATHS" -ge 1 ]; then
     echo "[UNHEALTHY] ${SERVICENAME} error deaths: $SERVICE_DEATHS"
     EXITCODE=1
@@ -52,8 +52,9 @@ s6-svdt-clear "${SERVICEDIR}"
 if [[ -n "$FR24KEY_UAT" ]]; then
     SERVICEDIR=/run/service/fr24uat-feed
     SERVICENAME=$(basename "${SERVICEDIR}")
-    # shellcheck disable=SC2126
-    SERVICE_DEATHS=$(s6-svdt "${SERVICEDIR}" | grep -v "exitcode 0" | wc -l)
+
+    SERVICE_DEATHS=$(s6-svdt "${SERVICEDIR}" | grep -cv "exitcode 0")
+
     if [ "$SERVICE_DEATHS" -ge 1 ]; then
         echo "[UNHEALTHY] ${SERVICENAME} error deaths: $SERVICE_DEATHS"
         EXITCODE=1

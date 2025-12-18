@@ -1,7 +1,7 @@
 #!/command/with-contenv bash
-#shellcheck shell=bash disable=SC1091,SC2154
+# shellcheck source-path=source-stubs
+# shellcheck source-path=SCRIPTDIR
 
-# shellcheck disable=SC1091
 source /scripts/common
 
 # sleep forever if UAT is not available
@@ -21,17 +21,16 @@ ulimit -n 256
 # wait a while so the adsb feeder instance is running
 sleep 15
 
-
 FR24_CMD=()
 
 # Test fr24feed can run natively (without qemu)
-if /usr/local/bin/fr24feed --version > /dev/null 2>&1; then
-  # fr24feed can be run natively
-  NATIVE_REMARK="natively"
+if /usr/local/bin/fr24feed --version >/dev/null 2>&1; then
+    # fr24feed can be run natively
+    NATIVE_REMARK="natively"
 else
-  # fr24feed needs qemu
-  FR24_CMD+=("qemu-arm-static")
-  NATIVE_REMARK="using qemu"
+    # fr24feed needs qemu
+    FR24_CMD+=("qemu-arm-static")
+    NATIVE_REMARK="using qemu"
 fi
 
 FR24_CMD+=("/usr/local/bin/fr24feed")
@@ -40,10 +39,10 @@ FR24_CMD+=("--monitor-file=/dev/shm/uat-decoder.txt" "--http-listen-port=8755" "
 FILTER_TERMS=("-e" "[feed][i]sent" "-e" "[feed][n]syncing" "-e" "[feed][n]ping")
 
 if chk_enabled "$VERBOSE_LOGGING"; then
-  VERBOSE_REMARK="in Verbose Logging mode"
+    VERBOSE_REMARK="in Verbose Logging mode"
 else
-  FILTER_TERMS+=("-e" "[mlat]")
-  VERBOSE_REMARK="in non-verbose Logging mode"
+    FILTER_TERMS+=("-e" "[mlat]")
+    VERBOSE_REMARK="in non-verbose Logging mode"
 fi
 
 "${s6wrap[@]}" echo "Starting fr24feed (adsb) $NATIVE_REMARK $VERBOSE_REMARK"

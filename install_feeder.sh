@@ -67,7 +67,7 @@ fi
 
 if [[ "${INSTALL_X86_FROMDEB,,}" == "true" ]] && { [[ "$ARCH" == "x86_64" ]] || [[ "$ARCH" == "amd64" ]]; }; then
 	curl -sSL https://repo-feed.flightradar24.com/linux_binaries/fr24feed_1.0.46-1_amd64.deb > fr24feed_1.0.46-1_amd64.deb
-	dpkg -i fr24feed_1.0.46-1_amd64.deb 
+	dpkg -i fr24feed_1.0.46-1_amd64.deb
 else
 	# If $INSTALL_X86_NATIVE == "false" then we'll install the armhf build on x86 systems - the container will run that binary in qemu-arm-static instead of natively
 	# This is done because for x86, the repo is stuck on a version 1.0.44 which is not compatible with the "new" UAT feeder code (which needs >=1.0.46-1)

@@ -1,26 +1,27 @@
 #!/command/with-contenv bash
 # shellcheck shell=bash
-# shellcheck disable=SC2153,SC1091,SC2154
+# shellcheck source-path=source-stubs
+# shellcheck source-path=SCRIPTDIR
 
 source /scripts/common
 
 # Check to make sure the correct command line arguments have been set
 EXITCODE=0
 if [ -z "${BEASTHOST}" ]; then
-  "${s6wrap[@]}" echo "ERROR: BEASTHOST environment variable not set"
-  EXITCODE=1
+    "${s6wrap[@]}" echo "ERROR: BEASTHOST environment variable not set"
+    EXITCODE=1
 fi
 if [ -z "${FR24KEY}" ]; then
-  "${s6wrap[@]}" echo "ERROR: FR24KEY environment variable not set"
-  EXITCODE=1
+    "${s6wrap[@]}" echo "ERROR: FR24KEY environment variable not set"
+    EXITCODE=1
 fi
 if [ -n "${FR24_SIGNUP}" ]; then
-  "${s6wrap[@]}" echo "even with missing keys, simply start the signup script"
-  EXITCODE=0
-  SIGNUP=1
+    "${s6wrap[@]}" echo "even with missing keys, simply start the signup script"
+    EXITCODE=0
+    SIGNUP=1
 fi
 if [ $EXITCODE -ne 0 ]; then
-  exit 1
+    exit 1
 fi
 
 # If the timezone is not GMT, then fr24feed throws warnings and errors, eg:
@@ -29,48 +30,48 @@ fi
 # 22-12-15 16:19:09.421 [E][:] Your machine should be set as GMT+0 time zone!
 # 22-12-15 16:19:09.421 [W][:] Time zone is not set to GMT+0
 if [ -n "${TZ}" ]; then
-  "${s6wrap[@]}" echo "WARNING: Setting timezone via TZ is ignored for this container because fr24feed requires the container to use timezone GMT (+0)."
+    "${s6wrap[@]}" echo "WARNING: Setting timezone via TZ is ignored for this container because fr24feed requires the container to use timezone GMT (+0)."
 fi
-printf "GMT" > /var/run/s6/container_environment/TZ
+printf "GMT" >/var/run/s6/container_environment/TZ
 
 if [ "$SIGNUP" = "1" ]; then
-  bash /scripts/signup.sh
-  exit 0
+    bash /scripts/signup.sh
+    exit 0
 fi
 
 # Set up fr24feed
 {
-  echo receiver="beast-tcp"
-  echo fr24key="${FR24KEY}"
-  echo host="${BEASTHOST}:${BEASTPORT}"
-  echo bs="no"
-  echo raw="no"
-  echo logmode="1"
-  echo logpath="/var/log"
-  if ! chk_enabled "${MLAT}"; then
-    echo mlat="no"
-    echo mlat-without-gps="no"
-  else
-    echo mlat="${MLAT}"
-    echo mlat-without-gps="${MLAT}"
-  fi
-  if [ -n "${BIND_INTERFACE}" ]; then
-    echo bind-interface="${BIND_INTERFACE}"
-  fi
-} > /etc/fr24feed.ini
-
-if [[ -n "$FR24KEY_UAT" ]]; then
-  {
-    echo "receiver=\"uat-tcp\""
-    echo "fr24key=\"$FR24KEY_UAT\""
-    echo "uat-host=${UATHOST:-dump978}"
-    echo "uat-port=\"${UATPORT:-30978}\""
+    echo receiver="beast-tcp"
+    echo fr24key="${FR24KEY}"
+    echo host="${BEASTHOST}:${BEASTPORT:-30005}"
+    echo bs="no"
+    echo raw="no"
     echo logmode="1"
     echo logpath="/var/log"
-  if [ -n "${BIND_INTERFACE}" ]; then
-    echo bind-interface="${BIND_INTERFACE}"
-  fi    
-  } > /etc/fr24uat-feed.ini
+    if ! chk_enabled "${MLAT}"; then
+        echo mlat="no"
+        echo mlat-without-gps="no"
+    else
+        echo mlat="${MLAT}"
+        echo mlat-without-gps="${MLAT}"
+    fi
+    if [ -n "${BIND_INTERFACE}" ]; then
+        echo bind-interface="${BIND_INTERFACE}"
+    fi
+} >/etc/fr24feed.ini
+
+if [[ -n "$FR24KEY_UAT" ]]; then
+    {
+        echo "receiver=\"uat-tcp\""
+        echo "fr24key=\"$FR24KEY_UAT\""
+        echo "uat-host=${UATHOST:-dump978}"
+        echo "uat-port=\"${UATPORT:-30978}\""
+        echo logmode="1"
+        echo logpath="/var/log"
+        if [ -n "${BIND_INTERFACE}" ]; then
+            echo bind-interface="${BIND_INTERFACE}"
+        fi
+    } >/etc/fr24uat-feed.ini
 fi
 
 # prepare directories (from /usr/lib/fr24/create_missing_directories.sh)
@@ -81,12 +82,12 @@ touch /dev/shm/decoder.txt
 
 # Print fr24 version.
 # Test fr24feed can run natively (without qemu)
-if /usr/local/bin/fr24feed --version > /dev/null 2>&1; then
-  # fr24feed can be run natively
-  "${s6wrap[@]}" echo "fr24feed version: $(/usr/local/bin/fr24feed --version)"
+if /usr/local/bin/fr24feed --version >/dev/null 2>&1; then
+    # fr24feed can be run natively
+    "${s6wrap[@]}" echo "fr24feed version: $(/usr/local/bin/fr24feed --version)"
 else
-  # fr24feed needs qemu
-  "${s6wrap[@]}" echo "fr24feed version: $(qemu-arm-static /usr/local/bin/fr24feed --version) (using qemu)"
+    # fr24feed needs qemu
+    "${s6wrap[@]}" echo "fr24feed version: $(qemu-arm-static /usr/local/bin/fr24feed --version) (using qemu)"
 fi
 
 # prepare log file
