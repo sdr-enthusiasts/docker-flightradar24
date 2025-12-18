@@ -1,7 +1,7 @@
 FROM ghcr.io/sdr-enthusiasts/docker-baseimage:base AS build
 SHELL ["/bin/bash", "-x", "-o", "pipefail", "-c"]
 COPY install_feeder.sh /
-# hadolint ignore=SC2016
+
 RUN \
     /install_feeder.sh && \
     sed -i "s|systemctl status fr24feed|grep -q /bin/fr24feed <<< \$(ps -ef)|g" /usr/bin/fr24feed-status
@@ -17,8 +17,6 @@ ENV S6_BEHAVIOUR_IF_STAGE2_FAILS=2 \
 ARG VERSION_REPO="sdr-enthusiasts/docker-flightradar24" \
     VERSION_BRANCH="##BRANCH##"
 
-# NEW STUFF BELOW
-# hadolint ignore=DL3008,SC2086,SC2039,SC2068
 RUN --mount=type=bind,from=build,source=/,target=/build/ \
     # define packages to install
     TEMP_PACKAGES=() && \

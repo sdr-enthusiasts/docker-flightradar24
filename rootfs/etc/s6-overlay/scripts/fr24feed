@@ -1,5 +1,6 @@
 #!/command/with-contenv bash
-#shellcheck shell=bash disable=SC1091,SC2068,SC2154
+# shellcheck source-path=source-stubs
+# shellcheck source-path=SCRIPTDIR
 
 source /scripts/common
 
@@ -15,13 +16,13 @@ ulimit -n 256
 FR24_CMD=()
 
 # Test fr24feed can run natively (without qemu)
-if /usr/local/bin/fr24feed --version > /dev/null 2>&1; then
-  # fr24feed can be run natively
-  NATIVE="natively"
+if /usr/local/bin/fr24feed --version >/dev/null 2>&1; then
+    # fr24feed can be run natively
+    NATIVE="natively"
 else
-  # fr24feed needs qemu
-  FR24_CMD+=("qemu-arm-static")
-  NATIVE="using qemu"
+    # fr24feed needs qemu
+    FR24_CMD+=("qemu-arm-static")
+    NATIVE="using qemu"
 fi
 
 FR24_CMD+=("/usr/local/bin/fr24feed")
@@ -29,14 +30,14 @@ FR24_CMD+=("/usr/local/bin/fr24feed")
 FILTER_TERMS=()
 
 if chk_enabled "$VERBOSE_LOGGING"; then
-  VERBOSE_REMARK="in verbose logging mode"
+    VERBOSE_REMARK="in verbose logging mode"
 else
-  FILTER_TERMS+=("-e" "[mlat]")
-  FILTER_TERMS+=("-e" "[feed][i]sent")
-  FILTER_TERMS+=("-e" "[feed][n]syncing")
-  FILTER_TERMS+=("-e" "[feed][n]ping 1")
-  FILTER_TERMS+=("-e" "[feed][i]filtering")
-  VERBOSE_REMARK="in non-verbose logging mode"
+    FILTER_TERMS+=("-e" "[mlat]")
+    FILTER_TERMS+=("-e" "[feed][i]sent")
+    FILTER_TERMS+=("-e" "[feed][n]syncing")
+    FILTER_TERMS+=("-e" "[feed][n]ping 1")
+    FILTER_TERMS+=("-e" "[feed][i]filtering")
+    VERBOSE_REMARK="in non-verbose logging mode"
 fi
 
 "${s6wrap[@]}" echo "Starting fr24feed (adsb) $NATIVE $VERBOSE_REMARK"

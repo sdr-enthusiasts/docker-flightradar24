@@ -4,3 +4,7 @@
 .gitattributes
 READMETEMPLATE.md
 README.md
+.direnv
+source-stubs
+.pre-commit-config.yaml
+.envrc

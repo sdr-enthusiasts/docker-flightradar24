@@ -12,16 +12,15 @@ Docker container running FlightRadar24's `fr24feed`. Designed to work in tandem 
 For more information on what fr24feed is, see here: [share-your-data](https://www.flightradar24.com/share-your-data).
 
 - [sdr-enthusiasts/docker-flightradar24](#sdr-enthusiastsdocker-flightradar24)
-   - [Supported tags and respective Dockerfiles](#supported-tags-and-respective-dockerfiles)
-   - [Obtaining a Flightradar24 Sharing Key for ADSB](#obtaining-a-flightradar24-sharing-key-for-adsb)
-   - [Up-and-Running with `docker run`](#up-and-running-with-docker-run)
-   - [Up-and-Running with Docker Compose](#up-and-running-with-docker-compose)
-   - [Runtime Environment Variables](#runtime-environment-variables)
-   - [Ports](#ports)
-   - [UAT configuration (USA only)](#uat-configuration-usa-only)
-   - [Logging](#logging)
-   - [Troubleshooting](#troubleshooting)
-   - [Getting Help](#getting-help)
+  - [Supported tags and respective Dockerfiles](#supported-tags-and-respective-dockerfiles)
+  - [Obtaining a Flightradar24 Sharing Key for ADSB](#obtaining-a-flightradar24-sharing-key-for-adsb)
+  - [Up-and-Running with `docker run`](#up-and-running-with-docker-run)
+  - [Up-and-Running with Docker Compose](#up-and-running-with-docker-compose)
+  - [Runtime Environment Variables](#runtime-environment-variables)
+  - [Ports](#ports)
+  - [UAT configuration (USA only)](#uat-configuration-usa-only)
+  - [Logging](#logging)
+  - [Getting Help](#getting-help)
 
 ## Supported tags and respective Dockerfiles
 
@@ -91,17 +90,17 @@ services:
 
 There are a series of available environment variables:
 
-| Environment Variable | Purpose                                                                                        | Default  |
-| -------------------- | ---------------------------------------------------------------------------------------------- | -------- |
-| `BEASTHOST`          | Required. IP/Hostname of a Mode-S/BEAST provider (dump1090)                                    | `readsb` |
-| `BEASTPORT`          | Optional. TCP port number of Mode-S/BEAST provider (dump1090)                                  | `30005`  |
-| `FR24KEY`            | Required. Flightradar24 Sharing Key                                                            |          |
-| `MLAT`               | Set to `yes` to enable MLAT (optional)                                                         | `no`     |
-| `BIND_INTERFACE`     | Optional. Set a bind interface such as `0.0.0.0` to allow access from non-private IP addresses | _none_   |
-| `VERBOSE_LOGGING`    | Set to `true` to enable verbose logging (optional)                                             | `false`  |
-| `FR24KEY_UAT`        | Optional. Only used if you are feeding UAT data - see section below                            | _empty_  |
-| `UATHOST`            | Optional. Only used if you are feeding UAT data and you don't use the default value                             | `dump978`  |
-| `UATPORT`            | Optional. Only used if you are feeding UAT data and you don't use the default value                             | `30978`    |
+| Environment Variable | Purpose                                                                                        | Default   |
+| -------------------- | ---------------------------------------------------------------------------------------------- | --------- |
+| `BEASTHOST`          | Required. IP/Hostname of a Mode-S/BEAST provider (dump1090)                                    | `readsb`  |
+| `BEASTPORT`          | Optional. TCP port number of Mode-S/BEAST provider (dump1090)                                  | `30005`   |
+| `FR24KEY`            | Required. Flightradar24 Sharing Key                                                            |           |
+| `MLAT`               | Set to `yes` to enable MLAT (optional)                                                         | `no`      |
+| `BIND_INTERFACE`     | Optional. Set a bind interface such as `0.0.0.0` to allow access from non-private IP addresses | _none_    |
+| `VERBOSE_LOGGING`    | Set to `true` to enable verbose logging (optional)                                             | `false`   |
+| `FR24KEY_UAT`        | Optional. Only used if you are feeding UAT data - see section below                            | _empty_   |
+| `UATHOST`            | Optional. Only used if you are feeding UAT data and you don't use the default value            | `dump978` |
+| `UATPORT`            | Optional. Only used if you are feeding UAT data and you don't use the default value            | `30978`   |
 
 ## Ports
 
@@ -142,9 +141,9 @@ Congratulations! You are now registered and ready to share UAT data with Flightr
 - If your UAT receiver is not the `dump978` container and port `30978`, you can set those as optionally as well:
 
 ```yaml
-  - FR24KEY_UAT=fxxxxxxxxxxx4
-  - UATHOST=hostname
-  - UATPORT=12345
+- FR24KEY_UAT=fxxxxxxxxxxx4
+- UATHOST=hostname
+- UATPORT=12345
 ```
 
 Note that there is a limit of 3 feeders per FR24 account. ADSB and UAT each count as 1 feeder. If you have more than 3 feeders, you will need to contact <support@fr24.com> to request an additional Feeder Key. Make sure to send them your account email-address, latitude, longitude, altitude, and if the key is for an ADSB or UAT feeder.
