@@ -58,6 +58,9 @@ fi
     if [ -n "${BIND_INTERFACE}" ]; then
         echo bind-interface="${BIND_INTERFACE}"
     fi
+    if [ -n "${NTP_SERVER}" ]; then
+        echo ntp-server="${NTP_SERVER}"
+    fi
 } >/etc/fr24feed.ini
 
 if [[ -n "$FR24KEY_UAT" ]]; then
