@@ -101,6 +101,7 @@ There are a series of available environment variables:
 | `FR24KEY_UAT`        | Optional. Only used if you are feeding UAT data - see section below                            | _empty_   |
 | `UATHOST`            | Optional. Only used if you are feeding UAT data and you don't use the default value            | `dump978` |
 | `UATPORT`            | Optional. Only used if you are feeding UAT data and you don't use the default value            | `30978`   |
+| `NTP_SERVER`         | Optional. A custom NTP server to override the defaults.                                        | _none_    |
 
 ## Ports
 
