@@ -38,7 +38,7 @@ fi
 SERVICEDIR=/run/service/fr24feed
 SERVICENAME=$(basename "${SERVICEDIR}")
 
-SERVICE_DEATHS=$(s6-svdt "${SERVICEDIR}" | grep -cv "exitcode 0")
+SERVICE_DEATHS=$(s6-svdt "${SERVICEDIR}" | grep -cv "exitcode 0" || echo 0)
 
 if [ "$SERVICE_DEATHS" -ge 1 ]; then
     echo "[UNHEALTHY] ${SERVICENAME} error deaths: $SERVICE_DEATHS"
