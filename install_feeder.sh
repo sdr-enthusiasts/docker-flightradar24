@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 # This is a slightly updated version of FR24's install script
 #
 
