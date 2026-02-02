@@ -77,20 +77,8 @@ else
 		dpkg --add-architecture armhf
 		FEEDER="$FEEDER:armhf"
 	fi
-    # allow SHA1 signing (less secure)
-    # required because FR24 has not update their repo and likely won't do so for quite some time
-    mkdir -p /etc/crypto-policies/back-ends
-    # this has to be named seqoia.config for whatever reason
-    cat > /etc/crypto-policies/back-ends/sequoia.config <<EOF
-[hash_algorithms]
-sha1 = "always"
-EOF
-
-    cat /etc/crypto-policies/back-ends/sequoia.config
-
 	# Import GPG key for the APT repository
-	# C969F07840C430F5
-	curl -sSL https://repo-feed.flightradar24.com/flightradar24.pub | gpg --dearmor > /etc/apt/keyrings/flightradar24.gpg
+	curl -sSL https://repo-feed.flightradar24.com/flightradar24.2026.pub | gpg --dearmor > /etc/apt/keyrings/flightradar24.gpg
 	# Add APT repository to the config file, removing older entries if exist
 	echo "deb [signed-by=/etc/apt/keyrings/flightradar24.gpg] https://${REPO} flightradar24 ${SYSTEM}-${CHANNEL}" > /etc/apt/sources.list.d/fr24feed.list
 	apt-get update -y
