@@ -47,7 +47,7 @@ jobs:
     if: |
       github.event.inputs.build_latest_as_test == 'false' ||
       github.event.inputs.build_latest_as_test == ''
-    uses: sdr-enthusiasts/common-github-workflows/.github/workflows/sdre.yml@main
+    uses: sdr-enthusiasts/common-github-workflows/.github/workflows/sdre.yml@226b2948a95ef5a19b6c1b2e1aaf12a645c5f382 # main
     with:
       push_enabled: true
       push_destinations: ghcr.io
