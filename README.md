@@ -55,14 +55,6 @@ Note that there is a limit of 3 feeders per FR24 account. ADSB and UAT (see belo
 
 If your longitude or latitude is close to 0, use 0.11 instead to work around bad programming by fr24. (invalid longitude error)
 
-## Obtaining a Flightradar24 Sharing Key for UAT
-
-
-Same as above but use this command:
-```bash
-docker run -it --rm --entrypoint /usr/bin/fr24feed ghcr.io/sdr-enthusiasts/docker-flightradar24:latest --signup --uat --configfile=/tmp/config.txt
-```
-
 ## Up-and-Running with `docker run`
 
 ```shell
@@ -129,7 +121,7 @@ If you have a UAT receiver with an existing `dump978` container or `dump978-fa` 
 1. Signup for a UAT sharing key. Note - you CANNOT reuse your existing ADSB sharing key. To do so, copy and paste the following command on your target machine (or really any armhf/arm64/x86_64 linux machine with Docker installed):
 
 ```bash
-docker run -it --rm ghcr.io/sdr-enthusiasts/docker-baseimage:qemu bash -c "$(curl -sSL https://raw.githubusercontent.com/sdr-enthusiasts/docker-flightradar24/main/get_uat_key.sh)"
+docker run -it --rm --entrypoint /usr/bin/fr24feed ghcr.io/sdr-enthusiasts/docker-flightradar24:latest --signup --uat --configfile=/tmp/config.txt
 ```
 
 - Step 1.1: Enter the email address associated with your existing (ADSB) FlightRadar24 account.
