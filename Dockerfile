@@ -22,6 +22,8 @@ RUN --mount=type=bind,from=build,source=/,target=/build/ \
     cp -f /build/usr/bin/fr24feed-status /usr/bin/fr24feed-status && \
     ln -s /usr/bin/fr24feed /usr/local/bin/fr24feed && \
     ln -s /usr/bin/fr24feed-status /usr/local/bin/fr24feed-status && \
+    # fake journalctl to prevent crash when accessing log via webinterface
+    ln -s /usr/bin/true /command/journalctl && \
     # Document version
     if [[ "${VERSION_BRANCH:0:1}" == "#" ]]; then VERSION_BRANCH="main"; fi && \
     echo "$(TZ=UTC date +%Y%m%d-%H%M%S)_$(curl -ssL https://api.github.com/repos/${VERSION_REPO}/commits/${VERSION_BRANCH} | awk '{if ($1=="\"sha\":") {print substr($2,2,7); exit}}')_${VERSION_BRANCH}_$(/usr/local/bin/fr24feed --version)" > /.CONTAINER_VERSION && \
