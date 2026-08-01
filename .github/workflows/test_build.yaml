@@ -8,7 +8,7 @@ on:
 jobs:
   test_build:
     name: Test Image Build
-    uses: sdr-enthusiasts/common-github-workflows/.github/workflows/sdre.yml@d99ce7f631ca56901a4aecca25d5c6e4b0a7e2f1 # main
+    uses: sdr-enthusiasts/common-github-workflows/.github/workflows/sdre.yml@bcf0b94a192e7ca9630f788ecc16acd999541404 # main
     with:
       push_enabled: false
       ghcr_repo_owner: ${{ github.repository_owner }}
