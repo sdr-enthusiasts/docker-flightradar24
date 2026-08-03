@@ -66,7 +66,7 @@
                 codespell
                 typos
                 nixfmt
-                nodePackages.markdownlint-cli2
+                markdownlint-cli2
               ]);
 
             LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath (chk.passthru.libPath or [ ]);
