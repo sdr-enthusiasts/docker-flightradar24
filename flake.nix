@@ -32,7 +32,7 @@
 
           # ── Feature toggles ─────────────────────────────
           check_rust = false;
-          check_docker = false;
+          check_docker = true;
           check_python = false;
 
           # Rust-specific knobs (safe to leave here)
