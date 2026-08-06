@@ -21,7 +21,7 @@ if [ -n "${FR24_SIGNUP}" ]; then
     SIGNUP=1
 fi
 if [ $EXITCODE -ne 0 ]; then
-    exit 1
+    exit 78
 fi
 
 # If the timezone is not GMT, then fr24feed throws warnings and errors, eg:
