@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -e
+set -o pipefail
 
 # This is a slightly updated version of FR24's install script
 #
@@ -68,7 +69,7 @@ if [ ! -e "/etc/apt/keyrings" ]; then
 fi
 
 if [[ "${INSTALL_X86_FROMDEB,,}" == "true" ]] && { [[ "$ARCH" == "x86_64" ]] || [[ "$ARCH" == "amd64" ]]; }; then
-	curl -sSL https://repo-feed.flightradar24.com/linux_binaries/fr24feed_1.0.57-1_amd64.deb > fr24feed_1.0.57-1_amd64.deb
+	curl --fail -sSL https://repo-feed.flightradar24.com/linux_binaries/fr24feed_1.0.57-1_amd64.deb > fr24feed_1.0.57-1_amd64.deb
 	dpkg -i fr24feed_1.0.56-0_amd64.deb
 else
 	# If $INSTALL_X86_NATIVE == "false" then we'll install the armhf build on x86 systems - the container will run that binary in qemu-arm-static instead of natively
@@ -80,7 +81,7 @@ else
 		FEEDER="$FEEDER:armhf"
 	fi
 	# Import GPG key for the APT repository
-	curl -sSL https://repo-feed.flightradar24.com/flightradar24.2026.pub | gpg --dearmor > /etc/apt/keyrings/flightradar24.gpg
+	curl --fail -sSL https://repo-feed.flightradar24.com/flightradar24.2026.pub | gpg --dearmor > /etc/apt/keyrings/flightradar24.gpg
 	# Add APT repository to the config file, removing older entries if exist
 	echo "deb [signed-by=/etc/apt/keyrings/flightradar24.gpg] https://${REPO} flightradar24 ${SYSTEM}-${CHANNEL}" > /etc/apt/sources.list.d/fr24feed.list
 	apt-get update -y
