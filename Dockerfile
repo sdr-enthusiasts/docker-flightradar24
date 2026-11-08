@@ -26,7 +26,9 @@ RUN --mount=type=bind,from=build,source=/,target=/build/ \
     ln -s /usr/bin/true /command/journalctl && \
     # Document version
     if [[ "${VERSION_BRANCH:0:1}" == "#" ]]; then VERSION_BRANCH="main"; fi && \
-    echo "$(TZ=UTC date +%Y%m%d-%H%M%S)_$(curl -ssL https://api.github.com/repos/${VERSION_REPO}/commits/${VERSION_BRANCH} | awk '{if ($1=="\"sha\":") {print substr($2,2,7); exit}}')_${VERSION_BRANCH}_$(/usr/local/bin/fr24feed --version)" > /.CONTAINER_VERSION && \
+    SHA="$(curl --fail --silent --show-error --location --retry 3 "https://api.github.com/repos/${VERSION_REPO}/commits/${VERSION_BRANCH}" | awk '$1=="\"sha\":" && !f {print substr($2,2,7); f=1}')" && \
+    [[ -n "$SHA" ]] && \
+    echo "$(TZ=UTC date +%Y%m%d-%H%M%S)_${SHA}_${VERSION_BRANCH}_$(/usr/local/bin/fr24feed --version)" > /.CONTAINER_VERSION && \
     /usr/local/bin/fr24feed --version > /.FR24_VERSION && \
     cat /.CONTAINER_VERSION
 
